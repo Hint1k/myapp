@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Courier form</title>
+</head>
+<body>
+<h1>Please fill in the Courier form</h1>
+<hr>
+<h2>New Courier:</h2>
+<form method="post" action="/courier/saveCourier" th:object="${courier}" th:action="@{saveCourier}">
+    <table>
+        <tbody>
+        <input type="hidden" id="id" name="id" th:field="*{id}"/>
+        <tr>
+            <td><label>First name:</label></td>
+            <td>
+                <input type="text" id="firstName" name="firstName" th:field="*{firstName}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Last name:</label></td>
+            <td>
+                <input type="text" id="lastName" name="lastName" th:field="*{lastName}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Phone number:</label></td>
+            <td>
+                <input type="text" id="phone" name="phone" th:field="*{phone}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Save Courier" class="save"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<p>
+    <a th:href="@{/courier/showList}">
+        <button type="button" class="update-button">Return back to Courier list</button>
+    </a>
+</p>
+</body>
+</html>

@@ -1,0 +1,38 @@
+/*
+creating a schema for the project:
+*/
+
+create database if not exists myappdata;
+use myappdata;
+
+/*
+creating a table for Courier class:
+*/
+
+drop table if exists courier;
+create table courier (
+id int(11) not null auto_increment,
+first_name varchar(45) default null,
+last_name varchar(45) default null,
+phone varchar(16) default null,
+primary key(id) )
+engine=InnoDB auto_increment=1
+default charset=latin1;
+
+
+/*
+creating a table for Address class:
+*/
+
+drop table if exists address;
+create table address (
+id int(11) not null auto_increment,
+street_name varchar(45) default null,
+house_number smallint(5) default null,
+flat_number smallint(5) default null,
+courier_id int(11) default null,
+primary key (id),
+foreign key (courier_id)
+references courier (id)
+on delete no action on update no action)
+engine=InnoDB auto_increment=1 default charset=latin1;

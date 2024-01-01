@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Address form</title>
+</head>
+<body>
+<h1>Please fill in the Address form</h1>
+<hr>
+<h2>New Address:</h2>
+<form method="post" action="/address/saveAddress" th:object="${address}" th:action="@{saveAddress}">
+    <table>
+        <tbody>
+        <input type="hidden" id="id" name="id" th:field="*{id}"/>
+        <tr>
+            <td><label>Street name:</label></td>
+            <td>
+                <input type="text" id="firstName" name="firstName" th:field="*{streetName}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label>House number:</label></td>
+            <td>
+                <input type="text" id="lastName" name="lastName" th:field="*{houseNumber}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Flat number:</label></td>
+            <td>
+                <input type="text" id="email" name="flatNumber" th:field="*{flatNumber}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Courier:</label></td>
+            <td>
+                <select th:field="*{courier}">
+                    <option value="">Choose...</option>
+                    <option th:each="newCourier:${couriers}" th:value="${newCourier.id}"
+                            th:text="${newCourier.firstName+' '+newCourier.lastName}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Save Address" class="save"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<p>
+    <a th:href="@{/address/showList}">
+        <button type="button" class="update-button">Return back to Address list</button>
+    </a>
+</p>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+</head>
+<body>
+<h1> Welcome to our company home page!</h1>
+<hr>
+<a th:href="@{/courier/showList}">
+    <button type="button" class="update-button">
+        List of couriers
+    </button>
+</a>
+<br><br>
+<a th:href="@{/address/showList}">
+    <button type="button" class="update-button">
+        List of addresses
+    </button>
+</a>
+</body>
+</html>
