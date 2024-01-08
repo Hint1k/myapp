@@ -11,14 +11,10 @@ import java.util.List;
 @Repository
 public class CourierDaoImpl implements CourierDao {
 
+    @Autowired
     private EntityManager entityManager;
 
     public CourierDaoImpl() {
-    }
-
-    @Autowired
-    public CourierDaoImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 
     @Override

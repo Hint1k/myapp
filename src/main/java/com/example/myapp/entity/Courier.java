@@ -1,41 +1,21 @@
 package com.example.myapp.entity;
 
+import com.example.myapp.validation.CapitalLetter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
 @Entity
-@Table(name="courier")
+@Table(name = "courier")
 public class Courier {
 
     @Id
-    //using the built-in database way to generate a primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
-
-    @Column(name="first_name")
-    private String firstName;
-
-    @Column(name="last_name")
-    private String lastName;
-
-    @Column(name="phone")
-    private String phone;
-
-    // bidirectional relationship, referencing side
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "courier",
-            targetEntity = Address.class,
-            cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH})
-    private List<Address> addresses;
-
-    public Courier(){}
-
 
     public Integer getId() {
         return id;
@@ -43,6 +23,36 @@ public class Courier {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Column(name = "first_name")
+    @NotNull(message = "First name should not be empty")
+    @CapitalLetter // custom validator
+    private String firstName;
+
+    @Column(name = "last_name")
+    @NotNull(message = "Last name should not be empty")
+    @CapitalLetter // custom validator
+    private String lastName;
+
+    @Column(name = "phone")
+    @NotEmpty(message = "Phone number cannot be empty")
+    @Pattern(regexp = "^\\+\\d{11}$",
+            message = "Phone number must contain \"+\" and 11 digits")
+    private String phone;
+
+    // bidirectional relationship, referencing side
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "courier",
+            targetEntity = Address.class,
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH})
+    private List<Address> addresses;
+
+    public Courier() {
     }
 
     public String getFirstName() {

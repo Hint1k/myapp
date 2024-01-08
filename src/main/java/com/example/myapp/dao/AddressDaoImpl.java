@@ -1,26 +1,20 @@
 package com.example.myapp.dao;
 
 import com.example.myapp.entity.Address;
-import com.example.myapp.entity.Courier;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class AddressDaoImpl implements AddressDao {
 
+    @Autowired
     EntityManager entityManager;
 
     public AddressDaoImpl() {
-    }
-
-    @Autowired
-    public AddressDaoImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 
     @Override

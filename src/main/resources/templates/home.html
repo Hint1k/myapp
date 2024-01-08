@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration and Login System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h1> Welcome to home page!</h1>
+    </div>
+</div>
+
+<hr>
+<p>
+    User name = <span sec:authentication="principal.username"></span>
+    <br>
+    User role(s) = <span sec:authentication="principal.authorities"></span>
+    <br>
+</p>
+<hr>
+<a th:href="@{/courier/showList}">
+    <button type="button" class="update-button">
+        List of couriers
+    </button>
+</a>
+<br><br>
+<a th:href="@{/address/showList}">
+    <button type="button" class="update-button">
+        List of addresses
+    </button>
+<hr>
+<span sec:authorize="hasRole('MANAGER')">
+<p>
+    <a th:href="@{/manager}">To the manager's page</a>
+    (Only for managers)
+</p>
+<hr>
+</span>
+<span sec:authorize="hasRole('ADMIN')">
+<p>
+    <a th:href="@{/admin}">To the admin's page</a>
+    (Only for admins)
+</p>
+<hr>
+</span>
+<div class="form-group mb-3">
+
+    <span><a th:href="@{/logout}">
+        <button type="submit" class="btn btn-primary">Logout</button>
+        </a>
+    </span>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

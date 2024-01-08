@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Address form</title>
+    <style>
+        .error{color:red}
+    </style>
 </head>
 <body>
 <h1>Please fill in the Address form</h1>
@@ -15,21 +18,24 @@
         <tr>
             <td><label>Street name:</label></td>
             <td>
-                <input type="text" id="firstName" name="firstName" th:field="*{streetName}"/>
+                <input type="text" id="streetName" name="streetName" th:field="*{streetName}"/>
             </td>
         </tr>
+        <td> <span th:if="${#fields.hasErrors('streetName')}" class="error" th:errors="*{streetName}">Street name is invalid</span></td>
         <tr>
             <td><label>House number:</label></td>
             <td>
-                <input type="text" id="lastName" name="lastName" th:field="*{houseNumber}"/>
+                <input type="text" id="houseNumber" name="houseNumber" th:field="*{houseNumber}"/>
             </td>
         </tr>
+        <td><span th:if="${#fields.hasErrors('houseNumber')}" class="error" th:errors="*{houseNumber}">House number is invalid</span></td>
         <tr>
             <td><label>Flat number:</label></td>
             <td>
-                <input type="text" id="email" name="flatNumber" th:field="*{flatNumber}"/>
+                <input type="text" id="flatNumber" name="flatNumber" th:field="*{flatNumber}"/>
             </td>
         </tr>
+        <td><span th:if="${#fields.hasErrors('flatNumber')}" class="error" th:errors="*{flatNumber}">Flat number is invalid</span></td>
         <tr>
             <td><label>Courier:</label></td>
             <td>
@@ -41,6 +47,7 @@
                 </select>
             </td>
         </tr>
+        <td><span th:if="${#fields.hasErrors('courier')}" class="error" th:errors="*{courier}">Courier id is invalid</span></td>
         <tr>
             <td>
                 <input type="submit" value="Save Address" class="save"/>

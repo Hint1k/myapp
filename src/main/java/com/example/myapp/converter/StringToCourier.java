@@ -6,16 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-// needed this class to avoid conversion error
+// I needed this class to avoid conversion error
 @Component
 public class StringToCourier implements Converter<String, Courier> {
 
+    @Autowired
     private CourierService courierService;
 
-    @Autowired
-    public StringToCourier(CourierService courierService) {
-        this.courierService = courierService;
-    }
+    public StringToCourier() {}
 
     @Override
     public Courier convert(String string) {

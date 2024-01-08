@@ -12,12 +12,12 @@ creating a table for Courier class:
 drop table if exists courier;
 create table courier (
 id int(11) not null auto_increment,
-first_name varchar(45) default null,
-last_name varchar(45) default null,
-phone varchar(16) default null,
+first_name varchar(45) not null,
+last_name varchar(45) not null,
+phone varchar(16) not null,
 primary key(id) )
 engine=InnoDB auto_increment=1
-default charset=latin1;
+default charset=utf8mb4;
 
 
 /*
@@ -27,12 +27,50 @@ creating a table for Address class:
 drop table if exists address;
 create table address (
 id int(11) not null auto_increment,
-street_name varchar(45) default null,
-house_number smallint(5) default null,
-flat_number smallint(5) default null,
-courier_id int(11) default null,
+street_name varchar(45) not null,
+house_number smallint(5) not null,
+flat_number smallint(5) not null,
+courier_id int(11) not null,
 primary key (id),
 foreign key (courier_id)
 references courier (id)
 on delete no action on update no action)
-engine=InnoDB auto_increment=1 default charset=latin1;
+engine=InnoDB auto_increment=1
+default charset=utf8mb4;
+
+/*
+creating a table for authorities:
+*/
+
+drop table if exists users;
+create table users (
+username varchar(45) not null,
+password char(68) not null,
+enabled tinyint(1) not null,
+primary key (username))
+engine=InnoDB
+default charset=utf8mb4;
+
+/*
+creating a table for authorities:
+*/
+
+drop table if exists authorities;
+create table authorities (
+username varchar(45) not null,
+authority varchar(45) not null,
+PRIMARY KEY (username))
+engine=InnoDB
+default charset=utf8mb4;
+
+/*
+populating the "authorities" table with initial login credentials:
+*/
+
+insert into myappdata.authorities (username, authority) values ('manager', 'ROLE_MANAGER');
+insert into myappdata.authorities (username, authority) values ('manager', 'ROLE_COURIER');
+insert into myappdata.authorities (username, authority) values ('admin', 'ROLE_ADMIN');
+insert into myappdata.authorities (username, authority) values ('admin', 'ROLE_COURIER');
+insert into myappdata.authorities (username, authority) values ('courier1', 'ROLE_COURIER');
+insert into myappdata.authorities (username, authority) values ('courier2', 'ROLE_COURIER');
+

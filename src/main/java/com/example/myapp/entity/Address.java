@@ -1,36 +1,19 @@
 package com.example.myapp.entity;
 
+import com.example.myapp.validation.CapitalLetter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name="Address")
+@Table(name = "Address")
 public class Address {
 
     @Id
-    //using the built-in database way to generate a primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
-
-    @Column(name="street_name")
-    private String streetName;
-
-    @Column(name="house_number")
-    private int houseNumber;
-
-    @Column(name="flat_number")
-    private int flatNumber;
-
-    //bidirectional relationship, owning side
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH})
-    @JoinColumn(name="courier_id")
-    private Courier courier;
-
-    public Address(){}
 
     public Integer getId() {
         return id;
@@ -38,6 +21,36 @@ public class Address {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Column(name = "street_name")
+    @NotNull(message = "Street name should not be empty")
+    @CapitalLetter // custom validator
+    private String streetName;
+
+    @Column(name = "house_number")
+    @NotNull(message = "House number cannot be empty")
+    @Min(value = 1, message = "Minimum house number = 1")
+    @Max(value = 99, message = "Maximum house number = 99")
+    private Integer houseNumber;
+
+    @Column(name = "flat_number")
+    @NotNull(message = "Flat number cannot be empty")
+    @Min(value = 1, message = "Minimum flat number = 1")
+    @Max(value = 99, message = "Maximum flat number = 99")
+    private Integer flatNumber;
+
+    //bidirectional relationship, owning side
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    @JoinColumn(name = "courier_id")
+    @NotNull(message = "You have to assign courier")
+    private Courier courier;
+
+    public Address() {
     }
 
     public String getStreetName() {
@@ -48,19 +61,19 @@ public class Address {
         this.streetName = streetName;
     }
 
-    public int getHouseNumber() {
+    public Integer getHouseNumber() {
         return houseNumber;
     }
 
-    public void setHouseNumber(int houseNumber) {
+    public void setHouseNumber(Integer houseNumber) {
         this.houseNumber = houseNumber;
     }
 
-    public int getFlatNumber() {
+    public Integer getFlatNumber() {
         return flatNumber;
     }
 
-    public void setFlatNumber(int flatNumber) {
+    public void setFlatNumber(Integer flatNumber) {
         this.flatNumber = flatNumber;
     }
 

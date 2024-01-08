@@ -4,7 +4,7 @@ import com.example.myapp.entity.Courier;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-// did not have any errors and wrote this class just for learning purposes
+// I did not have any errors and wrote this class just for learning purposes
 @Component
 public class CourierToString implements Converter<Courier, String> {
 

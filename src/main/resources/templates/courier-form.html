@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Courier form</title>
+    <style>
+        .error{color:red}
+    </style>
 </head>
 <body>
 <h1>Please fill in the Courier form</h1>
@@ -15,21 +18,24 @@
         <tr>
             <td><label>First name:</label></td>
             <td>
-                <input type="text" id="firstName" name="firstName" th:field="*{firstName}"/>
+                <input type="text" id="firstName" name="firstName" th:field="*{firstName}" class="form-control" />
             </td>
         </tr>
+        <td><span th:if="${#fields.hasErrors('firstName')}" class="error" th:errors="*{firstName}">First name is invalid</span></td>
         <tr>
             <td><label>Last name:</label></td>
             <td>
-                <input type="text" id="lastName" name="lastName" th:field="*{lastName}"/>
-            </td>
+                <input type="text" id="lastName" name="lastName" th:field="*{lastName}" class="form-control" />
+              </td>
         </tr>
+        <td> <span th:if="${#fields.hasErrors('lastName')}" class="error" th:errors="*{lastName}">Last name is invalid</span></td>
         <tr>
             <td><label>Phone number:</label></td>
             <td>
                 <input type="text" id="phone" name="phone" th:field="*{phone}"/>
             </td>
         </tr>
+        <td><span th:if="${#fields.hasErrors('phone')}" class="error" th:errors="*{phone}">Phone is invalid</span></td>
         <tr>
             <td>
                 <input type="submit" value="Save Courier" class="save"/>
