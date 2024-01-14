@@ -37,6 +37,25 @@
     <button type="button" class="update-button">
         List of addresses
     </button>
+</a>
+<!-- 3 temp buttons to make sure that getWeather and getLocation works OK --->
+<br><br>
+<a href="/getLocation?address=moscow">
+    <button type="button" class="update-button">
+       Get coordinates of location (Moscow)
+    </button>
+</a>
+<a href="/getWeather/lat=55.7558&lon=37.6173">
+    <button type="button" class="update-button">
+        Get weather based on coordinates (of Moscow)
+    </button>
+</a>
+<a href="/getWeather?address=moscow">
+    <button type="button" class="update-button">
+        Get weather based on location (Moscow)
+    </button>
+</a>
+<!-- END of temp content --->
 <hr>
 <span sec:authorize="hasRole('MANAGER')">
 <p>
