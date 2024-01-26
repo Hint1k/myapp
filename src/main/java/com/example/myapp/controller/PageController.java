@@ -34,4 +34,14 @@ public class PageController {
     public String showRegisterPage() {
         return "register";
     }
+
+    @GetMapping("/weather/weather-location")
+    public String showWeatherAndLocationPage() {
+        return "weather-location";
+    }
+
+    @GetMapping("/weather/weather-report")
+    public String showWeatherAndReportPage() {
+        return "weather-report";
+    }
 }

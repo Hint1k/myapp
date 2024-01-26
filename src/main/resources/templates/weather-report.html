@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather report page</title>
+</head>
+<body>
+<h1>Weather report:</h1>
+<hr>
+<table th:border="1">
+    <th>City name:</th>
+    <td th:text="${cityName}"></td>
+</table>
+<br>
+<table th:border="1">
+    <th>Temperature:</th>
+    <td th:text="${temperature}"></td>
+</table>
+<br>
+<table th:border="1">
+    <th>Feels like:</th>
+    <td th:text="${feelsLike}"></td>
+</table>
+<hr>
+<a th:href="@{/weather/weather-location}">
+    <button type="button" class="update-button">Return to Weather & Location page</button>
+</a>
+</body>
+</html>

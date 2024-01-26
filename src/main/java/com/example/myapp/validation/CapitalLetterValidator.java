@@ -12,7 +12,6 @@ public class CapitalLetterValidator
         boolean result;
         if (courierName != null) {
             result = Character.isUpperCase(courierName.charAt(0));
-            ;
         } else {
             result = true;
         }

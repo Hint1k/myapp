@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather & Location page</title>
+</head>
+<body>
+<h1>This is weather and location page</h1>
+<hr>
+
+<form method="post" action="/weather/weather-json" th:action="@{/weather/weather-json}">
+    <label>CityName: <input type="text" name="cityName"></label>
+    <button type="submit">Check Weather (JSON format)</button>
+</form>
+<br><br>
+
+<form method="post" action="/weather/weather-html" th:action="@{/weather/weather-html}">
+    <label>CityName: <input type="text" name="cityName"></label>
+    <button type="submit">Check Weather (HTML format)</button>
+</form>
+
+<!-- these are temp buttons for testing -->
+<!--
+<hr>
+<a href="/getLocation?address=moscow">
+    <button type="button" class="update-button">
+        Get coordinates of location (Moscow)
+    </button>
+</a>
+<a href="/getWeather/lat=55.7558&lon=37.6173">
+    <button type="button" class="update-button">
+        Get weather based on coordinates (of Moscow)
+    </button>
+</a>
+<a href="/getWeather?address=moscow">
+    <button type="button" class="update-button">
+        Get weather based on location (Moscow)
+    </button>
+</a>
+-->
+<br><br>
+<a th:href="@{/home}">
+    <button type="button" class="update-button">Return to home page</button>
+</a>
+</body>
+</html>
