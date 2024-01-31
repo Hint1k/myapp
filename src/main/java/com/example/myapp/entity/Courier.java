@@ -55,6 +55,19 @@ public class Courier {
     public Courier() {
     }
 
+    public Courier(String firstName, String lastName, String phone) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
+
+    public Courier(Integer id, String firstName, String lastName, String phone) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+    }
+
     public String getFirstName() {
         return firstName;
     }

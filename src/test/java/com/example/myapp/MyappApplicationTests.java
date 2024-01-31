@@ -1,13 +1,25 @@
 package com.example.myapp;
 
+import com.example.myapp.controller.AddressController;
+import com.example.myapp.controller.CourierController;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MyappApplicationTests {
+public class MyappApplicationTests {
 
+	@Autowired
+	CourierController courierController;
+
+	@Autowired
+	AddressController addressController;
+
+	//checking if the tests are working at all
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
+		Assertions.assertNotNull(courierController);
+		Assertions.assertNotNull(addressController);
 	}
-
 }

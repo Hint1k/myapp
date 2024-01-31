@@ -53,6 +53,34 @@ public class Address {
     public Address() {
     }
 
+    public Address(String streetName, Integer houseNumber, Integer flatNumber) {
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+        this.flatNumber = flatNumber;
+    }
+
+    public Address(Integer id, String streetName, Integer houseNumber, Integer flatNumber) {
+        this.id = id;
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+        this.flatNumber = flatNumber;
+    }
+
+    public Address(String streetName, Integer houseNumber, Integer flatNumber, Courier courier) {
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+        this.flatNumber = flatNumber;
+        this.courier = courier;
+    }
+
+    public Address(Integer id, String streetName, Integer houseNumber, Integer flatNumber, Courier courier) {
+        this.id = id;
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+        this.flatNumber = flatNumber;
+        this.courier = courier;
+    }
+
     public String getStreetName() {
         return streetName;
     }
