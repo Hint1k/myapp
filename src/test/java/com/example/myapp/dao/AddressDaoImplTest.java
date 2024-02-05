@@ -35,7 +35,7 @@ public class AddressDaoImplTest {
     public static void createAddressList() {
         // creating courier and address data using Address constructor
         AddressData addressData = new AddressData();
-        addressesStatic = addressData.getAddresses();
+        addressesStatic = addressData.getAddressData();
     }
 
     @Test

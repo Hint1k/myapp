@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 // unit testing of service layer
 @ExtendWith(MockitoExtension.class)
-public class AddressServiceImpTest {
+public class AddressServiceImplTest {
 
     @InjectMocks
     AddressServiceImpl addressServiceImpl;
@@ -30,7 +30,7 @@ public class AddressServiceImpTest {
     @BeforeAll
     public static void createAddressList() {
         AddressData addressData = new AddressData();
-        addresses = addressData.getAddresses();
+        addresses = addressData.getAddressData();
     }
 
     @Test
@@ -69,6 +69,8 @@ public class AddressServiceImpTest {
         int id = 0;
         Address address = addresses.get(id);
 
+        doNothing().when(addressDaoImpl).saveAddress(address);
+
         // testing
         addressServiceImpl.saveAddress(address);
 
@@ -79,6 +81,8 @@ public class AddressServiceImpTest {
     public void testDeleteAddress() {
         Address address = addresses.get(0);
         int id = address.getId();
+
+        doNothing().when(addressDaoImpl).deleteAddress(id);
 
         // testing
         addressServiceImpl.deleteAddress(id);

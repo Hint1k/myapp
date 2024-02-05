@@ -24,7 +24,7 @@ public class CourierDaoImplTest {
     @Autowired
     private EntityManager entityManager;
 
-    private static List<Courier> couriers;
+    private List<Courier> couriers;
 
     private static List<Courier> couriersStatic;
 

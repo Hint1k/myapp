@@ -67,6 +67,8 @@ public class CourierServiceImplTest {
         int id = 0;
         Courier courier = couriers.get(id);
 
+        doNothing().when(courierDaoImpl).saveCourier(courier);
+
         // testing
         courierServiceImpl.saveCourier(courier);
 
@@ -77,6 +79,8 @@ public class CourierServiceImplTest {
     public void testDeleteCourier() {
         Courier courier = couriers.get(0);
         int id = courier.getId();
+
+        doNothing().when(courierDaoImpl).deleteCourier(id);
 
         // testing
         courierServiceImpl.deleteCourier(id);

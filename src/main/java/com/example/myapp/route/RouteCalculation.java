@@ -98,7 +98,7 @@ public class RouteCalculation {
                 if (i == j) {
                     matrix[i][j] = 0;
                 } else if (i < j) {
-                    matrix[i][j] = distances.get(j - 1 + k);
+                    matrix[i][j] = distances.get(j - 1 + k );
                 } else {
                     matrix[i][j] = distances.get(i - 1 + m);
                 }

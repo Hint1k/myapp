@@ -1,7 +1,8 @@
 package com.example.myapp.controller;
 
-import com.example.myapp.data.CourierData;
-import com.example.myapp.entity.Courier;
+import com.example.myapp.data.AddressData;
+import com.example.myapp.entity.Address;
+import com.example.myapp.service.AddressService;
 import com.example.myapp.service.CourierService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,149 +24,154 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 //unit test of controller layer
-@WebMvcTest(CourierController.class)
+@WebMvcTest(AddressController.class)
 @WithMockUser // spring security requires a user with a password
-public class CourierControllerTest {
+public class AddressControllerTest {
 
+    @MockBean
+    private AddressService addressService;
+
+    // requires for tests to work
     @MockBean
     private CourierService courierService;
 
     @Autowired
     private MockMvc mockMvc;
 
-    private List<Courier> couriers;
+    private List<Address> addresses;
 
-    private static List<Courier> couriersStatic;
+    private static List<Address> addressesStatic;
 
     @BeforeAll
     public static void createCourierList() {
-        CourierData courierData = new CourierData();
-        couriersStatic = courierData.getCourierData();
+        AddressData addressData = new AddressData();
+        addressesStatic = addressData.getAddressData();
     }
 
     @BeforeEach
     public void setupCouriers() {
         // in case of any changes
-        couriers = couriersStatic;
+        addresses = addressesStatic;
     }
 
     @Test
-    public void testGetCourierList() {
-        when(courierService.getCouriers()).thenReturn(couriers);
+    public void testGetAddressList() {
+        when(addressService.getAddresses()).thenReturn(addresses);
 
         // testing
         try {
-            mockMvc.perform(get("/courier/showList"))
+            mockMvc.perform(get("/address/showList"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name("courier-list"))
-                    .andExpect(model().attribute("couriers", hasSize(5)))
-                    .andExpect(model().attribute("couriers", hasItem(allOf(
-                            hasProperty("firstName", equalTo("John")),
-                            hasProperty("lastName", equalTo("Doe")),
-                            hasProperty("phone", equalTo("+79991111111"))
+                    .andExpect(view().name("address-list"))
+                    .andExpect(model().attribute("addresses", hasSize(5)))
+                    .andExpect(model().attribute("addresses", hasItem(allOf(
+                            hasProperty("streetName", equalTo("Main")),
+                            hasProperty("houseNumber", equalTo(1)),
+                            hasProperty("flatNumber", equalTo(10))
                     ))))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
-            System.out.println("testGetCourierList() fails");
+            System.out.println("testGetAddressList() fails");
             throw new RuntimeException(e);
         }
 
-        verify(courierService, times(1)).getCouriers();
+        verify(addressService, times(1)).getAddresses();
     }
 
     @Test
-    public void testAddCourier() {
+    public void testAddAddress() {
         // testing
         try {
-            mockMvc.perform(get("/courier/addCourier"))
+            mockMvc.perform(get("/address/addAddress"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name("courier-form"))
+                    .andExpect(view().name("address-form"))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
-            System.out.println("testAddCourier() fails");
+            System.out.println("testAddAddress() fails");
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void testSaveCourier() {
-        Courier courier = couriers.get(0);
-        doNothing().when(courierService).saveCourier(courier);
+    public void testSaveAddress() {
+        Address address = addresses.get(0);
+        doNothing().when(addressService).saveAddress(address);
 
         // testing
         try {
-            mockMvc.perform(post("/courier/saveCourier")
+            mockMvc.perform(post("/address/saveAddress")
                             .with(csrf())
-                            .flashAttr("courier", courier)
+                            .flashAttr("address", address)
                             .content(MediaType.TEXT_HTML_VALUE)
-                            .content(new ObjectMapper().writeValueAsString(courier))
+                            .content(new ObjectMapper().writeValueAsString(address))
                     )
-                    .andExpect(redirectedUrl("/courier/showList"))
+                    .andExpect(redirectedUrl("/address/showList"))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
-            System.out.println("testSaveCourier() fails");
+            System.out.println("testSaveAddress() fails");
             throw new RuntimeException(e);
         }
 
-        verify(courierService, times(1)).saveCourier(courier);
+        verify(addressService, times(1)).saveAddress(address);
     }
 
     @Test
     public void testUpdateCourier() {
-        Courier courier = couriers.get(0);
-        int id = courier.getId();
+        Address address = addresses.get(0);
+        int id = address.getId();
         id = id + 1;
-        String urlString = "/courier/updateCourier?courierId=" + id;
+        String urlString = "/address/updateAddress?addressId=" + id;
 
-        when(courierService.getCourier(id)).thenReturn(courier);
+        when(addressService.getAddress(id)).thenReturn(address);
 
         // testing
         try {
             mockMvc.perform(get(urlString)
                             .content(MediaType.TEXT_HTML_VALUE)
-                            .content(new ObjectMapper().writeValueAsString(courier))
+                            .content(new ObjectMapper().writeValueAsString(address))
                     )
                     .andExpect(status().isOk())
-                    .andExpect(view().name("courier-form"))
+                    .andExpect(view().name("address-form"))
                     .andDo(print())
                     .andReturn();
 
         } catch (Exception e) {
-            System.out.println("testGetCourier() fails");
+            System.out.println("testGetAddress() fails");
             throw new RuntimeException(e);
         }
 
-        verify(courierService, times(1)).getCourier(id);
+        verify(addressService, times(1)).getAddress(id);
     }
 
     @Test
     public void testDeleteCourier() {
-        Courier courier = couriers.get(1);
-        int id = courier.getId();
+        Address address = addresses.get(1);
+        int id = address.getId();
         id = id + 1;
-        String urlString = "/courier/deleteCourier?courierId=" + id;
+        String urlString = "/address/deleteAddress?addressId=" + id;
 
-        doNothing().when(courierService).deleteCourier(id);
+        doNothing().when(addressService).deleteAddress(id);
 
         // testing
         try {
             mockMvc.perform(get(urlString)
                             .content(MediaType.TEXT_HTML_VALUE)
-                            .content(new ObjectMapper().writeValueAsString(courier))
+                            .content(new ObjectMapper().writeValueAsString(address))
                     )
-                    .andExpect(redirectedUrl("/courier/showList"))
+                    .andExpect(redirectedUrl("/address/showList"))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
-            System.out.println("testDeleteCourier() fails");
+            System.out.println("testDeleteAddress() fails");
             throw new RuntimeException(e);
         }
 
-        verify(courierService, times(1)).deleteCourier(id);
+        verify(addressService, times(1)).deleteAddress(id);
     }
 }

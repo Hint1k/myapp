@@ -37,11 +37,11 @@ public class AddressData {
         createAddressList();
     }
 
-    public List<Address> getAddresses() {
+    public List<Address> getAddressData() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddressData(List<Address> addresses) {
         this.addresses = addresses;
     }
 }
