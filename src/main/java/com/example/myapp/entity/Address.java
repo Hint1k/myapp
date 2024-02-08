@@ -23,6 +23,19 @@ public class Address {
         this.id = id;
     }
 
+    /* Turned out that Google API can't find small cities
+    without country name in the request, plus some countries
+    have cities with the same name */
+    @Column(name = "country_name")
+    @NotNull(message = "Country name should not be empty")
+    @CapitalLetter // custom validator
+    private String countryName;
+
+    @Column(name = "city_name")
+    @NotNull(message = "City name should not be empty")
+    @CapitalLetter // custom validator
+    private String cityName;
+
     @Column(name = "street_name")
     @NotNull(message = "Street name should not be empty")
     @CapitalLetter // custom validator
@@ -33,12 +46,6 @@ public class Address {
     @Min(value = 1, message = "Minimum house number = 1")
     @Max(value = 99, message = "Maximum house number = 99")
     private Integer houseNumber;
-
-    @Column(name = "flat_number")
-    @NotNull(message = "Flat number cannot be empty")
-    @Min(value = 1, message = "Minimum flat number = 1")
-    @Max(value = 99, message = "Maximum flat number = 99")
-    private Integer flatNumber;
 
     //bidirectional relationship, owning side
     @ManyToOne(cascade = {
@@ -53,32 +60,49 @@ public class Address {
     public Address() {
     }
 
-    public Address(String streetName, Integer houseNumber, Integer flatNumber) {
+    public Address(String countryName, String cityName,
+                   String streetName, Integer houseNumber) {
+        this.countryName = countryName;
+        this.cityName = cityName;
         this.streetName = streetName;
         this.houseNumber = houseNumber;
-        this.flatNumber = flatNumber;
     }
 
-    public Address(Integer id, String streetName, Integer houseNumber, Integer flatNumber) {
-        this.id = id;
+    public Address(String countryName, String cityName,
+                   String streetName, Integer houseNumber,
+                   Courier courier) {
+        this.countryName = countryName;
+        this.cityName = cityName;
         this.streetName = streetName;
         this.houseNumber = houseNumber;
-        this.flatNumber = flatNumber;
-    }
-
-    public Address(String streetName, Integer houseNumber, Integer flatNumber, Courier courier) {
-        this.streetName = streetName;
-        this.houseNumber = houseNumber;
-        this.flatNumber = flatNumber;
         this.courier = courier;
     }
 
-    public Address(Integer id, String streetName, Integer houseNumber, Integer flatNumber, Courier courier) {
+    public Address(Integer id, String countryName,
+                   String cityName, String streetName,
+                   Integer houseNumber, Courier courier) {
         this.id = id;
+        this.countryName = countryName;
+        this.cityName = cityName;
         this.streetName = streetName;
         this.houseNumber = houseNumber;
-        this.flatNumber = flatNumber;
         this.courier = courier;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getStreetName() {
@@ -95,14 +119,6 @@ public class Address {
 
     public void setHouseNumber(Integer houseNumber) {
         this.houseNumber = houseNumber;
-    }
-
-    public Integer getFlatNumber() {
-        return flatNumber;
-    }
-
-    public void setFlatNumber(Integer flatNumber) {
-        this.flatNumber = flatNumber;
     }
 
     public Courier getCourier() {

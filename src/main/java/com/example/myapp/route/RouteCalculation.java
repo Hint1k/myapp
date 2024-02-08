@@ -1,46 +1,40 @@
 package com.example.myapp.route;
 
+import com.example.myapp.entity.Address;
+import com.example.myapp.rest.weatherJsonParsing.Coordinates;
+
 import java.util.*;
 
 // currently there is no front-end for this route calculation
 public class RouteCalculation {
 
     // creating a map to store a list of cities with their coordinates
-    public static Map<City, CityCoordinates> map;
-
-    // creating indexed list of the "map", copy the references into an ArrayList
-    public static List<Map.Entry<City, CityCoordinates>> indexedList;
+    private Map<Address, Coordinates> map;
 
     // creating array to save distances between cities
-    public static List<Double> distances;
+    private List<Double> distances;
 
-    // Distance matrix (distances between cities in the matrix);
-    public static double[][] matrix;
+    private double[][] matrix;
 
-    public static void main(String[] args) {
+    private double distance;
 
-        createListOfDistancesAndListOfCities();
-        createDistanceMatrix();
+    private List<String> path;
 
-        System.out.println("------------");
-        String[] distancePrecise =
-                String.valueOf(calculateShortestPath()).split("\\.");
-        String distanceApproximated = distancePrecise[0];
-        System.out.println(distanceApproximated + " kilometers");
-
-        //printing out indexedList to check it is correctly filled in
-        System.out.println("-------------");
-        indexedList = new ArrayList<>(map.entrySet());
-        for (int i = 0; i < map.size(); i++) {
-            Map.Entry<City, CityCoordinates> entry = indexedList.get(i);
-            String city = entry.getKey().getCityName();
-            double latitude = entry.getValue().getLatitude();
-            double longitude = entry.getValue().getLongitude();
-            System.out.println(city + " : " + latitude + ", " + longitude);
-        }
+    public List<String> getPath() {
+        return path;
     }
 
-    public static double calculateDistanceBetweenCities
+    public double getDistance() {
+        return distance;
+    }
+
+    public RouteCalculation(Map<Address, Coordinates> cities) {
+        createListOfDistancesAndListOfCities(cities);
+        createDistanceMatrix();
+        calculateShortestPath();
+    }
+
+    private double calculateDistanceBetweenCities
             (double lat1, double lon1, double lat2, double lon2) {
 
         int earth_radius = 6371; // km
@@ -55,27 +49,26 @@ public class RouteCalculation {
         return distance;
     }
 
-    public static void createListOfDistancesAndListOfCities() {
-        CityData cityData = new CityData();
-        map = cityData.getMap();
-        //creating ArrayList to iterate "map" not knowing keys and/or values
-        indexedList = new ArrayList<>(map.entrySet());
+    private void createListOfDistancesAndListOfCities(Map<Address, Coordinates> cities) {
         distances = new ArrayList<>();
+        map = cities;
+        //creating ArrayList to iterate "map" by index, since keys and/or values are unknown
+        List<Map.Entry<Address, Coordinates>> indexedList = new ArrayList<>(map.entrySet());
 
         for (int i = 0; i < map.size(); i++) {
             for (int j = 0; j < map.size(); j++) {
                 if (i < j) {
 
-                    Map.Entry<City, CityCoordinates> entryI = indexedList.get(i);
-                    Map.Entry<City, CityCoordinates> entryJ = indexedList.get(j);
+                    Map.Entry<Address, Coordinates> entryI = indexedList.get(i);
+                    Map.Entry<Address, Coordinates> entryJ = indexedList.get(j);
 
-                    CityCoordinates cityCoordinatesI = entryI.getValue();
-                    CityCoordinates cityCoordinatesJ = entryJ.getValue();
+                    Coordinates coordinatesI = entryI.getValue();
+                    Coordinates coordinatesJ = entryJ.getValue();
 
-                    double latitudeI = cityCoordinatesI.getLatitude();
-                    double latitudeJ = cityCoordinatesJ.getLatitude();
-                    double longitudeI = cityCoordinatesI.getLongitude();
-                    double longitudeJ = cityCoordinatesJ.getLongitude();
+                    double latitudeI = coordinatesI.getLatitude();
+                    double latitudeJ = coordinatesJ.getLatitude();
+                    double longitudeI = coordinatesI.getLongitude();
+                    double longitudeJ = coordinatesJ.getLongitude();
 
                     double distance = calculateDistanceBetweenCities
                             (latitudeI, longitudeI, latitudeJ, longitudeJ);
@@ -87,7 +80,7 @@ public class RouteCalculation {
     }
 
     // creating a matrix of distances between cities
-    public static double[][] createDistanceMatrix() {
+    private void createDistanceMatrix() {
         matrix = new double[map.size()][map.size()];
         int k = 0;
         int m = 0;
@@ -98,28 +91,15 @@ public class RouteCalculation {
                 if (i == j) {
                     matrix[i][j] = 0;
                 } else if (i < j) {
-                    matrix[i][j] = distances.get(j - 1 + k );
+                    matrix[i][j] = distances.get(j - 1 + k);
                 } else {
                     matrix[i][j] = distances.get(i - 1 + m);
                 }
             }
         }
-
-        // printing out matrix to check the result visually
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
-                // removing everything after "." to make it readable
-                String string = String.valueOf(matrix[i][j]);
-                String[] stringArray = string.split("\\.");
-                String distance = stringArray[0];
-                System.out.print(distance + "   ");
-            }
-            System.out.println();
-        }
-        return matrix;
     }
 
-    private static int getVariable(int counter) {
+    private int getVariable(int counter) {
         int variable = 0;
         double step = 1.5;
         int numberOfCities = map.size();
@@ -131,13 +111,12 @@ public class RouteCalculation {
         return variable;
     }
 
-    private static double calculateShortestPath() {
+    private void calculateShortestPath() {
         double minimum = Double.MAX_VALUE;
-        double distance = 0.0;
         List<String> cities = new ArrayList<>();
-        List<String> path = new ArrayList<>();
-        for (City city : map.keySet()) {
-            cities.add(city.getCityName());
+        path = new ArrayList<>();
+        for (Address address : map.keySet()) {
+            cities.add(address.getCityName());
         }
         path.add(cities.get(0)); // adding starting city
         String nearestCity = null;
@@ -164,7 +143,5 @@ public class RouteCalculation {
                 break;
             }
         }
-        path.forEach(System.out::println);
-        return distance;
     }
 }

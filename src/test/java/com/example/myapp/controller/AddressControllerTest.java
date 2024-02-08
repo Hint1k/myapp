@@ -66,11 +66,11 @@ public class AddressControllerTest {
             mockMvc.perform(get("/address/showList"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("address-list"))
-                    .andExpect(model().attribute("addresses", hasSize(5)))
+                    .andExpect(model().attribute("addresses", hasSize(6)))
                     .andExpect(model().attribute("addresses", hasItem(allOf(
-                            hasProperty("streetName", equalTo("Main")),
-                            hasProperty("houseNumber", equalTo(1)),
-                            hasProperty("flatNumber", equalTo(10))
+                            hasProperty("streetName", equalTo("Main street")),
+                            hasProperty("houseNumber", equalTo(10)),
+                            hasProperty("countryName", equalTo("Russia"))
                     ))))
                     .andDo(print())
                     .andReturn();

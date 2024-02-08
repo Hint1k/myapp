@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WeatherResponse {
     @JsonProperty("coord")
-    private Coordinate coordinate;
+    private Coordinates coordinates;
     @JsonProperty("weather")
     private Weather[] weather;
     @JsonProperty("main")
@@ -15,12 +15,12 @@ public class WeatherResponse {
     public WeatherResponse() {
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
+    public Coordinates getPosition() {
+        return coordinates;
     }
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
+    public void setPosition(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public Weather[] getWeather() {

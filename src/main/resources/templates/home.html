@@ -57,6 +57,13 @@
 </p>
 <hr>
 </span>
+<span sec:authorize="hasRole('COURIER')">
+<p>
+    <a th:href="@{/route}">To the courier's page</a>
+    (Only for couriers)
+</p>
+<hr>
+</span>
 <div class="form-group mb-3">
 
     <span><a th:href="@{/logout}">

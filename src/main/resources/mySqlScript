@@ -19,7 +19,6 @@ primary key(id) )
 engine=InnoDB auto_increment=1
 default charset=utf8mb4;
 
-
 /*
 creating a table for Address class:
 */
@@ -27,9 +26,10 @@ creating a table for Address class:
 drop table if exists address;
 create table address (
 id int(11) not null auto_increment,
+country_name varchar(45) not null,
+city_name varchar(45) not null,
 street_name varchar(45) not null,
 house_number smallint(5) not null,
-flat_number smallint(5) not null,
 courier_id int(11) not null,
 primary key (id),
 foreign key (courier_id)
@@ -73,4 +73,3 @@ insert into myappdata.authorities (username, authority) values ('admin', 'ROLE_A
 insert into myappdata.authorities (username, authority) values ('admin', 'ROLE_COURIER');
 insert into myappdata.authorities (username, authority) values ('courier1', 'ROLE_COURIER');
 insert into myappdata.authorities (username, authority) values ('courier2', 'ROLE_COURIER');
-

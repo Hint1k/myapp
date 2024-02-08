@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Route Calculation</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h1> Route calculation page!</h1>
+    </div>
+</div>
+<hr>
+User name = <span sec:authentication="principal.username"></span>
+<br><br>
+<a th:href="@{/courier/getAddresses}">
+    <button type="button" class="update-button">Get address list</button>
+</a>
+<div id="container">
+    <div id="content">
+        <table th:border="1">
+            <tr>
+                <th>Country name</th>
+                <th>City name</th>
+                <th>Street name</th>
+                <th>House number</th>
+                <th>Courier id</th>
+            </tr>
+            <tr th:each="address : ${addresses}">
+                <td th:text="${address.countryName}"></td>
+                <td th:text="${address.cityName}"></td>
+                <td th:text="${address.streetName}"></td>
+                <td th:text="${address.houseNumber}"></td>
+                <td th:text="${address.courier.id}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<hr>
+<a th:href="@{/courier/getCityList}">
+    <button type="button" class="update-button">Get city list</button>
+</a>
+<table>
+    <tr th:each="entry : ${map}">
+        <td th:text="${entry.key.getCityName()}">City Name</td>
+        <table th:border="1">
+            <tr th:each="coordinates : ${entry.value}">
+                <td th:text="${coordinates.latitude}">Latitude</td>
+                <td th:text="${coordinates.longitude}">Longitude</td>
+            </tr>
+        </table>
+    </tr>
+</table>
+<hr>
+<a th:href="@{/courier/calculateRoute}">
+    <button type="button" class="update-button">Calculate route</button>
+</a>
+<table th:border="1">
+    <tr>
+        <th>Route sequence</th>
+    </tr>
+    <tr th:each="city : ${route}">
+        <td th:text="${city}"></td>
+    </tr>
+    <tr>
+        <th>Total distance</th>
+    </tr>
+    <tr>
+        <td th:text="${distance}"></td>
+    </tr>
+</table>
+<hr>
+<a th:href="@{/home}">
+    <button type="button" class="update-button">Return to home page</button>
+</a>
+</body>
+</html>

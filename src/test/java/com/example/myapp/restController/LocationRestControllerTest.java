@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // @WebMvcTest does not work with testGetWeather() due to wrong port error
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT )
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LocationRestControllerTest {
 
     @MockBean
@@ -56,8 +56,8 @@ public class LocationRestControllerTest {
         String urlString = "/getWeather?address=moscow";
         String latitudeJson = "$.coord.lat";
         String longitudeJson = "$.coord.lon";
-        double latitude  = 55.7557;
-        double longitude  = 37.6182;
+        double latitude = 55.7558;
+        double longitude = 37.6172;
 
         // testing
         try {

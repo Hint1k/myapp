@@ -44,4 +44,9 @@ public class PageController {
     public String showWeatherAndReportPage() {
         return "weather-report";
     }
+
+    @GetMapping("/route")
+    public String showRouteCalculationPage() {
+        return "route";
+    }
 }

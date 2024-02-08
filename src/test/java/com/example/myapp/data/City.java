@@ -1,4 +1,4 @@
-package com.example.myapp.route;
+package com.example.myapp.data;
 
 public class City {
 

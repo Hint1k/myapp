@@ -16,26 +16,37 @@
         <tbody>
         <input type="hidden" id="id" name="id" th:field="*{id}"/>
         <tr>
+            <td><label>Country name:</label></td>
+            <td>
+                <input type="text" id="countryName" name="countryName" th:field="*{countryName}"/>
+            </td>
+        </tr>
+        <td><span th:if="${#fields.hasErrors('countryName')}" class="error" th:errors="*{countryName}">
+            Country name is invalid</span></td>
+        <tr>
+            <td><label>City name:</label></td>
+            <td>
+                <input type="text" id="cityName" name="cityName" th:field="*{cityName}"/>
+            </td>
+        </tr>
+        <td><span th:if="${#fields.hasErrors('cityName')}" class="error" th:errors="*{cityName}">
+            City name is invalid</span></td>
+        <tr>
             <td><label>Street name:</label></td>
             <td>
                 <input type="text" id="streetName" name="streetName" th:field="*{streetName}"/>
             </td>
         </tr>
-        <td> <span th:if="${#fields.hasErrors('streetName')}" class="error" th:errors="*{streetName}">Street name is invalid</span></td>
+        <td> <span th:if="${#fields.hasErrors('streetName')}" class="error" th:errors="*{streetName}">
+            Street name is invalid</span></td>
         <tr>
             <td><label>House number:</label></td>
             <td>
                 <input type="text" id="houseNumber" name="houseNumber" th:field="*{houseNumber}"/>
             </td>
         </tr>
-        <td><span th:if="${#fields.hasErrors('houseNumber')}" class="error" th:errors="*{houseNumber}">House number is invalid</span></td>
-        <tr>
-            <td><label>Flat number:</label></td>
-            <td>
-                <input type="text" id="flatNumber" name="flatNumber" th:field="*{flatNumber}"/>
-            </td>
-        </tr>
-        <td><span th:if="${#fields.hasErrors('flatNumber')}" class="error" th:errors="*{flatNumber}">Flat number is invalid</span></td>
+        <td><span th:if="${#fields.hasErrors('houseNumber')}" class="error" th:errors="*{houseNumber}">
+            House number is invalid</span></td>
         <tr>
             <td><label>Courier:</label></td>
             <td>
@@ -47,7 +58,8 @@
                 </select>
             </td>
         </tr>
-        <td><span th:if="${#fields.hasErrors('courier')}" class="error" th:errors="*{courier}">Courier id is invalid</span></td>
+        <td><span th:if="${#fields.hasErrors('courier')}" class="error" th:errors="*{courier}">
+            Courier id is invalid</span></td>
         <tr>
             <td>
                 <input type="submit" value="Save Address" class="save"/>

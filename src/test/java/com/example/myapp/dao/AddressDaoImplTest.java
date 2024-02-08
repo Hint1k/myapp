@@ -53,7 +53,7 @@ public class AddressDaoImplTest {
         addresses = query.getResultList();
 
         Assertions.assertThat(addresses).extracting(Address::getStreetName)
-                .contains("Sun", "Moon");
+                .contains("Up street", "Down street");
     }
 
     @Test
@@ -61,9 +61,9 @@ public class AddressDaoImplTest {
         Query query = entityManager.createQuery("from Address");
         addresses = query.getResultList();
 
-        assertEquals(5, addresses.size());
+        assertEquals(6, addresses.size());
         Assertions.assertThat(addresses).extracting(Address::getId)
-                .containsOnly(1, 2, 3, 4, 5);
+                .containsOnly(1, 2, 3, 4, 5, 6);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class AddressDaoImplTest {
         int id = 3;
         Address address = entityManager.find(Address.class, id);
 
-        assertEquals("Back", address.getStreetName());
+        assertEquals("Back street", address.getStreetName());
         assertEquals("Black", address.getCourier().getLastName());
     }
 
@@ -80,15 +80,16 @@ public class AddressDaoImplTest {
         Courier courier6 = new Courier(
                 "Harry", "Potter", "+79991111166");
         Address address6 = new Address(
-                "Mars", 6, 99, courier6);
+                "Russia", "Moscow",
+                "Arbat street", 10, courier6);
         entityManager.persist(address6);
 
         Query query = entityManager.createQuery("from Address");
         addresses = query.getResultList();
 
-        assertEquals(6, addresses.size());
+        assertEquals(7, addresses.size());
         Assertions.assertThat(addresses).extracting(Address::getStreetName)
-                .contains("Mars");
+                .contains("Arbat street");
         Assertions.assertThat(addresses).extracting(Address::getCourier)
                 .contains(courier6);
     }
@@ -104,9 +105,9 @@ public class AddressDaoImplTest {
         query = entityManager.createQuery("from Address");
         addresses = query.getResultList();
 
-        assertEquals(4, addresses.size());
+        assertEquals(5, addresses.size());
         Assertions.assertThat(addresses).extracting(Address::getStreetName)
-                .doesNotContain("Main");
+                .doesNotContain("Main street");
 
         // testing that courier is not deleted together with address
         query = entityManager.createQuery("from Courier");

@@ -1,4 +1,4 @@
-package com.example.myapp.rest;
+package com.example.myapp.rest.restController;
 
 import com.example.myapp.rest.locationJsonParsing.LocationResponse;
 import com.example.myapp.rest.weatherJsonParsing.WeatherResponse;
@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-public class LocationRestController {
+public class  LocationRestController {
 
     //delete real Google API key before commit
     private static final String API_KEY =
@@ -37,11 +37,11 @@ public class LocationRestController {
     @GetMapping("/getWeather")
     public WeatherResponse getWeather(@RequestParam String address) {
 
-        LocationResponse coordinates = getLocation(address);
+        LocationResponse locationResponse = getLocation(address);
 
-        double latitude = coordinates.getResults()[0]
+        double latitude = locationResponse.getResults()[0]
                 .getGeometry().getLocation().getLatitude();
-        double longitude = coordinates.getResults()[0]
+        double longitude = locationResponse.getResults()[0]
                 .getGeometry().getLocation().getLongitude();
 
         String url = "http://localhost:8080/getWeather/lat="

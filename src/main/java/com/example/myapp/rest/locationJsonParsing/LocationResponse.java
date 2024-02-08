@@ -15,5 +15,4 @@ public class LocationResponse {
     public void setResults(Result[] results) {
         this.results = results;
     }
-
 }
