@@ -47,8 +47,8 @@ public class RouteController {
         return "route";
     }
 
-    @GetMapping("/getCityList") //rename to getCoordinates
-    public String getCityList(Model model) {
+    @GetMapping("/getCoordinates")
+    public String getCoordinates(Model model) {
         map = new LinkedHashMap<>();
 
         for (int i = 0; i < addresses.size(); i++) {
@@ -73,12 +73,13 @@ public class RouteController {
         }
 
         model.addAttribute("map", map);
+        model.addAttribute("addresses", addresses);
 
         return "route";
     }
 
-    @GetMapping("/calculateRoute")
-    public String calculateRoute3(Model model) {
+    @GetMapping("/getRoute")
+    public String calculateRoute(Model model) {
         RouteCalculation routeCalculation = new RouteCalculation(map);
 
         double distanceDouble = routeCalculation.getDistance();
@@ -88,6 +89,9 @@ public class RouteController {
 
         model.addAttribute("route", route);
         model.addAttribute("distance", distance + " km");
+        model.addAttribute("map", map);
+        model.addAttribute("addresses", addresses);
+
         return "route";
     }
 }

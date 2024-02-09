@@ -1,6 +1,6 @@
 package com.example.myapp.controller;
 
-import com.example.myapp.data.AddressData;
+import com.example.myapp.testData.AddressData;
 import com.example.myapp.entity.Address;
 import com.example.myapp.service.AddressService;
 import com.example.myapp.service.CourierService;
@@ -46,13 +46,13 @@ public class AddressControllerTest {
     private static List<Address> addressesStatic;
 
     @BeforeAll
-    public static void createCourierList() {
+    public static void createAddressData() {
         AddressData addressData = new AddressData();
         addressesStatic = addressData.getAddressData();
     }
 
     @BeforeEach
-    public void setupCouriers() {
+    public void setupAddresses() {
         // in case of any changes
         addresses = addressesStatic;
     }
@@ -122,7 +122,7 @@ public class AddressControllerTest {
     }
 
     @Test
-    public void testUpdateCourier() {
+    public void testUpdateAddress() {
         Address address = addresses.get(0);
         int id = address.getId();
         id = id + 1;
@@ -150,7 +150,7 @@ public class AddressControllerTest {
     }
 
     @Test
-    public void testDeleteCourier() {
+    public void testDeleteAddress() {
         Address address = addresses.get(1);
         int id = address.getId();
         id = id + 1;

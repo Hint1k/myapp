@@ -6,10 +6,22 @@
     <title>Admin page</title>
 </head>
 <body>
-<h1>Only visible to the admin. Under construction...</h1>
+<h1>Only visible to the admin.</h1>
 <hr>
+<a th:href="@{/courier/showList}">
+    <button type="button" class="update-button">
+        List of couriers
+    </button>
+</a>
+<br><br>
+<a th:href="@{/address/showList}">
+    <button type="button" class="update-button">
+        List of addresses
+    </button>
+</a>
+<br><br>
 <a th:href="@{/home}">
-    <button type="button" class="update-button">Return to home page</button>
+    <button type="button" class="update-button">Return to home's page</button>
 </a>
 </body>
 </html>

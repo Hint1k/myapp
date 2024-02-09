@@ -1,7 +1,7 @@
 package com.example.myapp.service;
 
 import com.example.myapp.dao.AddressDaoImpl;
-import com.example.myapp.data.AddressData;
+import com.example.myapp.testData.AddressData;
 import com.example.myapp.entity.Address;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

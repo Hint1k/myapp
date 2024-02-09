@@ -1,4 +1,4 @@
-package com.example.myapp.data;
+package com.example.myapp.testData;
 
 import com.example.myapp.entity.Courier;
 

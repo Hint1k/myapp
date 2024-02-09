@@ -1,4 +1,4 @@
-package com.example.myapp.rest;
+package com.example.myapp.rest.restController;
 
 import com.example.myapp.rest.weatherJsonParsing.WeatherResponse;
 import org.springframework.http.ResponseEntity;

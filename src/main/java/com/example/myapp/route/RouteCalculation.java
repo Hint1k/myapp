@@ -28,8 +28,8 @@ public class RouteCalculation {
         return distance;
     }
 
-    public RouteCalculation(Map<Address, Coordinates> cities) {
-        createListOfDistancesAndListOfCities(cities);
+    public RouteCalculation(Map<Address, Coordinates> addresses) {
+        createListOfDistancesAndListOfCities(addresses);
         createDistanceMatrix();
         calculateShortestPath();
     }
@@ -49,9 +49,9 @@ public class RouteCalculation {
         return distance;
     }
 
-    private void createListOfDistancesAndListOfCities(Map<Address, Coordinates> cities) {
+    private void createListOfDistancesAndListOfCities(Map<Address, Coordinates> addresses) {
         distances = new ArrayList<>();
-        map = cities;
+        map = addresses;
         //creating ArrayList to iterate "map" by index, since keys and/or values are unknown
         List<Map.Entry<Address, Coordinates>> indexedList = new ArrayList<>(map.entrySet());
 

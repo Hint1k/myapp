@@ -1,6 +1,6 @@
 package com.example.myapp.dao;
 
-import com.example.myapp.data.CourierData;
+import com.example.myapp.testData.CourierData;
 import com.example.myapp.entity.Courier;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;

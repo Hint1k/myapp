@@ -68,8 +68,6 @@ populating the "authorities" table with initial login credentials:
 */
 
 insert into myappdata.authorities (username, authority) values ('manager', 'ROLE_MANAGER');
-insert into myappdata.authorities (username, authority) values ('manager', 'ROLE_COURIER');
 insert into myappdata.authorities (username, authority) values ('admin', 'ROLE_ADMIN');
-insert into myappdata.authorities (username, authority) values ('admin', 'ROLE_COURIER');
 insert into myappdata.authorities (username, authority) values ('courier1', 'ROLE_COURIER');
 insert into myappdata.authorities (username, authority) values ('courier2', 'ROLE_COURIER');

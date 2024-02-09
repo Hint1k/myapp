@@ -40,8 +40,8 @@ User name = <span sec:authentication="principal.username"></span>
     </div>
 </div>
 <hr>
-<a th:href="@{/courier/getCityList}">
-    <button type="button" class="update-button">Get city list</button>
+<a th:href="@{/courier/getCoordinates}">
+    <button type="button" class="update-button">Get coordinates</button>
 </a>
 <table>
     <tr th:each="entry : ${map}">
@@ -55,7 +55,7 @@ User name = <span sec:authentication="principal.username"></span>
     </tr>
 </table>
 <hr>
-<a th:href="@{/courier/calculateRoute}">
+<a th:href="@{/courier/getRoute}">
     <button type="button" class="update-button">Calculate route</button>
 </a>
 <table th:border="1">

@@ -1,7 +1,7 @@
 package com.example.myapp.service;
 
 import com.example.myapp.dao.CourierDaoImpl;
-import com.example.myapp.data.CourierData;
+import com.example.myapp.testData.CourierData;
 import com.example.myapp.entity.Courier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

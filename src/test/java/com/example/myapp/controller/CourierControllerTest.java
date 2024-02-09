@@ -1,6 +1,6 @@
 package com.example.myapp.controller;
 
-import com.example.myapp.data.CourierData;
+import com.example.myapp.testData.CourierData;
 import com.example.myapp.entity.Courier;
 import com.example.myapp.service.CourierService;
 import com.fasterxml.jackson.databind.ObjectMapper;

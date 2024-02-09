@@ -27,21 +27,17 @@
     <br>
 </p>
 <hr>
-<a th:href="@{/courier/showList}">
-    <button type="button" class="update-button">
-        List of couriers
-    </button>
-</a>
-<br><br>
-<a th:href="@{/address/showList}">
-    <button type="button" class="update-button">
-        List of addresses
-    </button>
-</a>
-<br><br>
 <a th:href="@{/weather/weather-location}">
     <button type="button" class="update-button">Go to weather & location page</button>
 </a>
+<br><br>
+<span sec:authorize="hasRole('COURIER')">
+<p>
+    <a th:href="@{/route}">
+    <button type="button" class="update-button">Route calculation for a courier</button>
+    </a>
+</p>
+</span>
 <hr>
 <span sec:authorize="hasRole('MANAGER')">
 <p>
@@ -54,13 +50,6 @@
 <p>
     <a th:href="@{/admin}">To the admin's page</a>
     (Only for admins)
-</p>
-<hr>
-</span>
-<span sec:authorize="hasRole('COURIER')">
-<p>
-    <a th:href="@{/route}">To the courier's page</a>
-    (Only for couriers)
 </p>
 <hr>
 </span>
