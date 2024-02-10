@@ -14,14 +14,14 @@ to access the application.
 6) The application has to check the validity of the fields (fields are not empty etc)
 7) The application shows the weather forecast for everyone. This info is taken
 from a weather forecast site based on the location entered by user.
+8)  Test RouteCalculation and RouteController classes
 
 B) Still need to be done:
-1) Test RouteCalculation and RouteController classes
-2) Update endpoints in accordance with the REST naming convention
-3) New user registration process
-4) After a courier generated the route, it should be saved in database and
+1) Update endpoints in accordance with the REST naming convention
+2) New user registration process
+3) After a courier generated the route, it should be saved in database and
 can be downloaded as a file by a manager or admin
-5) Thymeleaf template to simulate a customer entering address to request the delivery
-6) The application has to check the validity of the address entered by customer
+4) Thymeleaf template to simulate a customer entering address to request the delivery
+5) The application has to check the validity of the address entered by customer
 on Google map, before recording it to the database.
-7) Implement generic DAO and generic service classes.
+6) Implement generic DAO and generic service classes.
