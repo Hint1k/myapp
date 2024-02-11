@@ -13,8 +13,8 @@ services:
       - spring.jpa.hibernate.ddl-auto = update
       - spring.datasource.url = jdbc:mysql://mysql:3306/myappdata?useSSL=false&allowPublicKeyRetrieval=true
       - spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQLDialect
-      - spring.datasource.username = root
-      - spring.datasource.password = root
+      - spring.datasource.username = user
+      - spring.datasource.password = user
       - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
     restart: always
     ports:
@@ -24,7 +24,8 @@ services:
     image: mysql:8.2.0
     environment:
       DATABASE_HOST: docker-mysql
-      MYSQL_ROOT_USER: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: myappdata
       DATABASE_PORT: 3306
