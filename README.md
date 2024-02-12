@@ -14,7 +14,6 @@ to access the application.
 6) The application has to check the validity of the fields (fields are not empty etc)
 7) The application shows the weather forecast for everyone. This info is taken
 from a weather forecast site based on the location entered by user.
-8)  Test RouteCalculation and RouteController classes
 
 B) Still need to be done:
 1) Update endpoints in accordance with the REST naming convention
