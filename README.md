@@ -15,5 +15,5 @@ B) Still need to be done:
 1) Update endpoints in accordance with the REST naming convention
 2) New user registration process
 3) After a courier generated the route, it should be saved in database and can be downloaded as a file by a manager or admin
-4 Thymeleaf template to simulate a customer entering address to request the delivery
+4) Thymeleaf template to simulate a customer entering address to request the delivery
 5) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.
