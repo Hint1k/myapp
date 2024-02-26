@@ -1,0 +1,13 @@
+{
+  "request": {
+    "urlPathPattern": "/maps/api/geocode/.*",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "countries/{{regexExtract request.query.address '[a-zA-Z]{3}'}}.json"
+  }
+}

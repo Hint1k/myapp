@@ -78,6 +78,12 @@
             <artifactId>jakarta.ws.rs-api</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>3.4.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

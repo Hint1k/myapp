@@ -5,18 +5,26 @@ import com.example.myapp.entity.Address;
 import com.example.myapp.rest.weatherJsonParsing.Coordinates;
 import com.example.myapp.service.AddressService;
 import com.example.myapp.service.CourierService;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,7 +41,6 @@ public class RouteControllerTest {
     @MockBean
     private AddressService addressService;
 
-    // requires for tests to work
     @MockBean
     private CourierService courierService;
 
@@ -47,6 +54,17 @@ public class RouteControllerTest {
     private List<Address> addresses;
 
     private static List<Address> addressesStatic;
+
+    @RegisterExtension
+    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+            .options(wireMockConfig().dynamicPort()
+                    .usingFilesUnderClasspath("wiremock"))
+            .build();
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("google.api.url", wireMockExtension::baseUrl);
+    }
 
     @BeforeAll
     public static void createData() {
@@ -92,6 +110,16 @@ public class RouteControllerTest {
         when(addressService.getAddresses()).thenReturn(addresses);
         testGetAddresses();
 
+        String fileName = "countries/{{regexExtract request.query.address '[a-zA-Z]{3}'}}";
+
+        // stubbing with WireMock
+        wireMockExtension.stubFor(WireMock.get(urlMatching("/maps/api/geocode/.*"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile(fileName + ".json")
+                        .withTransformers("response-template")));
+
         // testing
         try {
             mockMvc.perform(get("/courier/getCoordinates"))
@@ -120,7 +148,7 @@ public class RouteControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(view().name("route"))
                     .andExpect(model().attribute("route", hasSize(7)))
-                    .andExpect(model().attribute("distance", equalTo("7839 km")))
+                    .andExpect(model().attribute("distance", equalTo("7832 km")))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {

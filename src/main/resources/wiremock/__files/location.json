@@ -1,0 +1,111 @@
+{
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "10",
+          "short_name": "10",
+          "types": [
+            "street_number"
+          ]
+        },
+        {
+          "long_name": "Arbat Street",
+          "short_name": "Arbat St",
+          "types": [
+            "route"
+          ]
+        },
+        {
+          "long_name": "Tsentralnyy administrativnyy okrug",
+          "short_name": "Tsentralnyy administrativnyy okrug",
+          "types": [
+            "political",
+            "sublocality",
+            "sublocality_level_1"
+          ]
+        },
+        {
+          "long_name": "Moskva",
+          "short_name": "Moskva",
+          "types": [
+            "locality",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Arbat",
+          "short_name": "Arbat",
+          "types": [
+            "administrative_area_level_3",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Moskva",
+          "short_name": "Moskva",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Moskva",
+          "short_name": "Moskva",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "Russia",
+          "short_name": "RU",
+          "types": [
+            "country",
+            "political"
+          ]
+        },
+        {
+          "long_name": "119019",
+          "short_name": "119019",
+          "types": [
+            "postal_code"
+          ]
+        }
+      ],
+      "formatted_address": "Arbat St, 10, Moskva, Russia, 119019",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 55.751625,
+            "lng": 37.596894
+          },
+          "southwest": {
+            "lat": 55.75122,
+            "lng": 37.5961762
+          }
+        },
+        "location": {
+          "lat": 55.75,
+          "lng": 37.59
+        },
+        "location_type": "ROOFTOP",
+        "viewport": {
+          "northeast": {
+            "lat": 55.75277148029149,
+            "lng": 37.5980088302915
+          },
+          "southwest": {
+            "lat": 55.75007351970849,
+            "lng": 37.59531086970851
+          }
+        }
+      },
+      "place_id": "ChIJzxUu4UxKtUYR48OyEEE-T_U",
+      "types": [
+        "premise"
+      ]
+    }
+  ],
+  "status": "OK"
+}

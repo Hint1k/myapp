@@ -8,6 +8,7 @@ import com.example.myapp.rest.weatherJsonParsing.Coordinates;
 import com.example.myapp.route.RouteCalculation;
 import com.example.myapp.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,13 @@ public class RouteController {
 
     @Autowired
     private AddressService addressService;
+
+    private final String googleApiUrl;
+
+    public RouteController(@Value("${google.api.url}")
+                           String googleApiUrl) {
+        this.googleApiUrl = googleApiUrl;
+    }
 
     @GetMapping("/getAddresses")
     public String getAddresses(Principal principal, Model model) {
@@ -53,15 +61,9 @@ public class RouteController {
 
         for (int i = 0; i < addresses.size(); i++) {
             Address address = addresses.get(i);
-            String countryName = address.getCountryName();
-            String cityName = address.getCityName();
-            String streetName = address.getStreetName();
-            Integer houseNumber = address.getHouseNumber();
-            String stringAddress = countryName + ", " + cityName + ", "
-                    + streetName + ", " + houseNumber;
 
-            LocationRestController controller = new LocationRestController();
-            LocationResponse response = controller.getLocation(stringAddress);
+            LocationResponse response = getLocationResponse(address);
+
             double latitude = response.getResults()[0]
                     .getGeometry().getLocation().getLatitude();
             double longitude = response.getResults()[0]
@@ -76,6 +78,21 @@ public class RouteController {
         model.addAttribute("addresses", addresses);
 
         return "route";
+    }
+
+    private LocationResponse getLocationResponse(Address address) {
+        String countryName = address.getCountryName();
+        String cityName = address.getCityName();
+        String streetName = address.getStreetName();
+        Integer houseNumber = address.getHouseNumber();
+        String stringAddress = countryName + ", " + cityName + ", "
+                + streetName + ", " + houseNumber;
+
+        LocationRestController controller =
+                new LocationRestController(googleApiUrl);
+        LocationResponse response = controller.getLocation(stringAddress);
+
+        return response;
     }
 
     @GetMapping("/getRoute")

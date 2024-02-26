@@ -1,48 +1,75 @@
 package com.example.myapp.restController;
 
 import com.example.myapp.service.CourierService;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// @WebMvcTest does not work with testGetWeather() due to wrong port error
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LocationRestControllerTest {
 
     @MockBean
     private CourierService courierService;
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
+
+    @RegisterExtension
+    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+            .options(wireMockConfig().dynamicPort()
+                    .usingFilesUnderClasspath("wiremock"))
+            .build();
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("google.api.url", wireMockExtension::baseUrl);
+        registry.add("weather.api.url", wireMockExtension::baseUrl);
+    }
 
     @BeforeEach
     void setUp(WebApplicationContext wac) {
-        mockMvc = MockMvcBuilders.standaloneSetup(new LocationRestControllerTest()).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(new LocationRestControllerTest())
+                .build();
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
     @Test
     public void testGetLocation() {
-        String urlString = "/getLocation?address=Moscow";
-        String latitudeJson = "$.results[0].geometry.location.lat";
-        String longitudeJson = "$.results[0].geometry.location.lng";
-        String latitude = "55.755826";
-        String longitude = "37.6173";
+        String urlString = "/maps/api/geocode/json?key=googleApiKey&address=moscow";
+
+        // stubbing with WireMock
+        wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("location.json")));
+
+        // parsing the response in json format
+        String latitude = "$.results[0].geometry.location.lat";
+        String longitude = "$.results[0].geometry.location.lng";
 
         // testing
         try {
-            mockMvc.perform(get(urlString))
+            mockMvc.perform(get("/getLocation?address=moscow"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath(latitudeJson).value(latitude))
-                    .andExpect(jsonPath(longitudeJson).value(longitude))
+                    .andExpect(jsonPath(latitude).value(55.75))
+                    .andExpect(jsonPath(longitude).value(37.59))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
@@ -53,18 +80,35 @@ public class LocationRestControllerTest {
 
     @Test
     public void testGetWeather() {
-        String urlString = "/getWeather?address=moscow";
-        String latitudeJson = "$.coord.lat";
-        String longitudeJson = "$.coord.lon";
-        double latitude = 55.7558;
-        double longitude = 37.6172;
+        String urlString1 = "/maps/api/geocode/json?key=googleApiKey&address=moscow";
 
-        // testing
+        // stubbing location with WireMock
+        wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString1))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("location.json")));
+
+        String urlString2 =
+                "/data/2.5/weather?lat=55.75&lon=37.59&appid=weatherApiKey&units=metric";
+
+        // stubbing weather with WireMock
+        wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString2))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("weather.json")));
+
+        // parsing the response in json format
+        String latitude = "$.coord.lat";
+        String longitude = "$.coord.lon";
+
+        // testing the response for two stubs simultaneously
         try {
-            mockMvc.perform(get(urlString))
+            mockMvc.perform(get("/getWeather?address=moscow"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath(latitudeJson).value(latitude))
-                    .andExpect(jsonPath(longitudeJson).value(longitude))
+                    .andExpect(jsonPath(latitude).value(55.75))
+                    .andExpect(jsonPath(longitude).value(37.59))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {

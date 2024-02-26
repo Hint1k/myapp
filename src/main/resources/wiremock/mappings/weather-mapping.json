@@ -1,0 +1,13 @@
+{
+  "request": {
+    "urlPath": "/data/2.5/weather?lat=55.75&lon=37.59&appid=weatherApiKey&units=metric",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "weather.json"
+  }
+}
