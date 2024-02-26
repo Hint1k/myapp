@@ -1,3 +1,8 @@
+General description of application: A web based application for couriers. It helps couriers to delivers goods in accordance with their individual tasks.
+
+Customer requirements:
+
+A) Completed:
 1) Each task consists of addresses that has to be visited to complete deliveries.
 2) The manager/admin can edit the list of addresses and the list of couriers in the database.
 3) The couriers can only see their individual tasks, but cannot edit anything. 
