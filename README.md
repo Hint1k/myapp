@@ -1,4 +1,4 @@
-General description of application: A web based application for couriers. It helps couriers to delivers goods in accordance with their individual tasks.
+General description of application: A web based application for couriers. It helps couriers to deliver goods in accordance with their individual tasks.
 
 Customer requirements:
 
