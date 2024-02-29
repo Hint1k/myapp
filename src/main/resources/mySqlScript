@@ -71,3 +71,13 @@ insert into myappdata.authorities (username, authority) values ('manager', 'ROLE
 insert into myappdata.authorities (username, authority) values ('admin', 'ROLE_ADMIN');
 insert into myappdata.authorities (username, authority) values ('courier1', 'ROLE_COURIER');
 insert into myappdata.authorities (username, authority) values ('courier2', 'ROLE_COURIER');
+
+/*
+populating the "users" table with bcrypted passwords:
+*/
+
+INSERT INTO users (username, password, enabled) VALUES
+('admin', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
+('manager', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
+('courier1', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
+('courier2', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1);

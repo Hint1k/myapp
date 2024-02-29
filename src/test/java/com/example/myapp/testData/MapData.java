@@ -23,12 +23,12 @@ public class MapData {
         addresses = addressData.getAddressData();
 
         List<Coordinates> coordinates = new ArrayList<>();
-        coordinates.add(new Coordinates(55.755826, 37.6173));
+        coordinates.add(new Coordinates(55.755826, 37.617300));
         coordinates.add(new Coordinates(48.856614, 2.3522219));
-        coordinates.add(new Coordinates(51.5403558, -0.1432687));
-        coordinates.add(new Coordinates(52.52000659999999, 13.404954));
-        coordinates.add(new Coordinates(41.9027835, 12.4963655));
-        coordinates.add(new Coordinates(40.4167754, -3.7037902));
+        coordinates.add(new Coordinates(51.540355, -0.143268));
+        coordinates.add(new Coordinates(52.520006, 13.404954));
+        coordinates.add(new Coordinates(41.902783, 12.496365));
+        coordinates.add(new Coordinates(40.416775, -3.703790));
 
         int courierId = 1;
         Courier courier = new Courier();

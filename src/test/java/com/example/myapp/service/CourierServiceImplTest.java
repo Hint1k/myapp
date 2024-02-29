@@ -41,9 +41,9 @@ public class CourierServiceImplTest {
         // testing
         courierServiceImpl.getCourier(id);
 
-        assertEquals("Jack", courier.getFirstName());
-        assertEquals("Black", courier.getLastName());
-        assertEquals(3, courier.getId());
+        assertEquals("Sidor", courier.getFirstName());
+        assertEquals("Sidorov", courier.getLastName());
+        assertEquals(13, courier.getId());
 
         verify(courierDaoImpl, times(1)).getCourier(id);
     }
@@ -56,8 +56,8 @@ public class CourierServiceImplTest {
         List<Courier> courierList = courierServiceImpl.getCouriers();
 
         assertEquals(5, courierList.size());
-        assertEquals("Black", courierList.get(2).getLastName());
-        assertEquals("Jane", courierList.get(1).getFirstName());
+        assertEquals("Petr", courierList.get(1).getFirstName());
+        assertEquals("Sidorov", courierList.get(2).getLastName());
 
         verify(courierDaoImpl, times(1)).getCouriers();
     }

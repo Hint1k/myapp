@@ -14,23 +14,23 @@ public class AddressData {
     private void createAddressList() {
         addresses = new ArrayList<>();
         Address address1 = new Address(
-                1, "Russia", "Moscow",
-                "Main street", 10, couriers.get(0));
+                11, "Russia", "Moscow",
+                "Main street", 11, couriers.get(0));
         Address address2 = new Address(
-                2, "France", "Paris",
-                "Side street", 11, couriers.get(1));
+                12, "France", "Paris",
+                "Side street", 12, couriers.get(1));
         Address address3 = new Address(
-                3, "England", "London",
-                "Back street", 12, couriers.get(2));
+                13, "England", "London",
+                "Back street", 13, couriers.get(2));
         Address address4 = new Address(
-                4, "Germany", "Berlin",
-                "Down street", 13, couriers.get(3));
+                14, "Germany", "Berlin",
+                "Down street", 14, couriers.get(3));
         Address address5 = new Address(
-                5, "Italy", "Rome",
-                "Up street", 14, couriers.get(4));
+                15, "Italy", "Rome",
+                "Up street", 15, couriers.get(4));
         Address address6 = new Address(
-                6, "Spain", "Madrid",
-                "Forward street", 15, couriers.get(0));
+                16, "Spain", "Madrid",
+                "Forward street", 16, couriers.get(0));
 
         addresses.add(address1);
         addresses.add(address2);

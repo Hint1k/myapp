@@ -92,7 +92,7 @@ public class RouteControllerTest {
                     .andExpect(model().attribute("addresses", hasSize(6)))
                     .andExpect(model().attribute("addresses", hasItem(allOf(
                             hasProperty("streetName", equalTo("Main street")),
-                            hasProperty("houseNumber", equalTo(10)),
+                            hasProperty("houseNumber", equalTo(11)),
                             hasProperty("countryName", equalTo("Russia"))
                     ))))
                     .andDo(print())

@@ -1,56 +1,26 @@
 package com.example.myapp.dao;
 
-import com.example.myapp.testData.CourierData;
 import com.example.myapp.entity.Courier;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// unit testing of dao layer
-@DataJpaTest // disable full auto configuration
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+/* unit testing of dao layer using in-memory H2 database
+and sql scripts located in schema.sgl and data.sql */
+@DataJpaTest// disable full auto configuration
 public class CourierDaoImplTest {
 
     @Autowired
     private EntityManager entityManager;
 
     private List<Courier> couriers;
-
-    private static List<Courier> couriersStatic;
-
-    @BeforeAll
-    public static void createCourierList() {
-        CourierData courierData = new CourierData();
-        couriersStatic = courierData.getCourierData();
-    }
-
-    @Test
-    @BeforeEach // need to re-new database for each method
-    public void testMergeCourier() {
-        couriers = couriersStatic;
-
-        entityManager.merge(couriers.get(0));
-        entityManager.merge(couriers.get(1));
-        entityManager.merge(couriers.get(2));
-        entityManager.merge(couriers.get(3));
-        entityManager.merge(couriers.get(4));
-
-        Query query = entityManager.createQuery("from Courier");
-        couriers = query.getResultList();
-
-        Assertions.assertThat(couriers).extracting(Courier::getLastName)
-                .contains("Doe", "Sue");
-    }
 
     @Test
     public void testGetCouriers() {
@@ -67,8 +37,22 @@ public class CourierDaoImplTest {
         int id = 3;
         Courier courier = entityManager.find(Courier.class, id);
 
-        assertEquals("Jack", courier.getFirstName());
-        assertEquals("Black", courier.getLastName());
+        assertEquals("Sidor", courier.getFirstName());
+        assertEquals("Sidorov", courier.getLastName());
+    }
+
+    @Test
+    public void testMergeCourier() {
+        Courier courier6 = new Courier(
+                6,"Frodo", "Baggings", "+79991111177");
+        entityManager.merge(courier6);
+
+        Query query = entityManager.createQuery("from Courier");
+        couriers = query.getResultList();
+
+        assertEquals(6, couriers.size());
+        Assertions.assertThat(couriers).extracting(Courier::getLastName)
+                .contains("Baggings");
     }
 
     @Test
@@ -87,8 +71,8 @@ public class CourierDaoImplTest {
 
     @Test
     public void testDeleteCourier() {
-        // id = 1..4 can't be deleted,
-        // because they have foreign keys in real database
+        /* a courier with id = 5 does not have a foreign key
+        in the address table (see data.sql), so it can be deleted */
         int id = 5;
         Query query = entityManager.createQuery(
                 "delete from Courier where id=:courierId");
@@ -100,6 +84,6 @@ public class CourierDaoImplTest {
 
         assertEquals(4, couriers.size());
         Assertions.assertThat(couriers).extracting(Courier::getFirstName)
-                .doesNotContain("Martin");
+                .doesNotContain("Igor");
     }
 }

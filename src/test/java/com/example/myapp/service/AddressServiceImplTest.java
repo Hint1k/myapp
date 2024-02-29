@@ -34,21 +34,21 @@ public class AddressServiceImplTest {
     }
 
     @Test
-    public void testGetAddress() {
+    public void testGetAddresses() {
         when(addressDaoImpl.getAddresses()).thenReturn(addresses);
 
         //testing
         List<Address> addressList = addressServiceImpl.getAddresses();
 
         assertEquals(6, addressList.size());
-        assertEquals(10, addressList.get(0).getHouseNumber());
-        assertEquals("Doe", addressList.get(0).getCourier().getLastName());
+        assertEquals(11, addressList.get(0).getHouseNumber());
+        assertEquals("Ivanov", addressList.get(0).getCourier().getLastName());
 
         verify(addressDaoImpl, times(1)).getAddresses();
     }
 
     @Test
-    public void testGetAddresses() {
+    public void testGetAddress() {
         int id = 0;
         Address address = addresses.get(id);
 
@@ -58,8 +58,8 @@ public class AddressServiceImplTest {
         Address addressTest = addressServiceImpl.getAddress(id);
 
         assertEquals("Main street", addressTest.getStreetName());
-        assertEquals(10, addressTest.getHouseNumber());
-        assertEquals("John", addressTest.getCourier().getFirstName());
+        assertEquals(11, addressTest.getHouseNumber());
+        assertEquals("Ivan", addressTest.getCourier().getFirstName());
 
         verify(addressDaoImpl, times(1)).getAddress(id);
     }

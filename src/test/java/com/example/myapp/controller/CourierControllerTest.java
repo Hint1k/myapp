@@ -62,8 +62,8 @@ public class CourierControllerTest {
                     .andExpect(view().name("courier-list"))
                     .andExpect(model().attribute("couriers", hasSize(5)))
                     .andExpect(model().attribute("couriers", hasItem(allOf(
-                            hasProperty("firstName", equalTo("John")),
-                            hasProperty("lastName", equalTo("Doe")),
+                            hasProperty("firstName", equalTo("Ivan")),
+                            hasProperty("lastName", equalTo("Ivanov")),
                             hasProperty("phone", equalTo("+79991111111"))
                     ))))
                     .andDo(print())
