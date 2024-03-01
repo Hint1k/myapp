@@ -11,7 +11,7 @@
 <h1>Please fill in the Address form</h1>
 <hr>
 <h2>New Address:</h2>
-<form method="post" action="/address/saveAddress" th:object="${address}" th:action="@{saveAddress}">
+<form method="post" action="/api/addresses" th:object="${address}" th:action="@{/api/addresses}">
     <table>
         <tbody>
         <input type="hidden" id="id" name="id" th:field="*{id}"/>
@@ -69,7 +69,7 @@
     </table>
 </form>
 <p>
-    <a th:href="@{/address/showList}">
+    <a th:href="@{/api/addresses}">
         <button type="button" class="update-button">Return back to Address list</button>
     </a>
 </p>

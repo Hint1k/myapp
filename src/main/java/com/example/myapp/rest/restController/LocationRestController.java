@@ -14,24 +14,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 public class LocationRestController {
 
-    //delete real Google API key before commit
-    private static final String API_KEY =
-//            "here was my real Google Api Key";
-            "googleApiKey";
+    private final String googleApiKey;
 
     private final String googleApiUrl;
 
     public LocationRestController(@Value("${google.api.url}")
-                                  String googleApiUrl) {
+                                  String googleApiUrl,
+                                  @Value("${google.api.key}")
+                                  String googleApiKey) {
         this.googleApiUrl = googleApiUrl;
+        this.googleApiKey = googleApiKey;
     }
 
-    @GetMapping("/getLocation")
+    @GetMapping("/location")
     public LocationResponse getLocation(@RequestParam String address) {
         UriComponents uriComponents = UriComponentsBuilder
                 .fromHttpUrl(googleApiUrl)
                 .path("/maps/api/geocode/json")
-                .queryParam("key", API_KEY)
+                .queryParam("key", googleApiKey)
                 .queryParam("address", address)
                 .build();
 
@@ -42,7 +42,7 @@ public class LocationRestController {
         return locationResponse.getBody();
     }
 
-    @GetMapping("/getWeather")
+    @GetMapping("/weather")
     public WeatherResponse getWeather(@RequestParam String address) {
 
         LocationResponse locationResponse = getLocation(address);
@@ -52,7 +52,7 @@ public class LocationRestController {
         double longitude = locationResponse.getResults()[0]
                 .getGeometry().getLocation().getLongitude();
 
-        String url = "http://localhost:8080/getWeather/lat="
+        String url = "http://localhost:8080" + "/weather/lat="
                 + latitude + "&lon=" + longitude;
 
         ResponseEntity<WeatherResponse> weatherResponse =

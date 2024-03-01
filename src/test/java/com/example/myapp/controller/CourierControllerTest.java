@@ -57,7 +57,7 @@ public class CourierControllerTest {
 
         // testing
         try {
-            mockMvc.perform(get("/courier/showList"))
+            mockMvc.perform(get("/api/couriers"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("courier-list"))
                     .andExpect(model().attribute("couriers", hasSize(5)))
@@ -80,7 +80,7 @@ public class CourierControllerTest {
     public void testAddCourier() {
         // testing
         try {
-            mockMvc.perform(get("/courier/addCourier"))
+            mockMvc.perform(get("/api/couriers/courier"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("courier-form"))
                     .andDo(print())
@@ -98,13 +98,13 @@ public class CourierControllerTest {
 
         // testing
         try {
-            mockMvc.perform(post("/courier/saveCourier")
+            mockMvc.perform(post("/api/couriers")
                             .with(csrf())
                             .flashAttr("courier", courier)
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(courier))
                     )
-                    .andExpect(redirectedUrl("/courier/showList"))
+                    .andExpect(redirectedUrl("/api/couriers"))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
@@ -120,7 +120,7 @@ public class CourierControllerTest {
         Courier courier = couriers.get(0);
         int id = courier.getId();
         id = id + 1;
-        String urlString = "/courier/updateCourier?courierId=" + id;
+        String urlString = "/api/couriers/" + id;
 
         when(courierService.getCourier(id)).thenReturn(courier);
 
@@ -148,7 +148,7 @@ public class CourierControllerTest {
         Courier courier = couriers.get(1);
         int id = courier.getId();
         id = id + 1;
-        String urlString = "/courier/deleteCourier?courierId=" + id;
+        String urlString = "/api/couriers/" + id;
 
         doNothing().when(courierService).deleteCourier(id);
 
@@ -158,7 +158,7 @@ public class CourierControllerTest {
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(courier))
                     )
-                    .andExpect(redirectedUrl("/courier/showList"))
+                    .andExpect(redirectedUrl("/api/couriers"))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {

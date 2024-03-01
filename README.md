@@ -9,11 +9,10 @@ A) Completed:
 4) However, the couriers can generate the shortest route to speed up the delivery.
 5) Every courier, manager and admin should have a user name and a password to access the application.
 6) The application has to check the validity of the fields (fields are not empty etc)
-7) The application shows the weather forecast for everyone. This info is taken from a weather forecast site based on the location entered by user.
+7) The application shows the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
 
 B) Still need to be done:
-1) Update endpoints in accordance with the REST naming convention
-2) New user registration process
-3) After a courier generated the route, it should be saved in database and can be downloaded as a file by a manager or admin
-4) Thymeleaf template to simulate a customer entering address to request the delivery
-5) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.
+1) New user registration process
+2) After a courier generated the route, it should be saved in database and can be downloaded as a file by a manager or admin
+3) Thymeleaf template to simulate a customer entering address to request the delivery
+4) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.

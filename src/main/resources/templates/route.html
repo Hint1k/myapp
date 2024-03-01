@@ -16,7 +16,7 @@
 <hr>
 User name = <span sec:authentication="principal.username"></span>
 <br><br>
-<a th:href="@{/courier/getAddresses}">
+<a th:href="@{/api/courier/addresses}">
     <button type="button" class="update-button">Get address list</button>
 </a>
 <div id="container">
@@ -40,7 +40,7 @@ User name = <span sec:authentication="principal.username"></span>
     </div>
 </div>
 <hr>
-<a th:href="@{/courier/getCoordinates}">
+<a th:href="@{/api/courier/coordinates}">
     <button type="button" class="update-button">Get coordinates</button>
 </a>
 <table>
@@ -55,7 +55,7 @@ User name = <span sec:authentication="principal.username"></span>
     </tr>
 </table>
 <hr>
-<a th:href="@{/courier/getRoute}">
+<a th:href="@{/api/courier/distance}">
     <button type="button" class="update-button">Calculate route</button>
 </a>
 <table th:border="1">

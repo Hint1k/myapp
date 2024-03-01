@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/courier")
+@RequestMapping("/api/courier")
 public class RouteController {
 
     private Map<Address, Coordinates> map;
@@ -30,13 +30,17 @@ public class RouteController {
     private AddressService addressService;
 
     private final String googleApiUrl;
+    private final String googleApiKey;
 
     public RouteController(@Value("${google.api.url}")
-                           String googleApiUrl) {
+                           String googleApiUrl,
+                           @Value("${google.api.key}")
+                           String googleApiKey) {
         this.googleApiUrl = googleApiUrl;
+        this.googleApiKey = googleApiKey;
     }
 
-    @GetMapping("/getAddresses")
+    @GetMapping("/addresses")
     public String getAddresses(Principal principal, Model model) {
         String username = principal.getName();
         username = username.replaceAll("\\D+", "");
@@ -55,7 +59,7 @@ public class RouteController {
         return "route";
     }
 
-    @GetMapping("/getCoordinates")
+    @GetMapping("/coordinates")
     public String getCoordinates(Model model) {
         map = new LinkedHashMap<>();
 
@@ -89,13 +93,13 @@ public class RouteController {
                 + streetName + ", " + houseNumber;
 
         LocationRestController controller =
-                new LocationRestController(googleApiUrl);
+                new LocationRestController(googleApiUrl, googleApiKey);
         LocationResponse response = controller.getLocation(stringAddress);
 
         return response;
     }
 
-    @GetMapping("/getRoute")
+    @GetMapping("/distance")
     public String calculateRoute(Model model) {
         RouteCalculation routeCalculation = new RouteCalculation(map);
 

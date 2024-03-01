@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/address")
+@RequestMapping("/api")
 public class AddressController {
 
     @Autowired
@@ -35,14 +35,14 @@ public class AddressController {
         dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
 
-    @GetMapping("/showList")
+    @GetMapping("/addresses")
     public String getAddressList(Model model) {
         List<Address> addresses = addressService.getAddresses();
         model.addAttribute("addresses", addresses);
         return "address-list";
     }
 
-    @GetMapping("/addAddress")
+    @GetMapping("/addresses/address")
     public String addAddress(Model model) {
         List<Courier> couriers = courierService.getCouriers();
         model.addAttribute("couriers", couriers);
@@ -51,7 +51,7 @@ public class AddressController {
         return "address-form";
     }
 
-    @PostMapping("/saveAddress")
+    @PostMapping("/addresses")
     public String saveAddress(
             @Valid @ModelAttribute("address") Address address,
             BindingResult result, Model model) {
@@ -63,11 +63,12 @@ public class AddressController {
             return "address-form";
         }
         addressService.saveAddress(address);
-        return "redirect:/address/showList";
+        return "redirect:/api/addresses";
     }
 
-    @GetMapping("/updateAddress")
-    public String updateAddress(@RequestParam("addressId") Integer id, Model model) {
+    @PutMapping("/addresses/{id}")
+    public String updateAddress(@PathVariable("id") Integer id,
+                                Model model) {
         List<Courier> couriers = courierService.getCouriers();
         model.addAttribute("couriers", couriers);
         Address address = addressService.getAddress(id);
@@ -75,9 +76,9 @@ public class AddressController {
         return "address-form";
     }
 
-    @GetMapping("/deleteAddress")
-    public String deleteAddress(@RequestParam("addressId") Integer id) {
+    @DeleteMapping("/addresses/{id}")
+    public String deleteAddress(@PathVariable("id") Integer id) {
         addressService.deleteAddress(id);
-        return "redirect:/address/showList";
+        return "redirect:/api/addresses";
     }
 }

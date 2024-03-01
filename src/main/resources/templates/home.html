@@ -27,13 +27,13 @@
     <br>
 </p>
 <hr>
-<a th:href="@{/weather/weather-location}">
+<a th:href="@{/api/weather/weather-location}">
     <button type="button" class="update-button">Go to weather & location page</button>
 </a>
 <br><br>
 <span sec:authorize="hasRole('COURIER')">
 <p>
-    <a th:href="@{/route}">
+    <a th:href="@{/api/courier/route}">
     <button type="button" class="update-button">Route calculation for a courier</button>
     </a>
 </p>

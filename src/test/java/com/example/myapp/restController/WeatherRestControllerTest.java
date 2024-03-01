@@ -31,6 +31,8 @@ public class WeatherRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private static final String WEATHER_API_KEY = "weatherApiKey";
+
     @RegisterExtension
     static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort()
@@ -40,11 +42,13 @@ public class WeatherRestControllerTest {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("weather.api.url", wireMockExtension::baseUrl);
+        registry.add("weather.api.key", wireMockExtension::baseUrl);
     }
 
     @Test
     public void testGetWeather() {
-        String urlString = "/data/2.5/weather?lat=55.75&lon=37.59&appid=weatherApiKey&units=metric";
+        String urlString = "/data/2.5/weather?lat=55.75&lon=37.59&appid="
+                + WEATHER_API_KEY + "&units=metric";
 
         // stubbing with WireMock
         wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString))
@@ -59,7 +63,7 @@ public class WeatherRestControllerTest {
 
         // testing
         try {
-            mockMvc.perform(get("/getWeather/lat=55.75&lon=37.59"))
+            mockMvc.perform(get("/weather/lat=55.75&lon=37.59"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath(temperature).value(0.3))
                     .andExpect(jsonPath(feels_like).value(-4.83))

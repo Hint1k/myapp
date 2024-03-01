@@ -9,7 +9,7 @@
 <hr>
 <div id="container">
     <div id="content">
-        <button type="button" onclick="window.location.href='/courier/addCourier'; return false;"
+        <button type="button" onclick="window.location.href='/api/couriers/courier'; return false;"
                 class="add-button"> Add courier
         </button>
         <br><br>
@@ -27,14 +27,13 @@
                 <td th:text="${courier.lastName}"></td>
                 <td th:text="${courier.phone}"></td>
                 <td>
-                    <a th:href="@{/courier/updateCourier(courierId=${courier.id})}">
-                        <button type="button" class="update-button">Update</button>
-                    </a>
-                    <span>|</span>
-                    <a th:href="@{/courier/deleteCourier(courierId=${courier.id})}"
-                       onclick="if(!(confirm('Are you sure to delete this courier?'))) return false">
-                        <button type="button" class="update-button">Delete</button>
-                    </a>
+                    <form action="#" th:action="@{/api/couriers/{id}(id=${courier.id})}" th:method="put">
+                        <button type="submit" class="btn">Update courier</button>
+                    </form>
+                    <form action="#" th:action="@{/api/couriers/{id}(id=${courier.id})}" th:method="delete"
+                          onclick="if(!(confirm('Are you sure to delete this courier?'))) return false">
+                        <button type="submit" class="btn">Delete courier</button>
+                    </form>
                 </td>
             </tr>
         </table>

@@ -64,6 +64,7 @@ public class RouteControllerTest {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("google.api.url", wireMockExtension::baseUrl);
+        registry.add("google.api.key", wireMockExtension::baseUrl);
     }
 
     @BeforeAll
@@ -86,7 +87,7 @@ public class RouteControllerTest {
 
         // testing
         try {
-            mockMvc.perform(get("/courier/getAddresses"))
+            mockMvc.perform(get("/api/courier/addresses"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("route"))
                     .andExpect(model().attribute("addresses", hasSize(6)))
@@ -122,7 +123,7 @@ public class RouteControllerTest {
 
         // testing
         try {
-            mockMvc.perform(get("/courier/getCoordinates"))
+            mockMvc.perform(get("/api/courier/coordinates"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("route"))
                     .andExpect(model().attribute("addresses", hasSize(6)))
@@ -144,7 +145,7 @@ public class RouteControllerTest {
 
         // testing
         try {
-            mockMvc.perform(get("/courier/getRoute"))
+            mockMvc.perform(get("/api/courier/distance"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("route"))
                     .andExpect(model().attribute("route", hasSize(7)))

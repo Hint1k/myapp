@@ -63,7 +63,7 @@ public class AddressControllerTest {
 
         // testing
         try {
-            mockMvc.perform(get("/address/showList"))
+            mockMvc.perform(get("/api/addresses"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("address-list"))
                     .andExpect(model().attribute("addresses", hasSize(6)))
@@ -86,7 +86,7 @@ public class AddressControllerTest {
     public void testAddAddress() {
         // testing
         try {
-            mockMvc.perform(get("/address/addAddress"))
+            mockMvc.perform(get("/api/addresses/address"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("address-form"))
                     .andDo(print())
@@ -104,13 +104,13 @@ public class AddressControllerTest {
 
         // testing
         try {
-            mockMvc.perform(post("/address/saveAddress")
+            mockMvc.perform(post("/api/addresses")
                             .with(csrf())
                             .flashAttr("address", address)
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(address))
                     )
-                    .andExpect(redirectedUrl("/address/showList"))
+                    .andExpect(redirectedUrl("/api/addresses"))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
@@ -126,7 +126,7 @@ public class AddressControllerTest {
         Address address = addresses.get(0);
         int id = address.getId();
         id = id + 1;
-        String urlString = "/address/updateAddress?addressId=" + id;
+        String urlString = "/api/addresses/" + id;
 
         when(addressService.getAddress(id)).thenReturn(address);
 
@@ -154,7 +154,7 @@ public class AddressControllerTest {
         Address address = addresses.get(1);
         int id = address.getId();
         id = id + 1;
-        String urlString = "/address/deleteAddress?addressId=" + id;
+        String urlString = "/api/addresses/" + id;
 
         doNothing().when(addressService).deleteAddress(id);
 
@@ -164,7 +164,7 @@ public class AddressControllerTest {
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(address))
                     )
-                    .andExpect(redirectedUrl("/address/showList"))
+                    .andExpect(redirectedUrl("/api/addresses"))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {

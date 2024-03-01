@@ -11,14 +11,19 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/weather")
+@RequestMapping("/api/weather")
 public class WeatherController {
 
     private final String googleApiUrl;
 
+    private final String googleApiKey;
+
     public WeatherController(@Value("${google.api.url}")
-                             String googleApiUrl) {
+                             String googleApiUrl,
+                             @Value("${google.api.key}")
+                             String googleApiKey) {
         this.googleApiUrl = googleApiUrl;
+        this.googleApiKey = googleApiKey;
     }
 
     @InitBinder
@@ -32,14 +37,14 @@ public class WeatherController {
     @PostMapping("/weather-json")
     public String getJsonWeather(@RequestParam String cityName, Model model) {
         model.addAttribute("cityName", cityName);
-        return "redirect:/getWeather?address=" + cityName;
+        return "redirect:/weather?address=" + cityName;
     }
 
     // returns weather in HTML form
     @PostMapping("/weather-html")
     public String getHtmlWeather(@RequestParam String cityName, Model model) {
         LocationRestController locationRestController =
-                new LocationRestController(googleApiUrl);
+                new LocationRestController(googleApiUrl, googleApiKey);
         WeatherResponse weatherResponse =
                 locationRestController.getWeather(cityName);
         Main main = weatherResponse.getMain();

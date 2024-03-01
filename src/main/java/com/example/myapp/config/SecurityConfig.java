@@ -26,15 +26,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/").hasAnyRole("COURIER", "ADMIN", "MANAGER")
+                        .requestMatchers("/home").hasAnyRole("ADMIN", "MANAGER", "COURIER")
+                        .requestMatchers("/api/couriers/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/api/addresses/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/manager/**").hasRole("MANAGER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/courier/**").hasAnyRole("COURIER","ADMIN","MANAGER")
-                        .requestMatchers("/register/**").permitAll()
+                        .requestMatchers("/api/courier/**").hasRole("COURIER")
+                        //the registration process for customers needs update
+                        .requestMatchers("/register-form").permitAll()
+                        // weather & google interfaces are open to anyone
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage("/showLoginPage")
+                        .loginPage("/login-page")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home")
                         .permitAll())
@@ -44,7 +48,5 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception
                         .accessDeniedPage("/access-denied"));
         return http.build();
-
-        // return http.httpBasic().disable().build(); // to check mistakes concerning security
     }
 }

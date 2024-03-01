@@ -9,7 +9,7 @@
 <hr>
 <div id="container">
     <div id="content">
-        <button type="button" onclick="window.location.href='/address/addAddress'; return false;"
+        <button type="button" onclick="window.location.href='/api/addresses/address'; return false;"
                 class="add-button"> Add address
         </button>
         <br><br>
@@ -29,14 +29,13 @@
                 <td th:text="${address.houseNumber}"></td>
                 <td th:text="${address.courier.id}"></td>
                 <td>
-                    <a th:href="@{/address/updateAddress(addressId=${address.id})}">
-                        <button type="button" class="update-button">Update</button>
-                    </a>
-                    <span>|</span>
-                    <a th:href="@{/address/deleteAddress(addressId=${address.id})}"
-                       onclick="if(!(confirm('Are you sure to delete this address?'))) return false">
-                        <button type="button" class="update-button">Delete</button>
-                    </a>
+                    <form action="#" th:action="@{/api/addresses/{id}(id=${address.id})}" th:method="put">
+                        <button type="submit" class="btn">Update address</button>
+                    </form>
+                    <form action="#" th:action="@{/api/addresses/{id}(id=${address.id})}" th:method="delete"
+                          onclick="if(!(confirm('Are you sure to delete this address?'))) return false">
+                        <button type="submit" class="btn">Delete address</button>
+                    </form>
                 </td>
             </tr>
         </table>

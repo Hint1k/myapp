@@ -11,7 +11,7 @@
 <h1>Please fill in the Courier form</h1>
 <hr>
 <h2>New Courier:</h2>
-<form method="post" action="/courier/saveCourier" th:object="${courier}" th:action="@{saveCourier}">
+<form method="post" action="/api/couriers" th:object="${courier}" th:action="@{/api/couriers}">
     <table>
         <tbody>
         <input type="hidden" id="id" name="id" th:field="*{id}"/>
@@ -45,7 +45,7 @@
     </table>
 </form>
 <p>
-    <a th:href="@{/courier/showList}">
+    <a th:href="@{/api/couriers}">
         <button type="button" class="update-button">Return back to Courier list</button>
     </a>
 </p>

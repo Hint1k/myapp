@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/courier")
+@RequestMapping("/api")
 public class CourierController {
 
     @Autowired
@@ -30,21 +30,21 @@ public class CourierController {
         dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
 
-    @GetMapping("/showList")
+    @GetMapping("/couriers")
     public String getCourierList(Model model) {
         List<Courier> couriers = courierService.getCouriers();
         model.addAttribute("couriers", couriers);
         return "courier-list";
     }
 
-    @GetMapping("/addCourier")
+    @GetMapping("/couriers/courier")
     public String addCourier(Model model) {
         Courier courier = new Courier();
         model.addAttribute("courier", courier);
         return "courier-form";
     }
 
-    @PostMapping("/saveCourier")
+    @PostMapping("/couriers")
     public String saveCourier(
             @Valid @ModelAttribute("courier") Courier courier,
             BindingResult result) {
@@ -52,20 +52,20 @@ public class CourierController {
             return "courier-form";
         }
         courierService.saveCourier(courier);
-        return "redirect:/courier/showList";
+        return "redirect:/api/couriers";
     }
 
-    @GetMapping("/updateCourier")
-    public String updateCourier(@RequestParam("courierId") Integer id,
+    @PutMapping("/couriers/{id}")
+    public String updateCourier(@PathVariable("id") Integer id,
                                 Model model) {
         Courier courier = courierService.getCourier(id);
         model.addAttribute("courier", courier);
         return "courier-form";
     }
 
-    @GetMapping("/deleteCourier")
-    public String deleteCourier(@RequestParam("courierId") Integer id) {
+    @DeleteMapping("/couriers/{id}")
+    public String deleteCourier(@PathVariable("id") Integer id) {
         courierService.deleteCourier(id);
-        return "redirect:/courier/showList";
+        return "redirect:/api/couriers";
     }
 }

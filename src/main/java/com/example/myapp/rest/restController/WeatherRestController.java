@@ -10,10 +10,9 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class WeatherRestController {
-    //delete real OpenWeatherMap.org key before commit
-    private static final String API_KEY =
-//            "here was my real OpenWeatherMap.org Api Key";
-            "weatherApiKey";
+
+    @Value("${weather.api.key}")
+    private String weatherApiKey;
 
     private final String weatherApiUrl;
 
@@ -22,13 +21,13 @@ public class WeatherRestController {
         this.weatherApiUrl = weatherApiUrl;
     }
 
-    @GetMapping("/getWeather/lat={latitude}&lon={longitude}")
+    @GetMapping("/weather/lat={latitude}&lon={longitude}")
     public WeatherResponse getWeather(@PathVariable("latitude") double latitude,
                                       @PathVariable("longitude") double longitude) {
         ResponseEntity<WeatherResponse> responseEntity =
                 new RestTemplate().getForEntity(weatherApiUrl
                         + "/data/2.5/weather?lat=" + latitude + "&lon="
-                        + longitude + "&appid=" + API_KEY
+                        + longitude + "&appid=" + weatherApiKey
                         + "&units=metric", WeatherResponse.class);
 
         return responseEntity.getBody();

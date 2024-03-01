@@ -29,6 +29,8 @@ public class LocationRestControllerTest {
 
     private MockMvc mockMvc;
 
+    private static final String GOOGLE_API_KEY = "googleApiKey";
+
     @RegisterExtension
     static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort()
@@ -38,7 +40,9 @@ public class LocationRestControllerTest {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("google.api.url", wireMockExtension::baseUrl);
+        registry.add("google.api.key", wireMockExtension::baseUrl);
         registry.add("weather.api.url", wireMockExtension::baseUrl);
+        registry.add("weather.api.key", wireMockExtension::baseUrl);
     }
 
     @BeforeEach
@@ -51,7 +55,8 @@ public class LocationRestControllerTest {
 
     @Test
     public void testGetLocation() {
-        String urlString = "/maps/api/geocode/json?key=googleApiKey&address=moscow";
+        String urlString = "/maps/api/geocode/json?key=" +
+                GOOGLE_API_KEY + "&address=moscow";
 
         // stubbing with WireMock
         wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString))
@@ -66,7 +71,7 @@ public class LocationRestControllerTest {
 
         // testing
         try {
-            mockMvc.perform(get("/getLocation?address=moscow"))
+            mockMvc.perform(get("/location?address=moscow"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath(latitude).value(55.75))
                     .andExpect(jsonPath(longitude).value(37.59))
@@ -105,7 +110,7 @@ public class LocationRestControllerTest {
 
         // testing the response for two stubs simultaneously
         try {
-            mockMvc.perform(get("/getWeather?address=moscow"))
+            mockMvc.perform(get("/weather?address=moscow"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath(latitude).value(55.75))
                     .andExpect(jsonPath(longitude).value(37.59))

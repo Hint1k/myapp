@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class PageController {
-    @GetMapping("/showLoginPage")
+    @GetMapping("/login-page")
     public String showLoginPage() {
         return "index";
     }
@@ -30,22 +30,22 @@ public class PageController {
         return "manager";
     }
 
-    @GetMapping("/register")
+    @GetMapping("/register-form")
     public String showRegisterPage() {
-        return "register";
+        return "register-form";
     }
 
-    @GetMapping("/weather/weather-location")
+    @GetMapping("/api/weather/weather-location")
     public String showWeatherAndLocationPage() {
         return "weather-location";
     }
 
-    @GetMapping("/weather/weather-report")
+    @GetMapping("/api/weather/weather-report")
     public String showWeatherAndReportPage() {
         return "weather-report";
     }
 
-    @GetMapping("/route")
+    @GetMapping("/api/courier/route")
     public String showRouteCalculationPage() {
         return "route";
     }
