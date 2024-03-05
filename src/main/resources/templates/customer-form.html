@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration form</title>
+</head>
+<body>
+<h1> Registration form</h1>
+<form action="/api/customers" th:object="${customer}" th:action="@{/api/customers}" method="POST" enctype="utf8">
+    <input type="hidden" id="id" name="id" th:field="*{id}"/>
+    <div>
+        <label>First name</label>
+        <input th:field="*{firstName}"/>
+        <p th:each="error: ${#fields.errors('firstName')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <br>
+    <div>
+        <label>Last name</label>
+        <input th:field="*{lastName}"/>
+        <p th:each="error : ${#fields.errors('lastName')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <br>
+    <div>
+        <label>Enter email</label>
+        <input type="email" th:field="*{email}"/>
+        <p th:each="error : ${#fields.errors('email')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <br>
+    <div>
+        <label>Enter username</label>
+        <input th:field="*{username}"/>
+        <p th:each="error: ${#fields.errors('username')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <br>
+    <div>
+        <label>Enter password</label>
+        <input type="password" th:field="*{password}"/>
+        <p th:each="error : ${#fields.errors('password')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <br>
+    <button type="submit" class="submit-button">Submit</button>
+</form>
+<hr>
+<a th:href="@{/}">
+    <button type="button" class="update-button">Return back</button>
+</a>
+</body>
+</html>

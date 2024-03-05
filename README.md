@@ -10,9 +10,9 @@ A) Completed:
 5) Every courier, manager and admin should have a user name and a password to access the application.
 6) The application has to check the validity of the fields (fields are not empty etc)
 7) The application shows the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
-
+8) New user registration process
+ 
 B) Still need to be done:
-1) New user registration process
-2) After a courier generated the route, it should be saved in database and can be downloaded as a file by a manager or admin
-3) Thymeleaf template to simulate a customer entering address to request the delivery
-4) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.
+1) After a courier generated the route, it should be saved in database and can be downloaded as a file by a manager or admin
+2) Thymeleaf template to simulate a customer entering address to request the delivery
+3) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.

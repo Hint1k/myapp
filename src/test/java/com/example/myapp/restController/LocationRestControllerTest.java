@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// unit test of controller layer
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LocationRestControllerTest {
 
@@ -31,6 +32,8 @@ public class LocationRestControllerTest {
 
     private static final String GOOGLE_API_KEY = "googleApiKey";
 
+    private static final String WEATHER_API_KEY = "weatherApiKey";
+
     @RegisterExtension
     static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort()
@@ -40,9 +43,9 @@ public class LocationRestControllerTest {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("google.api.url", wireMockExtension::baseUrl);
-        registry.add("google.api.key", wireMockExtension::baseUrl);
         registry.add("weather.api.url", wireMockExtension::baseUrl);
-        registry.add("weather.api.key", wireMockExtension::baseUrl);
+        registry.add("google.api.key", () -> GOOGLE_API_KEY);
+        registry.add("weather.api.key", () -> WEATHER_API_KEY);
     }
 
     @BeforeEach
@@ -85,7 +88,8 @@ public class LocationRestControllerTest {
 
     @Test
     public void testGetWeather() {
-        String urlString1 = "/maps/api/geocode/json?key=googleApiKey&address=moscow";
+        String urlString1 = "/maps/api/geocode/json?key="
+                + GOOGLE_API_KEY + "&address=moscow";
 
         // stubbing location with WireMock
         wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString1))
@@ -94,8 +98,8 @@ public class LocationRestControllerTest {
                         .withHeader("Content-Type", "application/json")
                         .withBodyFile("location.json")));
 
-        String urlString2 =
-                "/data/2.5/weather?lat=55.75&lon=37.59&appid=weatherApiKey&units=metric";
+        String urlString2 = "/data/2.5/weather?lat=55.75&lon=37.59&appid="
+                + WEATHER_API_KEY + "&units=metric";
 
         // stubbing weather with WireMock
         wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString2))

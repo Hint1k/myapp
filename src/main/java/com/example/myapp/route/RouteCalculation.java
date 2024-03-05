@@ -5,19 +5,21 @@ import com.example.myapp.rest.weatherJsonParsing.Coordinates;
 
 import java.util.*;
 
-// currently there is no front-end for this route calculation
 public class RouteCalculation {
 
-    // creating a map to store a list of cities with their coordinates
+    // a map to store a list of addresses with their coordinates
     private Map<Address, Coordinates> map;
 
-    // creating array to save distances between cities
+    // an array to save distances between addresses
     private List<Double> distances;
 
+    // a matrix to store distances between addresses
     private double[][] matrix;
 
+    // total distance in kilometers
     private double distance;
 
+    // total path = list of addresses to visit
     private List<String> path;
 
     public List<String> getPath() {
@@ -99,6 +101,10 @@ public class RouteCalculation {
         }
     }
 
+    /* In order to put the values from the list of distances to the distance matrix
+     in their correct places it is necessary to calculate this variable.
+     It helps to move "i" and "j" counters in the createDistanceMatrix() method
+     to their correct positions */
     private int getVariable(int counter) {
         int variable = 0;
         double step = 1.5;
@@ -111,6 +117,7 @@ public class RouteCalculation {
         return variable;
     }
 
+    // greedy algorithm
     private void calculateShortestPath() {
         double minimum = Double.MAX_VALUE;
         List<String> cities = new ArrayList<>();

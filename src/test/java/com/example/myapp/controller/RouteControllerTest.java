@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+// unit test of controller layer
 @WebMvcTest(RouteController.class)
 /* spring security requires a user with a password,
 also need to set a specific "user1" with digits in the username
@@ -64,7 +65,6 @@ public class RouteControllerTest {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("google.api.url", wireMockExtension::baseUrl);
-        registry.add("google.api.key", wireMockExtension::baseUrl);
     }
 
     @BeforeAll

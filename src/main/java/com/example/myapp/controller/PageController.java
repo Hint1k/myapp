@@ -30,9 +30,9 @@ public class PageController {
         return "manager";
     }
 
-    @GetMapping("/register-form")
+    @GetMapping("/registration-successful")
     public String showRegisterPage() {
-        return "register-form";
+        return "registration-successful";
     }
 
     @GetMapping("/api/weather/weather-location")

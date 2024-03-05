@@ -39,28 +39,33 @@ engine=InnoDB auto_increment=1
 default charset=utf8mb4;
 
 /*
-creating a table for authorities:
+creating a table for users:
 */
 
 drop table if exists users;
 create table users (
+id int(11) not null auto_increment,
+first_name varchar(45) not null,
+last_name varchar(45) not null,
+email varchar(45) not null,
 username varchar(45) not null,
 password char(68) not null,
-enabled tinyint(1) not null,
-primary key (username))
-engine=InnoDB
+enabled int(11) not null,
+primary key(id))
+engine=InnoDB auto_increment=1
 default charset=utf8mb4;
 
 /*
-creating a table for authorities:
+creating a new table for authorities:
 */
 
 drop table if exists authorities;
 create table authorities (
+user_id int(11) not null auto_increment,
 username varchar(45) not null,
-authority varchar(45) not null,
-PRIMARY KEY (username))
-engine=InnoDB
+authority char(45) not null,
+primary key(user_id))
+engine=InnoDB auto_increment=1
 default charset=utf8mb4;
 
 /*
@@ -73,11 +78,11 @@ insert into myappdata.authorities (username, authority) values ('courier1', 'ROL
 insert into myappdata.authorities (username, authority) values ('courier2', 'ROLE_COURIER');
 
 /*
-populating the "users" table with bcrypted passwords:
+populating the "users" table with initial users and passwords:
 */
 
-INSERT INTO users (username, password, enabled) VALUES
-('admin', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
-('manager', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
-('courier1', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
-('courier2', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1);
+INSERT INTO users (first_name, last_name, email, username, password, enabled) VALUES
+('Alex', 'Smith', 'admin@server.com', 'admin', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
+('Mary', 'Sue', 'manager@server.com', 'manager', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
+('Harry', 'Potter', 'harry@server.com', 'courier1', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1),
+('Frodo', 'Baggins', 'frodo@server.com','courier2', '{bcrypt}$2a$12$Ar7GX6ecZR4GYCVRaBdIwe3VdovgTWy8JQ3UbEk4fju1tXoyvSG7C', 1);

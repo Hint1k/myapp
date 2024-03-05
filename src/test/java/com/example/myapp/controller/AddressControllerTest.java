@@ -20,13 +20,12 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
-//unit test of controller layer
+// unit test of controller layer
 @WebMvcTest(AddressController.class)
 @WithMockUser // spring security requires a user with a password
 public class AddressControllerTest {
@@ -125,14 +124,14 @@ public class AddressControllerTest {
     public void testUpdateAddress() {
         Address address = addresses.get(0);
         int id = address.getId();
-        id = id + 1;
         String urlString = "/api/addresses/" + id;
 
         when(addressService.getAddress(id)).thenReturn(address);
 
         // testing
         try {
-            mockMvc.perform(get(urlString)
+            mockMvc.perform(put(urlString)
+                            .with(csrf())
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(address))
                     )
@@ -153,14 +152,14 @@ public class AddressControllerTest {
     public void testDeleteAddress() {
         Address address = addresses.get(1);
         int id = address.getId();
-        id = id + 1;
         String urlString = "/api/addresses/" + id;
 
         doNothing().when(addressService).deleteAddress(id);
 
         // testing
         try {
-            mockMvc.perform(get(urlString)
+            mockMvc.perform(delete(urlString)
+                            .with(csrf())
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(address))
                     )

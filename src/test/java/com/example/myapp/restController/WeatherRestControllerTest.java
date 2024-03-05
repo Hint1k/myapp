@@ -42,13 +42,13 @@ public class WeatherRestControllerTest {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("weather.api.url", wireMockExtension::baseUrl);
-        registry.add("weather.api.key", wireMockExtension::baseUrl);
+        registry.add("weather.api.key", () -> WEATHER_API_KEY);
     }
 
     @Test
     public void testGetWeather() {
         String urlString = "/data/2.5/weather?lat=55.75&lon=37.59&appid="
-                + WEATHER_API_KEY + "&units=metric";
+               + WEATHER_API_KEY + "&units=metric";
 
         // stubbing with WireMock
         wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString))

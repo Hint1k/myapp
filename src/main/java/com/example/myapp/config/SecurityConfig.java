@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -24,16 +26,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/home").hasAnyRole("ADMIN", "MANAGER", "COURIER")
-                        .requestMatchers("/api/couriers/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers("/api/addresses/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/home").hasAnyRole(
+                                "ADMIN", "MANAGER", "COURIER", "CUSTOMER")
+                        .requestMatchers("/api/couriers/**").hasAnyRole(
+                                "ADMIN", "MANAGER")
+                        .requestMatchers("/api/addresses/**").hasAnyRole(
+                                "ADMIN", "MANAGER")
                         .requestMatchers("/manager/**").hasRole("MANAGER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/courier/**").hasRole("COURIER")
-                        //the registration process for customers needs update
-                        .requestMatchers("/register-form").permitAll()
+                        // the registration process for new customers
+                        .requestMatchers("/api/customers/**").permitAll()
                         // weather & google interfaces are open to anyone
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())

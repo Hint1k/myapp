@@ -19,12 +19,11 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//unit test of controller layer
+// unit test of controller layer
 @WebMvcTest(CourierController.class)
 @WithMockUser // spring security requires a user with a password
 public class CourierControllerTest {
@@ -119,14 +118,14 @@ public class CourierControllerTest {
     public void testUpdateCourier() {
         Courier courier = couriers.get(0);
         int id = courier.getId();
-        id = id + 1;
         String urlString = "/api/couriers/" + id;
 
         when(courierService.getCourier(id)).thenReturn(courier);
 
         // testing
         try {
-            mockMvc.perform(get(urlString)
+            mockMvc.perform(put(urlString)
+                            .with(csrf())
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(courier))
                     )
@@ -147,14 +146,14 @@ public class CourierControllerTest {
     public void testDeleteCourier() {
         Courier courier = couriers.get(1);
         int id = courier.getId();
-        id = id + 1;
         String urlString = "/api/couriers/" + id;
 
         doNothing().when(courierService).deleteCourier(id);
 
         // testing
         try {
-            mockMvc.perform(get(urlString)
+            mockMvc.perform(delete(urlString)
+                            .with(csrf())
                             .content(MediaType.TEXT_HTML_VALUE)
                             .content(new ObjectMapper().writeValueAsString(courier))
                     )
