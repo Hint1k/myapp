@@ -73,6 +73,11 @@ User name = <span sec:authentication="principal.username"></span>
     </tr>
 </table>
 <hr>
+<a th:href="@{/api/courier/file}">
+    <button type="button" class="save-button">Save route to file</button>
+</a>
+<br>
+<hr>
 <a th:href="@{/home}">
     <button type="button" class="update-button">Return to home page</button>
 </a>

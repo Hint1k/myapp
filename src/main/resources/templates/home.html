@@ -35,7 +35,7 @@
 <p>
     <a th:href="@{/api/courier/route}">
     <button type="button" class="update-button">Route calculation</button>
-        (Only for couriers)
+      <br>(Only for couriers)
     </a>
 </p>
 </span>
@@ -43,14 +43,14 @@
 <span sec:authorize="hasRole('MANAGER')">
 <p>
     <a th:href="@{/manager}">To the manager's page</a>
-    (Only for managers)
+    <br>(Only for managers)
 </p>
 <hr>
 </span>
 <span sec:authorize="hasRole('ADMIN')">
 <p>
     <a th:href="@{/admin}">To the admin's page</a>
-    (Only for admins)
+    <br>(Only for admins)
 </p>
 <hr>
 </span>

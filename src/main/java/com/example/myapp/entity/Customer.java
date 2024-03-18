@@ -3,6 +3,7 @@ package com.example.myapp.entity;
 import com.example.myapp.validation.CapitalLetter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -10,19 +11,23 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
 
+    @NotNull(message = "First name should not be empty")
     @Column(name = "first_name")
     @CapitalLetter
     private String firstName;
 
+    @NotNull(message = "Last name should not be empty")
     @Column(name = "last_name")
     @CapitalLetter
     private String lastName;
 
-    @Column(name="email")
     @NotNull(message = "Email should not be empty")
+    @Column(name = "email")
+    @Pattern(regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$",
+            message = "Email format must be name@server.domain")
     private String email;
 
     @Column(name = "username")
@@ -33,15 +38,38 @@ public class Customer {
     @NotNull(message = "Password should not be empty")
     private String password;
 
-    @Column (name = "enabled")
+    @Column(name = "enabled")
     private int isEnabled;
 
-    // bidirectional, owning side, shared primary key
-    @OneToOne (mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @PrimaryKeyJoinColumn
+    // bidirectional, referencing side
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
     private Role role;
 
     public Customer() {
+    }
+
+    public Customer(String firstName, String lastName,
+                    String email, String username,
+                    String password, int isEnabled) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.isEnabled = isEnabled;
+    }
+
+    public Customer(String firstName, String lastName,
+                    String email, String username, String password,
+                    int isEnabled, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.isEnabled = isEnabled;
+        this.role = role;
     }
 
     public Customer(Integer id, String firstName, String lastName,

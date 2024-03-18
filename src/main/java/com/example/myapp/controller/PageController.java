@@ -49,4 +49,9 @@ public class PageController {
     public String showRouteCalculationPage() {
         return "route";
     }
+
+    @GetMapping("/upload")
+    public String showFilesUploadPage() {
+        return "upload-form";
+    }
 }

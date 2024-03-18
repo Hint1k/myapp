@@ -7,16 +7,17 @@ import com.example.myapp.rest.restController.LocationRestController;
 import com.example.myapp.rest.weatherJsonParsing.Coordinates;
 import com.example.myapp.route.RouteCalculation;
 import com.example.myapp.service.AddressService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
 import java.security.Principal;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/api/courier")
@@ -30,7 +31,12 @@ public class RouteController {
     private AddressService addressService;
 
     private final String googleApiUrl;
+
     private final String googleApiKey;
+
+    private int distance;
+
+    private List<String> route;
 
     public RouteController(@Value("${google.api.url}")
                            String googleApiUrl,
@@ -105,8 +111,8 @@ public class RouteController {
 
         double distanceDouble = routeCalculation.getDistance();
         String[] string = String.valueOf(distanceDouble).split("\\.");
-        int distance = Integer.parseInt(string[0]);
-        List<String> route = routeCalculation.getPath();
+        distance = Integer.parseInt(string[0]);
+        route = routeCalculation.getPath();
 
         model.addAttribute("route", route);
         model.addAttribute("distance", distance + " km");
@@ -114,5 +120,28 @@ public class RouteController {
         model.addAttribute("addresses", addresses);
 
         return "route";
+    }
+
+    @RequestMapping("/file")
+    public void saveRouteToUserDevice(HttpServletResponse response) {
+        List<String> array = new ArrayList<>();
+        array.add("Your route is:");
+        array.addAll(route);
+        array.add("Total distance is:");
+        array.add(String.valueOf(distance));
+
+        try (
+                InputStream inputStream = new ByteArrayInputStream(
+                        String.join("\n", array).getBytes())
+        ) {
+            IOUtils.copy(inputStream, response.getOutputStream());
+            response.setContentType("text/plain");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\"route.txt\"");
+            response.flushBuffer();
+        } catch (IOException ioException) {
+            System.out.println("Could not save the file");
+            ioException.printStackTrace(System.out); // temp solution
+        }
     }
 }

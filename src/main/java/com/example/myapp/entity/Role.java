@@ -8,7 +8,8 @@ import jakarta.validation.constraints.NotNull;
 public class Role {
 
     @Id
-    @Column(name="user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @NotNull
@@ -19,13 +20,24 @@ public class Role {
     @Column(name = "authority")
     private String authority;
 
-    // bidirectional, referencing side, shared primary key
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id", nullable = false)
+    // bidirectional, owning side
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private Customer customer;
 
     public Role() {
+    }
+
+    public Role(String username, String authority) {
+        this.username = username;
+        this.authority = authority;
+    }
+
+    public Role(String username, String authority,
+                Customer customer) {
+        this.username = username;
+        this.authority = authority;
+        this.customer = customer;
     }
 
     public Role(Integer id, String username,
