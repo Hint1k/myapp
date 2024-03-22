@@ -5,31 +5,31 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Admin page</title>
+    <title>Files page</title>
 </head>
 <body>
-<h1>Only visible to the admin.</h1>
+<h1>Working with files in database</h1>
 <hr>
-<a th:href="@{/api/couriers}">
+<a th:href="@{/api/files/upload}">
     <button type="button" class="update-button">
-        List of couriers
+        Upload file to database
     </button>
 </a>
 <br><br>
-<a th:href="@{/api/addresses}">
+<a th:href="@{/api/files/html}">
     <button type="button" class="update-button">
-        List of addresses
+        Download files in html format
     </button>
 </a>
 <br><br>
-<a th:href="@{/api/files}">
+<a th:href="@{/api/files/json}">
     <button type="button" class="update-button">
-        Work with files
+        Download files in json format
     </button>
 </a>
 <br><br>
-<a th:href="@{/home}">
-    <button type="button" class="update-button">Return to home's page</button>
+<a th:href="@{/admin}">
+    <button type="button" class="update-button">Return to admin's page</button>
 </a>
 </body>
 </html>

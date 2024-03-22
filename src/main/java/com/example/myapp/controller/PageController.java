@@ -50,7 +50,12 @@ public class PageController {
         return "route";
     }
 
-    @GetMapping("/upload")
+    @GetMapping("/api/files")
+    public String showFilesPage() {
+        return "files";
+    }
+    
+    @GetMapping("/api/files/upload")
     public String showFilesUploadPage() {
         return "upload-form";
     }

@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/manager/**").hasRole("MANAGER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/courier/**").hasRole("COURIER")
+                        .requestMatchers("/api/files/**").hasAnyRole("ADMIN")
                         // the registration process for new customers
                         .requestMatchers("/api/customers/**").permitAll()
                         // weather & google interfaces are open to anyone

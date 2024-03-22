@@ -1,18 +1,20 @@
-General description of application: A web based application for couriers. It helps couriers to deliver goods in accordance with their individual tasks.
+General description of the application: 
+A web based application that helps a company to deliver goods to its customers.  
 
-Customer requirements:
+Application requirements:
 
 A) Completed:
-1) Each task consists of addresses that has to be visited to complete deliveries.
+1) Every courier has an individual task. It consists of list of addresses that has to be visited to complete the delivery.
 2) The manager/admin can edit the list of addresses and the list of couriers in the database.
 3) The couriers can only see their individual tasks, but cannot edit anything. 
 4) However, the couriers can generate the shortest route to speed up the delivery.
-5) Every courier, manager and admin should have a user name and a password to access the application.
-6) The application has to check the validity of the fields (fields are not empty etc)
+5) Every courier, manager and admin should have a username and a password to access the application.
+6) The application has to check the validity of the fields (fields are not empty etc.).
 7) The application shows the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
-8) New user registration process
+8) The application has to have a new user registration process.
+9) After a courier generated the delivery route, it can be saved as a text file from the calculation page.
+10) The route as a text file can be uploaded to database and downloaded from database.  
  
 B) Still need to be done:
-1) After a courier generated the route, it should be saved in database and can be downloaded as a file by a manager or admin
-2) Thymeleaf template to simulate a customer entering address to request the delivery
-3) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.
+1) Thymeleaf template to simulate a customer entering address to request the delivery
+2) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.

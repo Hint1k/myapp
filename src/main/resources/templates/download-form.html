@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Files download from database page</title>
+</head>
+<body>
+<div>
+    <h2 class="text-center">List of Files</h2>
+    <div>
+        <table class="table table-hover" border="1">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">File Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="file : ${files}">
+                <td th:text="${file.fileName}">File name</td>
+                <td><a th:href="@{${file.fileUrl}}">Download</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br><br>
+<a th:href="@{/api/files}">
+    <button type="button" class="update-button">Return to file's page</button>
+</a>
+</body>
+</html>

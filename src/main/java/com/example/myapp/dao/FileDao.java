@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FileDao extends JpaRepository<FileDb, String> {
+
+    FileDb findByName(String name);
 }

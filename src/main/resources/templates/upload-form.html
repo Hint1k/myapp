@@ -4,11 +4,12 @@
       xmlns="http://www.w3.org/1999/html" >
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Upload to database Page</title>
+    <title>Files upload to database page</title>
 </head>
 <body>
+<h2 class="text-center">Files upload to database page</h2>
 <div>
-    <form method="post" action="#" th:action="@{/upload}" enctype="multipart/form-data">
+    <form method="post" action="#" th:action="@{/api/files/upload}" enctype="multipart/form-data">
         <table>
             <tr>
                 <td>Pick file to upload:</td>
@@ -22,5 +23,9 @@
         </table>
     </form>
 </div>
+<br><br>
+<a th:href="@{/api/files}">
+    <button type="button" class="update-button">Return to file's page</button>
+</a>
 </body>
 </html>
