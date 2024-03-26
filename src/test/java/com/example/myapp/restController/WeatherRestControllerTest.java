@@ -34,7 +34,8 @@ public class WeatherRestControllerTest {
     private static final String WEATHER_API_KEY = "weatherApiKey";
 
     @RegisterExtension
-    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+    static WireMockExtension wireMockExtension = WireMockExtension
+            .newInstance()
             .options(wireMockConfig().dynamicPort()
                     .usingFilesUnderClasspath("wiremock"))
             .build();

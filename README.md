@@ -13,7 +13,7 @@ A) Completed:
 7) The application shows the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
 8) The application has to have a new user registration process.
 9) After a courier generated the delivery route, it can be saved as a text file from the calculation page.
-10) The route as a text file can be uploaded to database and downloaded from database.  
+10) The route as a text file can be uploaded to database and downloaded from database only by admin.  
  
 B) Still need to be done:
 1) Thymeleaf template to simulate a customer entering address to request the delivery

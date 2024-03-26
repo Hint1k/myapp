@@ -12,11 +12,11 @@ public class FileData {
     private void createFileList(){
         files = new ArrayList<>();
 
-        byte[] data1 = "file1.txt".getBytes();
-        byte[] data2 = "file2.pdf".getBytes();
-        byte[] data3 = "file3.jpg".getBytes();
-        byte[] data4 = "file4.doc".getBytes();
-        byte[] data5 = "file5.gif".getBytes();
+        byte[] data1 = "information-1".getBytes();
+        byte[] data2 = "important-info-2".getBytes();
+        byte[] data3 = "nice-information-3".getBytes();
+        byte[] data4 = "important-information-4".getBytes();
+        byte[] data5 = "mega-important-information-5".getBytes();
 
         FileDb file1 = new FileDb(11,"11.txt","text/plain", data1);
         FileDb file2 = new FileDb(12,"12.txt","text/plain", data2);

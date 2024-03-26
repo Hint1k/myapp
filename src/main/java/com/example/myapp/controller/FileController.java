@@ -74,8 +74,8 @@ public class FileController {
 
                     return new ResponseFile(
                             file.getName(),
-                            fileDownloadUri,
                             file.getType(),
+                            fileDownloadUri,
                             file.getData().length);
                 })
                 .collect(Collectors.toList());

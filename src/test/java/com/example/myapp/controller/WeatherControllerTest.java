@@ -1,4 +1,4 @@
-package com.example.myapp.restController;
+package com.example.myapp.controller;
 
 import com.example.myapp.MyTestContext;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,13 +15,13 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // unit test of controller layer
-public class LocationRestControllerTest extends MyTestContext {
+public class WeatherControllerTest extends MyTestContext{
 
     private MockMvc mockMvc;
 
@@ -49,46 +50,50 @@ public class LocationRestControllerTest extends MyTestContext {
     }
 
     @Test
-    public void testGetLocation() {
-        String urlString = "/maps/api/geocode/json?key=" +
-                GOOGLE_API_KEY + "&address=moscow";
+    public void testGetJsonWeather() {
+        String address = "moscow";
+        String urlString = "/weather?address=" + address;
 
         // stubbing with WireMock
         wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString))
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("location.json")));
-
-        // parsing the response in json format
-        String latitude = "$.results[0].geometry.location.lat";
-        String longitude = "$.results[0].geometry.location.lng";
+                        .withHeader("Content-Type",
+                                "application/json")
+                ));
 
         // testing
         try {
-            mockMvc.perform(get("/location?address=moscow"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath(latitude).value(55.75))
-                    .andExpect(jsonPath(longitude).value(37.59))
+            mockMvc.perform(post("/api/weather/weather-json")
+                            .with(csrf())
+                            .param("address", address)
+                            .content(MediaType.APPLICATION_JSON_VALUE)
+                            .content(address)
+                    )
+                    .andExpect(redirectedUrl(urlString))
+                    .andExpect(header().string("Location", urlString))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
-            System.out.println("testGetLocation() fails");
+            System.out.println("testGetJsonWeather() fails");
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void testGetWeather() {
+    public void testGetHtmlWeather() {
+        String address = "moscow";
+
         String urlString1 = "/maps/api/geocode/json?key="
-                + GOOGLE_API_KEY + "&address=moscow";
+                + GOOGLE_API_KEY + "&address=" + address;
 
         // stubbing location with WireMock
         wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString1))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBodyFile("location.json")));
+                        .withBodyFile("location.json")
+                ));
 
         String urlString2 = "/data/2.5/weather?lat=55.75&lon=37.59&appid="
                 + WEATHER_API_KEY + "&units=metric";
@@ -98,22 +103,25 @@ public class LocationRestControllerTest extends MyTestContext {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBodyFile("weather.json")));
-
-        // parsing the response in json format
-        String latitude = "$.coord.lat";
-        String longitude = "$.coord.lon";
+                        .withBodyFile("weather.json")
+                ));
 
         // testing the response for two stubs simultaneously
         try {
-            mockMvc.perform(get("/weather?address=moscow"))
+            mockMvc.perform(post("/api/weather/weather-html")
+                            .with(csrf())
+                            .param("address", address)
+                            .content(MediaType.TEXT_HTML_VALUE)
+                            .content(address)
+                    )
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath(latitude).value(55.75))
-                    .andExpect(jsonPath(longitude).value(37.59))
-                    .andDo(print())
-                    .andReturn();
+                    .andExpect(view().name("weather-report"))
+                    .andExpect(model().attributeExists("temperature"))
+                    .andExpect(model().attributeExists("feelsLike"))
+                    .andExpect(model().attributeExists("address"))
+                    .andDo(print());
         } catch (Exception e) {
-            System.out.println("testGetWeather() fails");
+            System.out.println("testGetHtmlWeather() fails");
             throw new RuntimeException(e);
         }
     }

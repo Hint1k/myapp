@@ -1,0 +1,38 @@
+version: '3.4' ### Specify the Docker Compose version
+
+services:
+
+  myapp:
+    image: myapp:0.1.1
+    build:
+      context: .
+      dockerfile: DockerFile
+    depends_on:
+      - mysql_db
+    environment:
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.datasource.url=jdbc:mysql://mysql_db:3306/myappdata?allowPublicKeyRetrieval=true&useSSL=false
+      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+      - spring.datasource.username=user
+      - spring.datasource.password=password
+      - spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+    restart: always
+    ports:
+      - 8080:8080
+
+  mysql_db:
+    image: mysql:8.2.0
+    environment:
+      MYSQL_DATABASE: myappdata
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    restart: always
+    ports:
+      - 3307:3307
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55

@@ -35,25 +35,25 @@ public class WeatherController {
 
     // returns weather in JSON form
     @PostMapping("/weather-json")
-    public String getJsonWeather(@RequestParam String cityName, Model model) {
-        model.addAttribute("cityName", cityName);
-        return "redirect:/weather?address=" + cityName;
+    public String getJsonWeather(@RequestParam String address, Model model) {
+        model.addAttribute("address", address);
+        return "redirect:/weather?address=" + address;
     }
 
     // returns weather in HTML form
     @PostMapping("/weather-html")
-    public String getHtmlWeather(@RequestParam String cityName, Model model) {
+    public String getHtmlWeather(@RequestParam String address, Model model) {
         LocationRestController locationRestController =
                 new LocationRestController(googleApiUrl, googleApiKey);
         WeatherResponse weatherResponse =
-                locationRestController.getWeather(cityName);
+                locationRestController.getWeather(address);
         Main main = weatherResponse.getMain();
         double temperature = main.getTemperature();
         double feelsLike = main.getFeelsLike();
 
         model.addAttribute("temperature", temperature);
         model.addAttribute("feelsLike", feelsLike);
-        model.addAttribute("cityName", cityName);
+        model.addAttribute("address", address);
 
         return "weather-report";
     }

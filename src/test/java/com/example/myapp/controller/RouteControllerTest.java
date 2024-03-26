@@ -57,7 +57,8 @@ public class RouteControllerTest {
     private static List<Address> addressesStatic;
 
     @RegisterExtension
-    static WireMockExtension wireMockExtension = WireMockExtension.newInstance()
+    static WireMockExtension wireMockExtension = WireMockExtension
+            .newInstance()
             .options(wireMockConfig().dynamicPort()
                     .usingFilesUnderClasspath("wiremock"))
             .build();
