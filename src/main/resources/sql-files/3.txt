@@ -1,0 +1,10 @@
+Your route is:
+Samara
+Tver
+Kaluga
+Tula
+Ryazan
+Vladimir
+Samara
+Total distance is:
+1013

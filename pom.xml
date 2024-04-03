@@ -90,6 +90,12 @@
             <version>2.2.224</version>
             <scope>test</scope>
         </dependency>
+        <!-- to avoid an error during the docker image creating process: -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.2.5</version>
+        </dependency>
     </dependencies>
 
     <build>
