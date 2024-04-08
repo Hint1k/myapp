@@ -54,8 +54,15 @@
 </p>
 <hr>
 </span>
-<div class="form-group mb-3">
+<span sec:authorize="hasRole('CUSTOMER')">
+<p>
+    <a th:href="@{/api/customers/order}">To the customer's page</a>
+    <br>(Only for customers)
+</p>
+<hr>
+</span>
 
+<div class="form-group mb-3">
     <span><a th:href="@{/logout}">
         <button type="submit" class="btn btn-primary">Logout</button>
         </a>

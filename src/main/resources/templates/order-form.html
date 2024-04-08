@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order-form page</title>
+</head>
+<body>
+    <h1>Validate Your Address</h1>
+    <form method="post" action="/api/customers/order" th:object="${address}" th:action="@{/api/customers/order}" enctype="multipart/form-data">
+        <table>
+            <tbody>
+            <tr>
+                <td><label>Country name:</label></td>
+                <td>
+                    <input type="text" id="countryName" name="countryName" th:field="*{countryName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label>City name:</label></td>
+                <td>
+                    <input type="text" id="cityName" name="cityName" th:field="*{cityName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Street name:</label></td>
+                <td>
+                    <input type="text" id="streetName" name="streetName" th:field="*{streetName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label>House number:</label></td>
+                <td>
+                    <input type="text" id="houseNumber" name="houseNumber" th:field="*{houseNumber}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Validate Address" class="validate"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+    <p>
+        <a th:href="@{/home}">
+            <button type="button" class="update-button">Return back to Home page</button>
+        </a>
+    </p>
+</body>
+</html>

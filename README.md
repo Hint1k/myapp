@@ -12,9 +12,16 @@ A) Completed:
 6) The application has to check the validity of the fields (fields are not empty etc.).
 7) The application shows the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
 8) The application has to have a new user registration process.
-9) After a courier generated the delivery route, it can be saved as a text file from the calculation page.
-10) The route as a text file can be uploaded to database and downloaded from database only by admin.  
+9) After a courier generated the delivery route, it can be saved as a text file right from the calculation page.
+10) The route as a text file can be uploaded to database and downloaded from database only by admin.
+11) The application has to check the validity of the address entered by a customer using a Google Places API.
  
-B) Still need to be done:
-1) Thymeleaf template to simulate a customer entering address to request the delivery
-2) The application has to check the validity of the address entered by customer on Google map, before recording it to the database.
+B) Planned features: 
+1) The validated address entered by a customer has to be saved to database
+2) The calculated route as a text file can be deleted from database only by admin
+
+Installation info:
+1) Create file "secret.properties" on this path: src/main/resources/
+2) The file's content has to be:
+google.api.key=here should be your real Google api key
+weather.api.key=here should be your real OpenWeatherMap api key

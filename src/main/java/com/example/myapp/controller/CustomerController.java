@@ -1,5 +1,6 @@
 package com.example.myapp.controller;
 
+import com.example.myapp.entity.Address;
 import com.example.myapp.entity.Customer;
 import com.example.myapp.service.CustomerService;
 import jakarta.validation.Valid;
@@ -42,5 +43,12 @@ public class CustomerController {
 
         customerService.saveCustomer(customer);
         return "redirect:/registration-successful";
+    }
+
+    @GetMapping("/customers/order") //order here used as noun
+    public String showOrderFormPage(Model model) {
+        Address address = new Address();
+        model.addAttribute("address", address);
+        return "order-form";
     }
 }
