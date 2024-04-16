@@ -14,7 +14,7 @@ A) Completed:
 8) The application has to have a new user registration process.
 9) After a courier generated the delivery route, it can be saved as a text file right from the calculation page.
 10) The route as a text file can be uploaded to database and downloaded from database only by admin.
-11) The application has to check the validity of the address entered by a customer using a Google Places API.
+11) The application has to check the validity of the address entered by a customer using a Google Address Validation API.
  
 B) Planned features: 
 1) The validated address entered by a customer has to be saved to database
@@ -22,6 +22,7 @@ B) Planned features:
 
 Installation info:
 1) Create file "secret.properties" on this path: src/main/resources/
-2) The file's content has to be:
-google.api.key=here should be your real Google api key
+2) The file's content has to be:  
+google.api.key=here should be your real Google api key  
 weather.api.key=here should be your real OpenWeatherMap api key
+3) SQL scripts to create and fill in the database are here: src/main/resources/sql-files/init.sql

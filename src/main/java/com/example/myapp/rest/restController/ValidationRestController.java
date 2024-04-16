@@ -1,152 +1,95 @@
 package com.example.myapp.rest.restController;
 
 import com.example.myapp.entity.Address;
-import com.example.myapp.rest.validationJsonParsing.MatchedSubstrings;
-import com.example.myapp.rest.validationJsonParsing.Predictions;
-import com.example.myapp.rest.validationJsonParsing.ValidationResponse;
+import com.example.myapp.rest.validationJsonParsing.request.RequestAddress;
+import com.example.myapp.rest.validationJsonParsing.request.ValidationRequest;
+import com.example.myapp.rest.validationJsonParsing.response.ResponseAddress;
+import com.example.myapp.rest.validationJsonParsing.response.ValidationResponse;
+import com.example.myapp.rest.validationJsonParsing.response.ValidationResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@RestController
+@Controller
+@RequestMapping("/api")
 public class ValidationRestController {
 
     private final String googleApiKey;
-    private final String googleApiUrl;
+    private static final String GOOGLE_API_URL
+            = "https://addressvalidation.googleapis.com/v1:validateAddress?key=";
+
     private final ObjectMapper objectMapper;
 
-    public ValidationRestController(@Value("${google.api.url}") String googleApiUrl,
-                                    @Value("${google.api.key}") String googleApiKey,
+    public ValidationRestController(@Value("${google.api.key}")
+                                    String googleApiKey,
                                     ObjectMapper objectMapper) {
-        this.googleApiUrl = googleApiUrl;
         this.googleApiKey = googleApiKey;
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping(value = "/api/customers/order", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> validateAddress(@RequestParam String countryName,
-                                                  @RequestParam String cityName,
-                                                  @RequestParam String streetName,
-                                                  @RequestParam String houseNumber) {
-        try {
-            // Encode the address components
-            String encodedAddress = URLEncoder.encode(streetName + ", " + houseNumber + ", " + cityName + ", " + countryName, StandardCharsets.UTF_8);
+    @PostMapping("/customers/order")
+    public String validateAddress(@ModelAttribute Address address, Model model) {
+        String addressLines = address.getHouseNumber() + " "
+                + address.getStreetName();
+        String regionCode = address.getCountryName();
+        String locality = address.getCityName();
 
-            // Construct the API URL
-            String apiUrl = googleApiUrl + "/maps/api/place/autocomplete/json?input=" + encodedAddress + "&key=" + googleApiKey;
+        ValidationRequest validationRequest = new ValidationRequest();
+        RequestAddress requestAddress = new RequestAddress();
+        requestAddress.setRegionCode(regionCode);
+        requestAddress.setLocality(locality);
+        requestAddress.setAddressLines(List.of(addressLines));
+        validationRequest.setRequestAddress(requestAddress);
 
-            // Perform API call and get response
-            String response = performApiCall(apiUrl);
-
-            Address address = new Address(countryName, cityName, streetName, Integer.parseInt(houseNumber));
-
-            // Check if the response contains valid results
-            String validationResult = validateApiResponse(response, address);
-            if (validationResult.equals("Address is valid")) {
-                return ResponseEntity.ok(validationResult);
-            } else {
-                return ResponseEntity.badRequest().body(validationResult);
-            }
-        } catch (Exception e) {
+        String jsonString;
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            objectMapper.writeValue(outputStream, validationRequest);
+            jsonString = outputStream.toString(StandardCharsets.UTF_8);
+        } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred: " + e.getMessage());
+            // Handle exception if needed
+            return "redirect:/error";
         }
-    }
 
-    private String performApiCall(String apiUrl) throws Exception {
-        // Create URL object
-        URL url = new URL(apiUrl);
-        // Create connection object
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        // Set request method
-        connection.setRequestMethod("GET");
-        // Get response code
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            // Read response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String url = GOOGLE_API_URL + googleApiKey;
+        HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
+        ResponseEntity<String> response = new RestTemplate()
+                .postForEntity(url, entity, String.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            try {
+                ValidationResponse validationResponse = objectMapper
+                        .readValue(response.getBody(), ValidationResponse.class);
+                ValidationResult validationResult = validationResponse.getValidationResult();
+                ResponseAddress responseAddress = validationResult.getResponseAddress();
+                String formattedAddress = responseAddress.getFormattedAddress();
+                if (formattedAddress != null) {
+                    model.addAttribute("formattedAddress", formattedAddress);
+                    // Add other attributes to model if needed
+                    return "order-form";
+                } else {
+                    // Handle error if formatted address not found
+                    return "redirect:/error";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Handle exception if needed
+                return "redirect:/error";
             }
-            reader.close();
-            return response.toString();
         } else {
-            throw new RuntimeException("Failed to fetch response. Response code: " + responseCode);
+            // Handle error if response status is not OK
+            return "redirect:/error";
         }
-    }
-
-    private String validateApiResponse(String response, Address address) throws Exception {
-        ValidationResponse validationResponse = objectMapper.readValue(response, ValidationResponse.class);
-        List<Predictions> predictions = validationResponse.getPredictions();
-
-        // Check if predictions in json response is null
-        if (predictions == null || predictions.isEmpty()) {
-            return "No valid address is found";
-        }
-
-        Predictions prediction = predictions.get(0);
-        List<MatchedSubstrings> matchedSubstrings = prediction.getMatchedSubstrings();
-
-        // Check if matchedSubstrings in json response is null
-        if (matchedSubstrings == null || matchedSubstrings.isEmpty()) {
-            return "No valid address is found";
-        }
-
-        /* It defines the quantity of address components.
-        In this case they are: country name, city name,
-        street name and house number */
-        int addressSize = 4;
-
-        if (matchedSubstrings.size() < addressSize) {
-            if (matchedSubstrings.size() == addressSize - 1) {
-                return "One of the address components are incorrect";
-            } else if (matchedSubstrings.size() == addressSize - 2) {
-                return "Two of the address components are incorrect";
-            } else { // matchedSubstring.size() == addressSize - 3
-                return "Three of the address components are incorrect";
-            }
-        }
-
-        String[] components = {address.getStreetName(), String.valueOf(address.getHouseNumber()), address.getCityName(), address.getCountryName()};
-        String[] componentTypes = {"street", "houseNumber", "city", "country"};
-
-        // Check which address component is missing
-        for (int i = 0; i < components.length; i++) {
-            if (!containsMatchedSubstring(matchedSubstrings, componentTypes[i], components[i], i)) {
-                return componentTypes[i] + " is missing";
-            }
-        }
-
-        // Address is considered valid if it passes all conditions
-        return "Address is valid";
-    }
-
-    private boolean containsMatchedSubstring(List<MatchedSubstrings> matchedSubstrings, String componentType, String componentValue, int index) {
-        // Get the matched substring corresponding to the component
-        MatchedSubstrings substring = matchedSubstrings.get(index);
-
-        // Get the expected length from the matched substring
-        int expectedLength = substring.getLength();
-
-        // Get the actual length of the componentValue
-        int actualLength = componentValue.length();
-
-        // Check if the actual length matches the expected length
-        return actualLength == expectedLength;
     }
 }

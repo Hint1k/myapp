@@ -3,6 +3,7 @@ package com.example.myapp.rest.locationJsonParsing;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LocationResponse {
+
     @JsonProperty("results")
     private Result[] results;
 

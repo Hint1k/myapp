@@ -3,8 +3,10 @@ package com.example.myapp.rest.weatherJsonParsing;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Weather {
+
     @JsonProperty("id")
     private Long id;
+
     @JsonProperty("description")
     private String description;
 

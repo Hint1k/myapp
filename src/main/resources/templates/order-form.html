@@ -1,3 +1,4 @@
+<!-- rename this form later for clarity -->
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
@@ -9,11 +10,12 @@
 </head>
 <body>
     <h1>Validate Your Address</h1>
-    <form method="post" action="/api/customers/order" th:object="${address}" th:action="@{/api/customers/order}" enctype="multipart/form-data">
+    <form method="post" action="/api/customers/order" th:object="${address}" th:action="@{/api/customers/order}">
         <table>
             <tbody>
             <tr>
-                <td><label>Country name:</label></td>
+                <td><label>Country code:</label></td>
+                <!-- Add validation check here, so customer enters only two letters code and not the full country name -->
                 <td>
                     <input type="text" id="countryName" name="countryName" th:field="*{countryName}"/>
                 </td>
@@ -44,6 +46,14 @@
             </tbody>
         </table>
     </form>
+    <p>Google found this address: <span th:text="${formattedAddress}"></span></p>
+    <hr>
+    <p> 1) Compare your address with the address found by Google. <br>
+        2) Update the entered information if the addresses do not match. <br>
+        3) Submit your address <br>
+    </p>
+    <input type="submit" value="Submit Address" class="submit"/>
+    <hr>
     <p>
         <a th:href="@{/home}">
             <button type="button" class="update-button">Return back to Home page</button>

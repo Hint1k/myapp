@@ -3,8 +3,10 @@ package com.example.myapp.rest.weatherJsonParsing;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Coordinates {
+
     @JsonProperty("lat")
     private double latitude;
+
     @JsonProperty("lon")
     private double longitude;
 
