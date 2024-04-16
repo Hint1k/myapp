@@ -3,12 +3,16 @@ package com.example.myapp.rest.weatherJsonParsing;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WeatherResponse {
+
     @JsonProperty("coord")
     private Coordinates coordinates;
+
     @JsonProperty("weather")
     private Weather[] weather;
+
     @JsonProperty("main")
     private Main main;
+
     @JsonProperty("name")
     private String name;
 
