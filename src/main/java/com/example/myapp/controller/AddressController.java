@@ -81,4 +81,21 @@ public class AddressController {
         addressService.deleteAddress(id);
         return "redirect:/api/addresses";
     }
+
+    @PostMapping("/customers/address")
+    public String saveValidatedAddress(@ModelAttribute("address") Address address) {
+            /* 0 is a default courier for each new address entered by customer,
+            it has to be changed to real courier manually by admin or manager
+            when the customer order is processed by company */
+            Courier courier = courierService.getCourier(0);
+            // creating a new Address validated by Google Address Validation Api
+            Address validatedAddress = new Address(
+                    address.getCountryName(),
+                    address.getCityName(),
+                    address.getStreetName(),
+                    address.getHouseNumber(),
+                    courier);
+            addressService.saveAddress(validatedAddress);
+            return "order-successful";
+    }
 }

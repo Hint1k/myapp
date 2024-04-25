@@ -114,3 +114,10 @@ populating the "files" table with files containing path and distance:
 insert into files values (1, '1.txt', 'text/plain', LOAD_FILE('/var/lib/mysql-files/1.txt'));
 insert into files values (2, '2.txt', 'text/plain', LOAD_FILE('/var/lib/mysql-files/2.txt'));
 insert into files values (3, '3.txt', 'text/plain', LOAD_FILE('/var/lib/mysql-files/3.txt'));
+
+/*
+creating a default courier to be assigned to an address entered by a customer
+*/
+
+insert into courier (id, first_name, last_name, phone) values
+(0, 'Not', 'Courier', '+00000000000');

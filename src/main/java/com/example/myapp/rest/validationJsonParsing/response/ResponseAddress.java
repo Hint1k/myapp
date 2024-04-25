@@ -1,7 +1,6 @@
 package com.example.myapp.rest.validationJsonParsing.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.maps.model.AddressComponent;
 
 import java.util.List;
 

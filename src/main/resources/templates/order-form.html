@@ -6,58 +6,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .error {
+            color: red
+        }
+    </style>
     <title>Order-form page</title>
 </head>
 <body>
-    <h1>Validate Your Address</h1>
-    <form method="post" action="/api/customers/order" th:object="${address}" th:action="@{/api/customers/order}">
-        <table>
-            <tbody>
-            <tr>
-                <td><label>Country code:</label></td>
-                <!-- Add validation check here, so customer enters only two letters code and not the full country name -->
-                <td>
-                    <input type="text" id="countryName" name="countryName" th:field="*{countryName}"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label>City name:</label></td>
-                <td>
-                    <input type="text" id="cityName" name="cityName" th:field="*{cityName}"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label>Street name:</label></td>
-                <td>
-                    <input type="text" id="streetName" name="streetName" th:field="*{streetName}"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label>House number:</label></td>
-                <td>
-                    <input type="text" id="houseNumber" name="houseNumber" th:field="*{houseNumber}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Validate Address" class="validate"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
-    <p>Google found this address: <span th:text="${formattedAddress}"></span></p>
-    <hr>
-    <p> 1) Compare your address with the address found by Google. <br>
-        2) Update the entered information if the addresses do not match. <br>
-        3) Submit your address <br>
-    </p>
-    <input type="submit" value="Submit Address" class="submit"/>
-    <hr>
-    <p>
-        <a th:href="@{/home}">
-            <button type="button" class="update-button">Return back to Home page</button>
-        </a>
-    </p>
+<h1>Validate Your Address</h1>
+<form method="post" action="/api/customers/order" th:object="${address}" th:action="@{/api/customers/order}">
+    <table>
+        <tbody>
+        <tr>
+            <td><label>Country code:</label></td>
+            <td>
+                <input type="text" id="countryName" name="countryName" th:field="*{countryName}"/>
+            </td>
+            <td>
+                <span th:if="${#fields.hasErrors('countryName')}" class="error" th:errors="*{countryName}"></span>
+                <span th:if="${countryName}" class="error" th:text="${countryName}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td><label>City name:</label></td>
+            <td>
+                <input type="text" id="cityName" name="cityName" th:field="*{cityName}"/>
+            </td>
+            <td><span th:if="${#fields.hasErrors('cityName')}" class="error" th:errors="*{cityName}">
+            City name is invalid</span></td>
+        </tr>
+        <tr>
+            <td><label>Street name:</label></td>
+            <td>
+                <input type="text" id="streetName" name="streetName" th:field="*{streetName}"/>
+            </td>
+            <td> <span th:if="${#fields.hasErrors('streetName')}" class="error" th:errors="*{streetName}">
+            Street name is invalid</span></td>
+        </tr>
+        <tr>
+            <td><label>House number:</label></td>
+            <td>
+                <input type="text" id="houseNumber" name="houseNumber" th:field="*{houseNumber}"/>
+                <span th:text="${houseNumberConfirmation}" class="confirmation-text error"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Validate Address" class="validate"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<p>Google found this address: <span th:text="${formattedAddress}"></span></p>
+<hr>
+<p> 1) Did Google found your address? If yes, go 2. <br>
+    2) Do you have any red warnings about the address? If no, go 3. <br>
+    3) Your address is validated by Google. Submit it. <br>
+</p>
+<form method="post" action="/api/customers/address" th:object="${address}" th:action="@{/api/customers/address}">
+    <input type="hidden" th:field="*{countryName}" />
+    <input type="hidden" th:field="*{cityName}" />
+    <input type="hidden" th:field="*{streetName}" />
+    <input type="hidden" th:field="*{houseNumber}" />
+    <input type="submit" value="Submit Address" class="submit-address"/>
+</form>
+<hr>
+<p>
+    <a th:href="@{/home}">
+        <button type="button" class="update-button">Return back to Home page</button>
+    </a>
+</p>
 </body>
 </html>
