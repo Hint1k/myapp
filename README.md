@@ -13,12 +13,19 @@ A) Completed:
 7) The application shows the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
 8) The application has to have a new user registration process.
 9) After a courier generated the delivery route, it can be saved as a text file right from the calculation page.
-10) The route as a text file can be uploaded to database and downloaded from database only by admin.
+10) The route as a text file can be uploaded to database, downloaded or deleted from database only by admin.
 11) The application has to check the validity of the address entered by a customer using a Google Address Validation API.
+12) The customer can save the validated address to database for further processing by company.  
  
-B) Planned features: 
-1) The validated address entered by a customer has to be saved to database
-2) The calculated route as a text file can be deleted from database only by admin
+B) Planned features:
+- All planned features have been added
+
+C) To do list:
+- Test a new ValidationRestController class
+- Add test for a new method in AddressController class
+- Add test for a new method in FileServiceImpl class
+- Add test for a new method in FileController class
+- Handle errors for Address Validation Controller class
 
 Installation info:
 1) Create file "secret.properties" on this path: src/main/resources/

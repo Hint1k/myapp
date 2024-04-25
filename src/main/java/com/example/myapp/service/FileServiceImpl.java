@@ -61,4 +61,12 @@ public class FileServiceImpl implements FileService {
     public Stream<FileDb> getAllFiles() {
         return fileDao.findAll().stream();
     }
+
+    @Override
+    public void deleteFile(String name) {
+        FileDb file = fileDao.findByName(name);
+        if (file != null) {
+            fileDao.delete(file);
+        }
+    }
 }

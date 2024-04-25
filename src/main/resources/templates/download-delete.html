@@ -4,7 +4,7 @@
       xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Files download from database page</title>
+    <title>File download / delete from database page</title>
 </head>
 <body>
 <div>
@@ -20,7 +20,12 @@
             <tbody>
             <tr th:each="file : ${files}">
                 <td th:text="${file.fileName}">File name</td>
-                <td><a th:href="@{${file.fileUrl}}">Download</a></td>
+                <td><a th:href="@{${file.fileUrl}}">Download</a>
+                    <form action="#" th:action="@{/api/files/html/{name}(name=${file.fileName})}" th:method="delete"
+                          onclick="if(!(confirm('Are you sure to delete this file?'))) return false">
+                        <button type="submit" class="btn">Delete file</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

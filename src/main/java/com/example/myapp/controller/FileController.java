@@ -28,6 +28,14 @@ public class FileController {
     @PostMapping("/files/upload") // "upload" here is a noun
     public ResponseEntity<ResponseMessage> uploadFileToDb(
             @RequestParam("file") MultipartFile file) {
+
+        // to prevent user attempt to add "no file" record to database
+        if (file.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseMessage("Please select a file to upload."));
+        }
+
         String message = "";
         try {
             fileService.saveFile(file);
@@ -59,7 +67,7 @@ public class FileController {
 
         model.addAttribute("files", files);
 
-        return "download-form";
+        return "download-delete";
     }
 
     @GetMapping("/files/json")
@@ -108,5 +116,14 @@ public class FileController {
                         "attachment; filename = "
                                 + file.getName())
                 .body(file.getData());
+    }
+
+    @DeleteMapping("/files/html/{name}")
+    public String deleteFileFromDbByName(@PathVariable String name) {
+        FileDb file = fileService.getByName(name);
+        if (file != null) {
+            fileService.deleteFile(name);
+        }
+        return "redirect:/api/files/html";
     }
 }

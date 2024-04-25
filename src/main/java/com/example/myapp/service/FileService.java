@@ -12,7 +12,9 @@ public interface FileService {
 
     Optional<FileDb> getById(Integer id);
 
-    public FileDb getByName(String name);
+    FileDb getByName(String name);
 
-    public Stream<FileDb> getAllFiles();
+    Stream<FileDb> getAllFiles();
+
+    void deleteFile(String name);
 }
