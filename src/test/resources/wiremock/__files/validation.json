@@ -1,0 +1,89 @@
+{
+  "result": {
+    "verdict": {
+      "inputGranularity": "PREMISE",
+      "validationGranularity": "PREMISE",
+      "geocodeGranularity": "PREMISE",
+      "addressComplete": true,
+      "hasInferredComponents": true
+    },
+    "address": {
+      "formattedAddress": "10 Downing Street, London SW1A 2AB, UK",
+      "postalAddress": {
+        "regionCode": "GB",
+        "languageCode": "en-GB",
+        "postalCode": "SW1A 2AB",
+        "locality": "London",
+        "addressLines": [
+          "10 Downing Street"
+        ]
+      },
+      "addressComponents": [
+        {
+          "componentName": {
+            "text": "10"
+          },
+          "componentType": "street_number",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Downing Street",
+            "languageCode": "en"
+          },
+          "componentType": "route",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "London",
+            "languageCode": "en"
+          },
+          "componentType": "postal_town",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "UK",
+            "languageCode": "en"
+          },
+          "componentType": "country",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "SW1A 2AB"
+          },
+          "componentType": "postal_code",
+          "confirmationLevel": "CONFIRMED",
+          "inferred": true
+        }
+      ]
+    },
+    "geocode": {
+      "location": {
+        "latitude": 51.5033998,
+        "longitude": -0.1277265
+      },
+      "plusCode": {
+        "globalCode": "9C3XGV3C+9W"
+      },
+      "bounds": {
+        "low": {
+          "latitude": 51.5032949,
+          "longitude": -0.1282223
+        },
+        "high": {
+          "latitude": 51.5036949,
+          "longitude": -0.1272952
+        }
+      },
+      "featureSizeMeters": 47.480377,
+      "placeId": "ChIJx2E7b8UEdkgRtw6rLyLUl5w",
+      "placeTypes": [
+        "premise"
+      ]
+    }
+  },
+  "responseId": "5f9f5792-0545-4bd0-b905-4323250e90a6"
+}

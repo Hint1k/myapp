@@ -1,5 +1,6 @@
 package com.example.myapp.controller;
 
+import com.example.myapp.entity.Courier;
 import com.example.myapp.testData.AddressData;
 import com.example.myapp.entity.Address;
 import com.example.myapp.service.AddressService;
@@ -172,5 +173,45 @@ public class AddressControllerTest {
         }
 
         verify(addressService, times(1)).deleteAddress(id);
+    }
+
+    @Test
+    public void testSaveValidatedAddress() throws Exception {
+        // Creating a mock Address object as the customer input
+        Address customerAddress = addresses.get(0);
+
+        // getting a default courier with id = 0
+        Courier defaultCourier = customerAddress.getCourier();
+        when(courierService.getCourier(0)).thenReturn(defaultCourier);
+
+        /* Mocking the behavior of addressService.saveAddress(validatedAddress) with a deep copy,
+        since retrieving the same object this way: "Address validatedAddress = address.get(0)"
+        makes Mockito to consider them as two different addresses because of different references */
+        Address validatedAddress = new Address(
+                customerAddress.getCountryName(),
+                customerAddress.getCityName(),
+                customerAddress.getStreetName(),
+                customerAddress.getHouseNumber(),
+                defaultCourier
+        );
+
+        doNothing().when(addressService).saveAddress(validatedAddress);
+
+        // testing
+        mockMvc.perform(post("/api/customers/address")
+                        .with(csrf())
+                        .flashAttr("address", customerAddress)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("countryName", customerAddress.getCountryName())
+                        .param("cityName", customerAddress.getCityName())
+                        .param("streetName", customerAddress.getStreetName())
+                        .param("houseNumber", String.valueOf(customerAddress.getHouseNumber())))
+                .andExpect(status().isOk())
+                .andExpect(view().name("order-successful"))
+                .andDo(print())
+                .andReturn();
+
+        verify(addressService, times(1)).saveAddress(validatedAddress);
+        verify(courierService, times(1)).getCourier(0);
     }
 }

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "Address")
 public class Address {
@@ -127,5 +129,24 @@ public class Address {
 
     public void setCourier(Courier courier) {
         this.courier = courier;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(id, address.id) &&
+                Objects.equals(countryName, address.countryName) &&
+                Objects.equals(cityName, address.cityName) &&
+                Objects.equals(streetName, address.streetName) &&
+                Objects.equals(houseNumber, address.houseNumber) &&
+                Objects.equals(courier, address.courier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, countryName, cityName,
+                streetName, houseNumber, courier);
     }
 }

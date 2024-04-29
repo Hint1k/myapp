@@ -1,66 +1,61 @@
 package com.example.myapp.controller;
 
-import com.example.myapp.MyTestContext;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.myapp.rest.locationJsonParsing.Geometry;
+import com.example.myapp.rest.locationJsonParsing.Location;
+import com.example.myapp.rest.locationJsonParsing.LocationResponse;
+import com.example.myapp.rest.locationJsonParsing.Result;
+import com.example.myapp.rest.restController.LocationRestController;
+import com.example.myapp.rest.restController.WeatherRestController;
+import com.example.myapp.rest.weatherJsonParsing.Main;
+import com.example.myapp.rest.weatherJsonParsing.WeatherResponse;
+import com.example.myapp.service.CourierService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// unit test of controller layer
-public class WeatherControllerTest extends MyTestContext{
+@WebMvcTest(WeatherController.class)
+@WithMockUser // spring security requires a user with a password
+public class WeatherControllerTest {
 
+    @MockBean
+    private CourierService courierService;
+
+    @MockBean
+    LocationRestController locationRestController;
+
+    @MockBean
+    WeatherRestController weatherRestController;
+
+    @Autowired
     private MockMvc mockMvc;
 
-    private static final String GOOGLE_API_KEY = "googleApiKey";
+    private final String googleApiUrl;
 
-    private static final String WEATHER_API_KEY = "weatherApiKey";
+    private final String googleApiKey;
 
-    @RegisterExtension
-    static WireMockExtension wireMockExtension = WireMockExtension
-            .newInstance()
-            .options(wireMockConfig().dynamicPort()
-                    .usingFilesUnderClasspath("wiremock"))
-            .build();
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("google.api.url", wireMockExtension::baseUrl);
-        registry.add("weather.api.url", wireMockExtension::baseUrl);
-        registry.add("google.api.key", () -> GOOGLE_API_KEY);
-        registry.add("weather.api.key", () -> WEATHER_API_KEY);
-    }
-
-    @BeforeEach
-    void setUp(WebApplicationContext wac) {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    public WeatherControllerTest(@Value("${google.api.url}")
+                                 String googleApiUrl,
+                                 @Value("${google.api.key}")
+                                 String googleApiKey) {
+        this.googleApiUrl = googleApiUrl;
+        this.googleApiKey = googleApiKey;
     }
 
     @Test
     public void testGetJsonWeather() {
         String address = "moscow";
         String urlString = "/weather?address=" + address;
-
-        // stubbing with WireMock
-        wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type",
-                                "application/json")
-                ));
 
         // testing
         try {
@@ -81,48 +76,46 @@ public class WeatherControllerTest extends MyTestContext{
     }
 
     @Test
-    public void testGetHtmlWeather() {
-        String address = "moscow";
+    public void testGetHtmlWeather() throws Exception {
+        // Mock dependencies
+        WeatherResponse weatherResponse = new WeatherResponse();
+        Main main = new Main();
+        main.setTemperature(20.0);
+        main.setFeelsLike(18.0);
+        weatherResponse.setMain(main);
 
-        String urlString1 = "/maps/api/geocode/json?key="
-                + GOOGLE_API_KEY + "&address=" + address;
+        // Mock behavior of LocationRestController
+        LocationResponse locationResponse = new LocationResponse();
+        Result result = new Result();
+        Geometry geometry = new Geometry();
+        Location location = new Location();
+        location.setLatitude(55.755826); // Sample latitude for Moscow
+        location.setLongitude(37.617300); // Sample longitude for Moscow
+        geometry.setLocation(location);
+        result.setGeometry(geometry);
+        locationResponse.setResults(new Result[]{result});
+        Mockito.when(locationRestController.getLocation(Mockito.anyString()))
+                .thenReturn(locationResponse);
 
-        // stubbing location with WireMock
-        wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString1))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("location.json")
-                ));
+        // Mock behavior of WeatherRestController (optional,
+        // if you want to test specific weather data)
+        Mockito.when(weatherRestController.getWeather(Mockito.anyDouble(), Mockito.anyDouble()))
+                .thenReturn(weatherResponse); // Comment out if not needed
 
-        String urlString2 = "/data/2.5/weather?lat=55.75&lon=37.59&appid="
-                + WEATHER_API_KEY + "&units=metric";
+        // Perform the request
+        mockMvc.perform(post("/api/weather/weather-html")
+                        .with(csrf())
+                        .param("address", "Moscow")
+                        .contentType(MediaType.TEXT_HTML_VALUE)
+                        .content("Moscow"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("address", "Moscow"))
+                .andExpect(model().attribute("temperature", 20.0))
+                .andExpect(model().attribute("feelsLike", 18.0))
+                .andExpect(view().name("weather-report"))
+                .andDo(print())
+                .andReturn();
 
-        // stubbing weather with WireMock
-        wireMockExtension.stubFor(WireMock.get(urlEqualTo(urlString2))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("weather.json")
-                ));
-
-        // testing the response for two stubs simultaneously
-        try {
-            mockMvc.perform(post("/api/weather/weather-html")
-                            .with(csrf())
-                            .param("address", address)
-                            .content(MediaType.TEXT_HTML_VALUE)
-                            .content(address)
-                    )
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("weather-report"))
-                    .andExpect(model().attributeExists("temperature"))
-                    .andExpect(model().attributeExists("feelsLike"))
-                    .andExpect(model().attributeExists("address"))
-                    .andDo(print());
-        } catch (Exception e) {
-            System.out.println("testGetHtmlWeather() fails");
-            throw new RuntimeException(e);
-        }
+        Mockito.verify(locationRestController, Mockito.times(1)).getLocation(Mockito.anyString());
     }
 }

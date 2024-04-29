@@ -17,15 +17,14 @@ A) Completed:
 11) The application has to check the validity of the address entered by a customer using a Google Address Validation API.
 12) The customer can save the validated address to database for further processing by company.  
  
-B) Planned features:
+B) Planned:
 - All planned features have been added
 
-C) To do list:
-- Test a new ValidationRestController class
-- Add test for a new method in AddressController class
-- Add test for a new method in FileServiceImpl class
-- Add test for a new method in FileController class
+C) To-do list:
 - Handle errors for Address Validation Controller class
+- Handles errors for other classes
+- Use in memory database for file test classes
+- Correct the WeatherControllerTest class (the 2nd test does not mock dependencies properly)
 
 Installation info:
 1) Create file "secret.properties" on this path: src/main/resources/

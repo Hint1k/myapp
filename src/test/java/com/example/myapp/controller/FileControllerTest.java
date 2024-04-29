@@ -101,7 +101,7 @@ public class FileControllerTest {
         try {
             mockMvc.perform(get("/api/files/html"))
                     .andExpect(status().isOk())
-                    .andExpect(view().name("download-form"))
+                    .andExpect(view().name("download-delete"))
                     .andExpect(model().attribute("files", hasSize(5)))
                     .andExpect(content().string(containsString("14.txt")))
                     .andExpect(content().string(containsString("15.txt")))
@@ -190,5 +190,31 @@ public class FileControllerTest {
         }
 
         verify(fileService, times(1)).getByName(name);
+    }
+
+    @Test
+    public void testDeleteFileFromDbByName() {
+        int id = 3; // delete file "14.txt" with id = 3
+        FileDb file = files.get(id);
+        String name = file.getName();
+
+        when(fileService.getByName(name)).thenReturn(file);
+        doNothing().when(fileService).deleteFile(name);
+
+        //testing
+        try {
+            mockMvc.perform(delete("/api/files/html/{name}", name)
+                            .with(csrf()))
+                    .andExpect(status().isFound())
+                    .andExpect(redirectedUrl("/api/files/html"))
+                    .andDo(print())
+                    .andReturn();
+        } catch (Exception e) {
+            System.out.println("testDeleteFileFromDbByName() fails");
+            throw new RuntimeException(e);
+        }
+
+        verify(fileService, times(1)).getByName(name);
+        verify(fileService, times(1)).deleteFile(name);
     }
 }

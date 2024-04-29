@@ -1,4 +1,3 @@
-<!-- rename this form later for clarity -->
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
@@ -25,7 +24,7 @@
             </td>
             <td>
                 <span th:if="${#fields.hasErrors('countryName')}" class="error" th:errors="*{countryName}"></span>
-                <span th:if="${countryName}" class="error" th:text="${countryName}"></span>
+                <span th:if="${errorMessage}" class="error" th:text="${errorMessage}"></span>
             </td>
         </tr>
         <tr>

@@ -1,11 +1,11 @@
 package com.example.myapp.restController;
 
-import com.example.myapp.MyTestContext;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // unit test of controller layer
-public class LocationRestControllerTest extends MyTestContext {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class LocationRestControllerTest {
 
     private MockMvc mockMvc;
 
@@ -76,6 +77,8 @@ public class LocationRestControllerTest extends MyTestContext {
             System.out.println("testGetLocation() fails");
             throw new RuntimeException(e);
         }
+
+        wireMockExtension.verify(exactly(1), getRequestedFor(urlEqualTo(urlString)));
     }
 
     @Test
@@ -116,5 +119,8 @@ public class LocationRestControllerTest extends MyTestContext {
             System.out.println("testGetWeather() fails");
             throw new RuntimeException(e);
         }
+
+        wireMockExtension.verify(exactly(1), getRequestedFor(urlEqualTo(urlString1)));
+        wireMockExtension.verify(exactly(1), getRequestedFor(urlEqualTo(urlString2)));
     }
 }

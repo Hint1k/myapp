@@ -25,15 +25,17 @@ public class ValidationRestController {
 
     private final String googleApiKey;
 
-    private static final String GOOGLE_API_URL
-            = "https://addressvalidation.googleapis.com/v1:validateAddress?key=";
+    private final String googleApiUrl;
 
     private final ObjectMapper objectMapper;
 
     public ValidationRestController(@Value("${google.api.key}")
                                     String googleApiKey,
+                                    @Value("${validation.api.url}")
+                                    String googleApiUrl,
                                     ObjectMapper objectMapper) {
         this.googleApiKey = googleApiKey;
+        this.googleApiUrl = googleApiUrl;
         this.objectMapper = objectMapper;
     }
 
@@ -55,6 +57,11 @@ public class ValidationRestController {
         ResponseEntity<String> response = sendValidationRequest(validationRequest);
 
         if (response == null || response.getStatusCode() != HttpStatus.OK) {
+            if (response != null) {
+                String errorMessage = response.getBody();
+                model.addAttribute("errorMessage", errorMessage);
+                return "order-form";
+            }
             return "redirect:/error";
         }
 
@@ -97,8 +104,9 @@ public class ValidationRestController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String url = GOOGLE_API_URL + googleApiKey;
-        HttpEntity<String> entity = new HttpEntity<>(toJsonString(validationRequest), headers);
+        String url = googleApiUrl + "/v1:validateAddress?key=" + googleApiKey;
+        HttpEntity<String> entity
+                = new HttpEntity<>(toJsonString(validationRequest), headers);
 
         try {
             return new RestTemplate().postForEntity(url, entity, String.class);
@@ -158,8 +166,9 @@ public class ValidationRestController {
                     address.setHouseNumber(Integer.parseInt(name));
                     String confirmationLevel = component.getConfirmationLevel();
                     if (!confirmationLevel.equalsIgnoreCase("confirmed")) {
-                        String confirmationText = "Double check the house number,"
-                                + "Google could not find this exact house";
+                        String confirmationText
+                                = "Double check the house number and street name, "
+                                + "Google could not find this exact address";
                         model.addAttribute("houseNumberConfirmation",
                                 confirmationText);
                     }

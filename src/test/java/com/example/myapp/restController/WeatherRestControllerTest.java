@@ -74,5 +74,7 @@ public class WeatherRestControllerTest {
             System.out.println("testGetWeather() fails");
             throw new RuntimeException(e);
         }
+
+        wireMockExtension.verify(exactly(1), getRequestedFor(urlEqualTo(urlString)));
     }
 }

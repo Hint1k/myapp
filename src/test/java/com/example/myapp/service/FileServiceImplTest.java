@@ -89,4 +89,18 @@ public class FileServiceImplTest {
 
         verify(fileDao, times(1)).findAll();
     }
+
+    @Test
+    public void testDeleteFile() {
+        int id = 4;
+        FileDb file = files.get(id);
+        String fileName = file.getName();
+
+        when(fileDao.findByName(fileName)).thenReturn(file);
+
+        // testing
+        fileServiceImpl.deleteFile(fileName);
+
+        verify(fileDao, times(1)).delete(file);
+    }
 }

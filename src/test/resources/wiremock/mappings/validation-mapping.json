@@ -1,0 +1,13 @@
+{
+  "request": {
+    "urlPathPattern": "/v1:validateAddress?key=googleApiKey",
+    "method": "POST"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "validation.json"
+  }
+}
