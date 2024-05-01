@@ -116,8 +116,15 @@ insert into files values (2, '2.txt', 'text/plain', LOAD_FILE('/var/lib/mysql-fi
 insert into files values (3, '3.txt', 'text/plain', LOAD_FILE('/var/lib/mysql-files/3.txt'));
 
 /*
-creating a default courier to be assigned to an address entered by a customer
+creating a default courier to be assigned to an address entered by a customer:
 */
 
 insert into courier (id, first_name, last_name, phone) values
 (0, 'Not', 'Courier', '+00000000000');
+
+/*
+when the app runs in docker, it creates the courier with id = 1,
+instead of 0, so the update command fixes it:
+*/
+
+update courier set id = 0 where id = 1;

@@ -23,8 +23,6 @@ B) Planned:
 C) To-do list:
 - Handle errors for Address Validation Controller class
 - Handles errors for other classes
-- Use in memory database for file test classes
-- Correct the WeatherControllerTest class (the 2nd test does not mock dependencies properly)
 
 Installation info:
 1) Create file "secret.properties" on this path: src/main/resources/
