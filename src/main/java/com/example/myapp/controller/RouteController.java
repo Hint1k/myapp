@@ -61,7 +61,14 @@ public class RouteController {
                 i--;
             }
         }
-        model.addAttribute("addresses", addresses);
+        if (addresses.isEmpty()) {
+            String message = "No addresses found for you." +
+                    " Contact your manager";
+            model.addAttribute("message", message);
+        } else {
+            model.addAttribute("addresses", addresses);
+            model.addAttribute("addressesLoaded", true);
+        }
         return "route";
     }
 
@@ -86,6 +93,8 @@ public class RouteController {
 
         model.addAttribute("map", map);
         model.addAttribute("addresses", addresses);
+        model.addAttribute("addressesLoaded", true);
+        model.addAttribute("coordinatesLoaded", true);
 
         return "route";
     }
@@ -118,11 +127,14 @@ public class RouteController {
         model.addAttribute("distance", distance + " km");
         model.addAttribute("map", map);
         model.addAttribute("addresses", addresses);
+        model.addAttribute("addressesLoaded", true);
+        model.addAttribute("coordinatesLoaded", true);
+        model.addAttribute("routeLoaded", true);
 
         return "route";
     }
 
-    @RequestMapping("/file")
+    @GetMapping("/file")
     public void saveRouteToUserDevice(HttpServletResponse response) {
         List<String> array = new ArrayList<>();
         array.add("Your route is:");

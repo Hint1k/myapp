@@ -119,6 +119,17 @@ public class RouteCalculation {
 
     // greedy algorithm
     private void calculateShortestPath() {
+        // the case with map.size == 0 is handled by RouteController
+
+        // the case when there is only one address present
+        if (map.size() == 1) {
+            distance = 0.0;
+            path = new ArrayList<>();
+            path.add(map.keySet().iterator().next().getCityName());
+            return;
+        }
+
+        // handle all other cases
         double minimum = Double.MAX_VALUE;
         List<String> cities = new ArrayList<>();
         path = new ArrayList<>();

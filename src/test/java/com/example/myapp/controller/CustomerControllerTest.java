@@ -55,7 +55,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void testAddCustomer() {
+    public void testShowRegistrationForm() {
         // testing
         try {
             mockMvc.perform(get("/api/customers/customer-form"))
@@ -64,7 +64,7 @@ public class CustomerControllerTest {
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {
-            System.out.println("testAddCustomer() fails");
+            System.out.println("testShowRegistrationForm() fails");
             throw new RuntimeException(e);
         }
     }
@@ -91,5 +91,20 @@ public class CustomerControllerTest {
         }
 
         verify(customerService, times(1)).saveCustomer(customer);
+    }
+
+    @Test
+    public void testShowOrderFormPage() {
+        //testing
+        try {
+            mockMvc.perform(get("/api/customers/order")) //order here used as noun
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("order-form"))
+                    .andDo(print())
+                    .andReturn();
+        } catch (Exception e) {
+            System.out.println("testShowOrderFormPage() fails");
+            throw new RuntimeException(e);
+        }
     }
 }

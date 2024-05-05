@@ -15,7 +15,9 @@
 </div>
 <hr>
 User name = <span sec:authentication="principal.username"></span>
-<br><br>
+<br>
+<p th:if="${message}" style="color: red;" th:text="${message}"></p>
+<br>
 <a th:href="@{/api/courier/addresses}">
     <button type="button" class="update-button">Get address list</button>
 </a>
@@ -40,43 +42,49 @@ User name = <span sec:authentication="principal.username"></span>
     </div>
 </div>
 <hr>
-<a th:href="@{/api/courier/coordinates}">
-    <button type="button" class="update-button">Get coordinates</button>
-</a>
-<table>
-    <tr th:each="entry : ${map}">
-        <td th:text="${entry.key.getCityName()}">City Name</td>
+<div id="other-buttons1" th:if="${addressesLoaded}">
+    <a th:href="@{/api/courier/coordinates}">
+        <button type="button" class="update-button">Get coordinates</button>
+    </a>
+    <table>
+        <tr th:each="entry : ${map}">
+            <td th:text="${entry.key.getCityName()}">City Name</td>
+            <table th:border="1">
+                <tr th:each="coordinates : ${entry.value}">
+                    <td th:text="${coordinates.latitude}">Latitude</td>
+                    <td th:text="${coordinates.longitude}">Longitude</td>
+                </tr>
+            </table>
+        </tr>
+    </table>
+    <hr>
+    <div id="other-buttons2" th:if="${coordinatesLoaded}">
+        <a th:href="@{/api/courier/distance}">
+            <button type="button" class="update-button">Calculate route</button>
+        </a>
         <table th:border="1">
-            <tr th:each="coordinates : ${entry.value}">
-                <td th:text="${coordinates.latitude}">Latitude</td>
-                <td th:text="${coordinates.longitude}">Longitude</td>
+            <tr>
+                <th>Route sequence</th>
+            </tr>
+            <tr th:each="city : ${route}">
+                <td th:text="${city}"></td>
+            </tr>
+            <tr>
+                <th>Total distance</th>
+            </tr>
+            <tr>
+                <td th:text="${distance}"></td>
             </tr>
         </table>
-    </tr>
-</table>
-<hr>
-<a th:href="@{/api/courier/distance}">
-    <button type="button" class="update-button">Calculate route</button>
-</a>
-<table th:border="1">
-    <tr>
-        <th>Route sequence</th>
-    </tr>
-    <tr th:each="city : ${route}">
-        <td th:text="${city}"></td>
-    </tr>
-    <tr>
-        <th>Total distance</th>
-    </tr>
-    <tr>
-        <td th:text="${distance}"></td>
-    </tr>
-</table>
-<hr>
-<a th:href="@{/api/courier/file}">
-    <button type="button" class="save-button">Save route to file</button>
-</a>
-<br>
+        <hr>
+        <div id="other-buttons3" th:if="${routeLoaded}">
+        <a th:href="@{/api/courier/file}">
+            <button type="button" class="save-button">Save route to file</button>
+        </a>
+        <br>
+    </div>
+    </div>
+</div>
 <hr>
 <a th:href="@{/home}">
     <button type="button" class="update-button">Return to home page</button>

@@ -17,6 +17,7 @@
 <form method="post" action="/api/customers/order" th:object="${address}" th:action="@{/api/customers/order}">
     <table>
         <tbody>
+        <input type="hidden" id="id" name="id" th:field="*{id}"/>
         <tr>
             <td><label>Country code:</label></td>
             <td>
@@ -24,7 +25,7 @@
             </td>
             <td>
                 <span th:if="${#fields.hasErrors('countryName')}" class="error" th:errors="*{countryName}"></span>
-                <span th:if="${errorMessage}" class="error" th:text="${errorMessage}"></span>
+                <span th:if="${unsupportedRegion}" class="error" th:text="${unsupportedRegion}"></span>
             </td>
         </tr>
         <tr>
@@ -47,8 +48,9 @@
             <td><label>House number:</label></td>
             <td>
                 <input type="text" id="houseNumber" name="houseNumber" th:field="*{houseNumber}"/>
-                <span th:text="${houseNumberConfirmation}" class="confirmation-text error"></span>
             </td>
+            <td> <span th:if="${#fields.hasErrors('houseNumber')}" class="error" th:errors="*{houseNumber}">
+            House number is invalid</span></td>
         </tr>
         <tr>
             <td>
@@ -58,17 +60,19 @@
         </tbody>
     </table>
 </form>
-<p>Google found this address: <span th:text="${formattedAddress}" style="color: green;"></span></p>
+<p>Google found this address: <span th:text="${formattedAddress}" style="color: green;"></span>
+    <span th:text="${errorConfirmation}" class="confirmation-text error"></span>
+</p>
 <hr>
-<p> 1) Did Google found your address? If yes, go 2. <br>
-    2) Do you have any red warnings about the address? If no, go 3. <br>
+<p> 1) Do you have any red warnings about the address? If no, go 2. <br>
+    2) Did Google found your address and displayed in green? If yes, go 3. <br>
     3) Your address is validated by Google. Submit it. <br>
 </p>
 <form method="post" action="/api/customers/address" th:object="${address}" th:action="@{/api/customers/address}">
-    <input type="hidden" th:field="*{countryName}" />
-    <input type="hidden" th:field="*{cityName}" />
-    <input type="hidden" th:field="*{streetName}" />
-    <input type="hidden" th:field="*{houseNumber}" />
+    <input type="hidden" th:field="*{countryName}"/>
+    <input type="hidden" th:field="*{cityName}"/>
+    <input type="hidden" th:field="*{streetName}"/>
+    <input type="hidden" th:field="*{houseNumber}"/>
     <input type="submit" value="Submit Address" class="submit-address"/>
 </form>
 <hr>

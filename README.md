@@ -21,8 +21,8 @@ B) Planned:
 - All planned features have been added
 
 C) To-do list:
-- Handle errors for Address Validation Controller class
-- Handles errors for other classes
+- Change Integer houseNumber to String houseNumber (in Address class) 
+- Handles errors for all classes
 
 Installation info:
 1) Create file "secret.properties" on this path: src/main/resources/
