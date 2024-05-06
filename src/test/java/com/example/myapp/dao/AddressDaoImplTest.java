@@ -48,7 +48,7 @@ public class AddressDaoImplTest {
                 6, "Harry", "Potter", "+79991111166");
         Address address6 = new Address(
                 6, "Spain", "Madrid",
-                "Forward street", 16, courier6);
+                "Forward street", "16", courier6);
         entityManager.merge(address6);
 
         Query query = entityManager.createQuery("from Address");
@@ -70,7 +70,7 @@ public class AddressDaoImplTest {
                 "Harry", "Potter", "+79991111166");
         Address address6 = new Address(
                 "Spain", "Madrid",
-                "Forward street", 16, courier6);
+                "Forward street", "16", courier6);
         entityManager.persist(address6);
 
         Query query = entityManager.createQuery("from Address");

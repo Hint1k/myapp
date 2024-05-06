@@ -29,7 +29,7 @@ id int(11) not null auto_increment,
 country_name varchar(45) not null,
 city_name varchar(45) not null,
 street_name varchar(45) not null,
-house_number smallint(5) not null,
+house_number varchar(45) not null,
 courier_id int(11) not null,
 primary key (id),
 foreign key (courier_id)

@@ -13,7 +13,7 @@ create table if not exists address
     country_name varchar(45) not null,
     city_name    varchar(45) not null,
     street_name  varchar(45) not null,
-    house_number smallint    not null,
+    house_number varchar(45) not null,
     courier_id   integer     not null,
     foreign key (courier_id)
         references courier (id)

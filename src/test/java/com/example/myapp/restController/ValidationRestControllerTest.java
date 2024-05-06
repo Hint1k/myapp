@@ -75,7 +75,7 @@ public class ValidationRestControllerTest {
         address.setCountryName("UK");
         address.setCityName("London");
         address.setStreetName("Downing Street");
-        address.setHouseNumber(10);
+        address.setHouseNumber("10");
 
         // testing
         try {

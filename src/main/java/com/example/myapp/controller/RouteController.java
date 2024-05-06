@@ -103,7 +103,7 @@ public class RouteController {
         String countryName = address.getCountryName();
         String cityName = address.getCityName();
         String streetName = address.getStreetName();
-        Integer houseNumber = address.getHouseNumber();
+        String houseNumber = address.getHouseNumber();
         String stringAddress = countryName + ", " + cityName + ", "
                 + streetName + ", " + houseNumber;
 

@@ -2,8 +2,6 @@ package com.example.myapp.entity;
 
 import com.example.myapp.validation.CapitalLetter;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
@@ -45,9 +43,9 @@ public class Address {
 
     @Column(name = "house_number")
     @NotNull(message = "House number cannot be empty")
-    @Min(value = 1, message = "Minimum house number = 1")
-    @Max(value = 99, message = "Maximum house number = 99")
-    private Integer houseNumber;
+    /* change type from Integer to String, since
+    house numbers can have letters and special symbols */
+    private String houseNumber;
 
     //bidirectional relationship, owning side
     @ManyToOne(cascade = {
@@ -63,7 +61,7 @@ public class Address {
     }
 
     public Address(String countryName, String cityName,
-                   String streetName, Integer houseNumber) {
+                   String streetName, String houseNumber) {
         this.countryName = countryName;
         this.cityName = cityName;
         this.streetName = streetName;
@@ -71,7 +69,7 @@ public class Address {
     }
 
     public Address(String countryName, String cityName,
-                   String streetName, Integer houseNumber,
+                   String streetName, String houseNumber,
                    Courier courier) {
         this.countryName = countryName;
         this.cityName = cityName;
@@ -82,7 +80,7 @@ public class Address {
 
     public Address(Integer id, String countryName,
                    String cityName, String streetName,
-                   Integer houseNumber, Courier courier) {
+                   String houseNumber, Courier courier) {
         this.id = id;
         this.countryName = countryName;
         this.cityName = cityName;
@@ -115,11 +113,11 @@ public class Address {
         this.streetName = streetName;
     }
 
-    public Integer getHouseNumber() {
+    public String getHouseNumber() {
         return houseNumber;
     }
 
-    public void setHouseNumber(Integer houseNumber) {
+    public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
     }
 

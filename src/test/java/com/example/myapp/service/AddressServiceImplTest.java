@@ -41,7 +41,7 @@ public class AddressServiceImplTest {
         List<Address> addressList = addressServiceImpl.getAddresses();
 
         assertEquals(6, addressList.size());
-        assertEquals(11, addressList.get(0).getHouseNumber());
+        assertEquals("11", addressList.get(0).getHouseNumber());
         assertEquals("Ivanov", addressList.get(0).getCourier().getLastName());
 
         verify(addressDaoImpl, times(1)).getAddresses();
@@ -58,7 +58,7 @@ public class AddressServiceImplTest {
         Address addressTest = addressServiceImpl.getAddress(id);
 
         assertEquals("Main street", addressTest.getStreetName());
-        assertEquals(11, addressTest.getHouseNumber());
+        assertEquals("11", addressTest.getHouseNumber());
         assertEquals("Ivan", addressTest.getCourier().getFirstName());
 
         verify(addressDaoImpl, times(1)).getAddress(id);

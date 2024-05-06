@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/api")
@@ -54,7 +53,7 @@ public class ValidationRestController {
     public String validateAddress(@ModelAttribute("address") Address address,
                                   Model model, BindingResult bindingResult) {
 
-        if (!validateAddressFields(address, bindingResult)) {
+        if (!isAllAddressFieldsFilledIn(address, bindingResult)) {
             return "order-form";
         }
 
@@ -82,12 +81,13 @@ public class ValidationRestController {
         }
     }
 
-    private boolean validateAddressFields(Address address,
+    private boolean isAllAddressFieldsFilledIn(Address address,
                                           BindingResult bindingResult) {
 
         String countryName = address.getCountryName();
         String cityName = address.getCityName();
         String streetName = address.getStreetName();
+        String houseNumber = address.getHouseNumber();
 
         if (countryName == null || countryName.length() != 2) {
             bindingResult.rejectValue("countryName",
@@ -110,7 +110,6 @@ public class ValidationRestController {
             return false;
         }
 
-        String houseNumber = Objects.toString(address.getHouseNumber(), "");
         if (houseNumber == null || houseNumber.isEmpty()) {
             bindingResult.rejectValue("houseNumber",
                     "componentNull",
@@ -172,8 +171,9 @@ public class ValidationRestController {
     private ResponseEntity<String> handleBadRequestException(
             HttpClientErrorException.BadRequest ex) {
 
-        /* handling a response from Google when a customer correctly entered
-        two letters country code, but it is an unsupported country code  */
+        /* Handling a response from Google when a customer correctly entered
+        two letters country code, but it is an unsupported country code.
+        Since it is a new Google service, some countries are not implemented yet. */
         try {
             ErrorResponse errorResponse = objectMapper.readValue(ex
                     .getResponseBodyAsString(), ErrorResponse.class);
@@ -191,8 +191,8 @@ public class ValidationRestController {
         String formattedAddress = responseAddress.getFormattedAddress();
         List<AddressComponent> addressComponents = responseAddress.getAddressComponents();
 
-        if (!checkAllAddressComponentsPresent(addressComponents)
-                || !checkConfirmationLevels(addressComponents)) {
+        if (!isAllAddressComponentsPresent(addressComponents)
+                || !isAllAddressComponentsConfirmed(addressComponents)) {
             String confirmationText = "Double check the info you entered, "
                     + "Google could not find this exact address";
             model.addAttribute("errorConfirmation", confirmationText);
@@ -203,7 +203,7 @@ public class ValidationRestController {
                 model, formattedAddress);
     }
 
-    private boolean checkAllAddressComponentsPresent(
+    private boolean isAllAddressComponentsPresent(
             List<AddressComponent> addressComponents) {
 
         boolean isStreetMissing = true;
@@ -231,7 +231,7 @@ public class ValidationRestController {
                 && !isCityMissing && !isCountryNameMissing;
     }
 
-    private boolean checkConfirmationLevels(List<AddressComponent> addressComponents) {
+    private boolean isAllAddressComponentsConfirmed(List<AddressComponent> addressComponents) {
         for (AddressComponent component : addressComponents) {
             String confirmationLevel = component.getConfirmationLevel();
             if (!confirmationLevel.equalsIgnoreCase("confirmed")) {
@@ -251,15 +251,15 @@ public class ValidationRestController {
                 case "country":
                     address.setCountryName(name);
                     break;
-                case "locality":
-                case "postal_town":
+                case "locality": // this is a standard component name
+                case "postal_town": // UK has a different component name (Google's mistake)
                     address.setCityName(name);
                     break;
                 case "route":
                     address.setStreetName(name);
                     break;
                 case "street_number":
-                    address.setHouseNumber(Integer.parseInt(name));
+                    address.setHouseNumber(name);
                     break;
             }
         }
