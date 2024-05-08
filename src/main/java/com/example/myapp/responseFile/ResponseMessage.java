@@ -1,4 +1,4 @@
-package com.example.myapp.response;
+package com.example.myapp.responseFile;
 
 public class ResponseMessage {
 

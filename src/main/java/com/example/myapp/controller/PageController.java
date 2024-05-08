@@ -5,6 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class PageController {
+
+    @GetMapping("/error")
+    public String showErrorPage() {
+        return "error";
+    }
+
     @GetMapping("/login-page")
     public String showLoginPage() {
         return "index";

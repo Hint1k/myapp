@@ -2,8 +2,8 @@ package com.example.myapp.controller;
 
 import com.example.myapp.entity.FileDb;
 import com.example.myapp.entity.FileInfo;
-import com.example.myapp.response.ResponseFile;
-import com.example.myapp.response.ResponseMessage;
+import com.example.myapp.responseFile.ResponseFile;
+import com.example.myapp.responseFile.ResponseMessage;
 import com.example.myapp.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;

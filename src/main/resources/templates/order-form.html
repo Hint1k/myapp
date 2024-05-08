@@ -13,7 +13,7 @@
     <title>Order-form page</title>
 </head>
 <body>
-<h1>Validate Your Address</h1>
+<h1>Validate and Submit Your Address</h1>
 <form method="post" action="/api/customers/order" th:object="${address}" th:action="@{/api/customers/order}">
     <table>
         <tbody>
@@ -64,17 +64,19 @@
     <span th:text="${errorConfirmation}" class="confirmation-text error"></span>
 </p>
 <hr>
-<p> 1) Do you have any red warnings about the address? If no, go 2. <br>
-    2) Did Google found your address and displayed in green? If yes, go 3. <br>
-    3) Your address is validated by Google. Submit it. <br>
+<p> 1) Did Google found your address (displayed in green) ? <br>
+    2) If yes, submit it. <br>
+    3) If no, then contact admin for manual address validation. <br>
 </p>
-<form method="post" action="/api/customers/address" th:object="${address}" th:action="@{/api/customers/address}">
-    <input type="hidden" th:field="*{countryName}"/>
-    <input type="hidden" th:field="*{cityName}"/>
-    <input type="hidden" th:field="*{streetName}"/>
-    <input type="hidden" th:field="*{houseNumber}"/>
-    <input type="submit" value="Submit Address" class="submit-address"/>
-</form>
+<div id="other-buttons1" th:if="${addressValidated}">
+    <form method="post" action="/api/customers/address" th:object="${address}" th:action="@{/api/customers/address}">
+        <input type="hidden" th:field="*{countryName}"/>
+        <input type="hidden" th:field="*{cityName}"/>
+        <input type="hidden" th:field="*{streetName}"/>
+        <input type="hidden" th:field="*{houseNumber}"/>
+        <input type="submit" value="Submit Address" class="submit-address"/>
+    </form>
+</div>
 <hr>
 <p>
     <a th:href="@{/home}">

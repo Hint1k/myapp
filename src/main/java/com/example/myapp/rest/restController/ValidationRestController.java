@@ -1,10 +1,13 @@
 package com.example.myapp.rest.restController;
 
 import com.example.myapp.entity.Address;
+import com.example.myapp.exception.*;
 import com.example.myapp.rest.validationJsonParsing.request.RequestAddress;
 import com.example.myapp.rest.validationJsonParsing.request.ValidationRequest;
 import com.example.myapp.rest.validationJsonParsing.response.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.*;
@@ -31,6 +34,9 @@ public class ValidationRestController {
 
     private final ObjectMapper objectMapper;
 
+    private static final Logger logger
+            = LoggerFactory.getLogger(ValidationRestController.class);
+
     public ValidationRestController(@Value("${google.api.key}")
                                     String googleApiKey,
                                     @Value("${validation.api.url}")
@@ -52,37 +58,41 @@ public class ValidationRestController {
     @PostMapping("/customers/order")
     public String validateAddress(@ModelAttribute("address") Address address,
                                   Model model, BindingResult bindingResult) {
-
-        if (!isAllAddressFieldsFilledIn(address, bindingResult)) {
-            return "order-form";
-        }
-
-        ValidationRequest validationRequest = createValidationRequest(address);
-        ResponseEntity<String> response = sendValidationRequest(validationRequest);
-
-        // if country code is unsupported google response has an error message
-        if (response == null || response.getStatusCode() != HttpStatus.OK) {
-            if (response != null) { // handle unsupported region error
-                String errorMessage = response.getBody();
-                model.addAttribute("unsupportedRegion", errorMessage);
-                return "order-form";
-            } // handle other errors with no error message
-            return "redirect:/error";
-        }
-
         try {
+            // preventing Google responses with HttpStatus != OK (with 2 exclusions)
+            if (!isAllAddressFieldsFilledIn(address, bindingResult)) {
+                return "order-form";
+            }
+
+            ValidationRequest validationRequest = createValidationRequest(address);
+            ResponseEntity<String> response = sendValidationRequest(validationRequest);
+
+            // handling 2 exclusions for Google responses
+            if (response == null || response.getStatusCode() != HttpStatus.OK) {
+                // Google response with unsupported region error
+                if (response != null) {
+                    String errorMessage = response.getBody();
+                    model.addAttribute("unsupportedRegion", errorMessage);
+                    return "order-form";
+                } // Google response == null
+                logger.error("Google null response. Request: {}", validationRequest);
+                throw new InvalidGoogleResponse("Invalid Google response");
+            }
+
             ValidationResponse validationResponse = objectMapper
                     .readValue(response.getBody(), ValidationResponse.class);
             handleValidationResponse(validationResponse, address, model);
             return "order-form";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "redirect:/error";
+
+        } catch (Exception e) {
+            // handling other errors
+            logger.error("An error occurred: {}", e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
     private boolean isAllAddressFieldsFilledIn(Address address,
-                                          BindingResult bindingResult) {
+                                               BindingResult bindingResult) {
 
         String countryName = address.getCountryName();
         String cityName = address.getCityName();
@@ -154,16 +164,18 @@ public class ValidationRestController {
         } catch (HttpClientErrorException.BadRequest ex) {
             return handleBadRequestException(ex);
         } catch (Exception ex) {
+            // the exceptions handled in validateAddress() method
             return null;
         }
     }
 
     private String toJsonString(Object object) {
+
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             objectMapper.writeValue(outputStream, object);
             return outputStream.toString(StandardCharsets.UTF_8);
         } catch (IOException e) {
-            e.printStackTrace();
+            // the exceptions handled in validateAddress() method
             return null;
         }
     }
@@ -179,7 +191,8 @@ public class ValidationRestController {
                     .getResponseBodyAsString(), ErrorResponse.class);
             return ResponseEntity.badRequest().body(errorResponse.getError().getMessage());
         } catch (IOException e) {
-            return ResponseEntity.badRequest().body("An unexpected error occurred.");
+            // the exceptions handled in validateAddress() method
+            return null;
         }
     }
 
@@ -231,7 +244,9 @@ public class ValidationRestController {
                 && !isCityMissing && !isCountryNameMissing;
     }
 
-    private boolean isAllAddressComponentsConfirmed(List<AddressComponent> addressComponents) {
+    private boolean isAllAddressComponentsConfirmed(
+            List<AddressComponent> addressComponents) {
+
         for (AddressComponent component : addressComponents) {
             String confirmationLevel = component.getConfirmationLevel();
             if (!confirmationLevel.equalsIgnoreCase("confirmed")) {
@@ -264,5 +279,6 @@ public class ValidationRestController {
             }
         }
         model.addAttribute("formattedAddress", formattedAddress);
+        model.addAttribute("addressValidated", true);
     }
 }

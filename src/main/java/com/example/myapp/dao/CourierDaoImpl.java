@@ -42,7 +42,8 @@ public class CourierDaoImpl implements CourierDao {
 
     @Override
     public void deleteCourier(Integer id) {
-        Query query = entityManager.createQuery("delete from Courier where id=:courierId");
+        Query query = entityManager
+                .createQuery("delete from Courier where id=:courierId");
         query.setParameter("courierId", id);
         query.executeUpdate();
     }

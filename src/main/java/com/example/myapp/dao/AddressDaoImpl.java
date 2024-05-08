@@ -42,7 +42,8 @@ public class AddressDaoImpl implements AddressDao {
 
     @Override
     public void deleteAddress(Integer id) {
-        Query query = entityManager.createQuery("delete from Address where id=:addressId");
+        Query query = entityManager
+                .createQuery("delete from Address where id=:addressId");
         query.setParameter("addressId", id);
         query.executeUpdate();
     }
