@@ -8,11 +8,22 @@ import org.springframework.web.client.HttpServerErrorException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // handling database connection problems
+    @ExceptionHandler(DatabaseConnectionError.class)
+    public String handleDatabaseConnectionError(
+            DatabaseConnectionError ex, Model model) {
+
+        String errorMessage = ex.getMessage();
+        model.addAttribute("errorMessage", errorMessage);
+        return "error";
+    }
+
     // Handling invalid Google responses
     @ExceptionHandler(InvalidGoogleResponse.class)
-    public String handleInvalidGoogleResponse(InvalidGoogleResponse ex, Model model) {
+    public String handleInvalidGoogleResponse(
+            InvalidGoogleResponse ex, Model model) {
 
-        String errorMessage = "The application encountered an invalid response from Google.";
+        String errorMessage = ex.getMessage();
         model.addAttribute("errorMessage", errorMessage);
         return "error";
     }

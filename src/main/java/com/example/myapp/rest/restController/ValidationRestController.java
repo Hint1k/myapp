@@ -76,6 +76,7 @@ public class ValidationRestController {
                     return "order-form";
                 } // Google response == null
                 logger.error("Google null response. Request: {}", validationRequest);
+                // this is info for user
                 throw new InvalidGoogleResponse("Invalid Google response");
             }
 

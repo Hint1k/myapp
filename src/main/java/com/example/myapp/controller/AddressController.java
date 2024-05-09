@@ -28,6 +28,7 @@ public class AddressController {
     public AddressController() {
     }
 
+    // cutting off the spaces entered by user to avoid errors
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
         StringTrimmerEditor stringTrimmerEditor

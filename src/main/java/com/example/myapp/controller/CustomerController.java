@@ -19,6 +19,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    // cutting off the spaces entered by user to avoid errors
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
         StringTrimmerEditor stringTrimmerEditor
