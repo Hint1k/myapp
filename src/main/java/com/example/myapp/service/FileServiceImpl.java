@@ -2,6 +2,8 @@ package com.example.myapp.service;
 
 import com.example.myapp.dao.FileDao;
 import com.example.myapp.entity.FileDb;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -18,6 +20,9 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     FileDao fileDao;
+
+    private static final Logger logger
+            = LoggerFactory.getLogger(FileServiceImpl.class);
 
     public FileDb saveFile(MultipartFile file) {
         String fileName = StringUtils.cleanPath(
@@ -43,7 +48,7 @@ public class FileServiceImpl implements FileService {
                 newFileDb = new FileDb(fileName, file.getContentType(), file.getBytes());
             }
         } catch (IOException e) {
-            System.out.println("File is not available");
+            logger.error("An error occurred: {}", e.getMessage(), e);
             throw new RuntimeException(e);
         }
 

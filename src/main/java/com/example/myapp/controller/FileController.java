@@ -1,10 +1,14 @@
 package com.example.myapp.controller;
 
+import com.example.myapp.entity.Courier;
 import com.example.myapp.entity.FileDb;
 import com.example.myapp.entity.FileInfo;
 import com.example.myapp.responseFile.ResponseFile;
-import com.example.myapp.responseFile.ResponseMessage;
+import com.example.myapp.service.CourierService;
 import com.example.myapp.service.FileService;
+import com.example.myapp.service.FileServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -14,7 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
+import java.nio.file.FileStore;
+import java.nio.file.FileSystems;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,31 +34,73 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private CourierService courierService;
+
+    private static final Logger logger
+            = LoggerFactory.getLogger(FileServiceImpl.class);
+
     @PostMapping("/files/upload") // "upload" here is a noun
-    public ResponseEntity<ResponseMessage> uploadFileToDb(
-            @RequestParam("file") MultipartFile file) {
+    public String uploadFileToDb(
+            @RequestParam("file") MultipartFile file, Model model) {
 
-        // to prevent user attempt to add "no file" record to database
+        String result = performFileUploadChecks(file, model);
+        if (result != null) {
+            return result;
+        }
+
+        fileService.saveFile(file);
+        String message = "The file is uploaded successfully: "
+                + file.getOriginalFilename();
+        model.addAttribute("successMessage", message);
+        return "upload-form";
+    }
+
+    private String performFileUploadChecks(MultipartFile file, Model model) {
+
+        // Checking that user first chose a file and then tried to upload it
         if (file.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseMessage("Please select a file to upload."));
+            String message = "Please select a file to upload.";
+            model.addAttribute("errorMessage", message);
+            return "upload-form";
         }
 
-        String message = "";
+        // Checking that the file name is a number or number.extension
+        String fullFileName = Objects.requireNonNull(file.getOriginalFilename());
+        String[] fileName = fullFileName.split("\\.");
+        int courierId = 0;
         try {
-            fileService.saveFile(file);
-            message = "The file is uploaded successfully: "
-                    + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(message));
-        } catch (Exception exception) {
-            message = "Could not upload the file: "
-                    + file.getOriginalFilename();
-            return ResponseEntity
-                    .status(HttpStatus.EXPECTATION_FAILED)
-                    .body(new ResponseMessage(message));
+            courierId = Integer.parseInt(fileName[0]);
+        } catch (NumberFormatException e){
+            String message = "File name is a number or number.extension";
+            model.addAttribute("errorMessage", message);
+            return "upload-form";
         }
+
+        // Checking that the filename is an existing courier id
+        List<Courier> couriers = courierService.getCouriers();
+        List<Integer> idList = new ArrayList<>();
+        for (Courier courier : couriers) {
+            int id = courier.getId();
+            idList.add(id);
+        }
+
+        if (!idList.contains(courierId)) {
+            String message = "File name must be an existing courier id";
+            model.addAttribute("errorMessage", message);
+            return "upload-form";
+        }
+
+        // Checking the file size
+        long maxSizeInBytes = 1024 * 1024; // 1MB in bytes
+        long fileSizeInBytes = file.getSize();
+        if (fileSizeInBytes > maxSizeInBytes) {
+            String message = "File size exceeds the maximum allowed limit (1MB).";
+            model.addAttribute("errorMessage", message);
+            return "upload-form";
+        }
+
+        return null; // if no error detected
     }
 
     @GetMapping("/files/html")
@@ -97,6 +148,16 @@ public class FileController {
 
         Optional<FileDb> file = fileService.getById(id);
 
+        // Checking available disk space
+        if (file.isPresent()) {
+            byte[] fileData = file.get().getData();
+            if (!isEnoughDiskSpace(fileData.length)) {
+                String errorMessage = "Not enough space on your device.";
+                return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE)
+                        .body(errorMessage.getBytes());
+            }
+        }
+
         return file.map(value -> ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename = "
@@ -111,11 +172,35 @@ public class FileController {
 
         FileDb file = fileService.getByName(name);
 
+        // Checking available disk space
+        byte[] fileData = file.getData();
+        if (!isEnoughDiskSpace(fileData.length)) {
+            String errorMessage = "Not enough space on your device to download the file.";
+            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE)
+                    .body(errorMessage.getBytes());
+        }
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename = "
                                 + file.getName())
                 .body(file.getData());
+    }
+
+    private boolean isEnoughDiskSpace(long fileSize) {
+        try {
+            Iterable<FileStore> fileStores = FileSystems.getDefault().getFileStores();
+            for (FileStore store : fileStores) {
+                long usableSpace = store.getUsableSpace();
+                if (usableSpace >= fileSize) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            logger.error("An error occurred: {}", e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 
     @DeleteMapping("/files/html/{name}")

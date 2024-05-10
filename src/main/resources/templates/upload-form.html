@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/html" >
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Files upload to database page</title>
@@ -12,18 +12,21 @@
     <form method="post" action="#" th:action="@{/api/files/upload}" enctype="multipart/form-data">
         <table>
             <tr>
-                <td>Pick file to upload:</td>
+                <td>Pick file to upload: </td>
                 <td>
-                    <input type="file" class="form-control-file" id="file" name="file" />
+                    <input type="file" class="form-control-file" id="file" name="file"/>
                 </td>
             </tr>
             <tr>
-                <td colspan="2"><input type="submit" value="Upload" /></td>
+                <td colspan="2"><input type="submit" value="Upload"/></td>
             </tr>
         </table>
     </form>
 </div>
-<br><br>
+<br>
+<p th:text="${errorMessage}" style="color: red;"></p>
+<p th:text="${successMessage}" style="color: green;"></p>
+<br>
 <a th:href="@{/api/files}">
     <button type="button" class="update-button">Return to file's page</button>
 </a>
