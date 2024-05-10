@@ -2,6 +2,7 @@ package com.example.myapp.controller;
 
 import com.example.myapp.entity.Address;
 import com.example.myapp.entity.Courier;
+import com.example.myapp.file.DiskSpaceUtil;
 import com.example.myapp.rest.locationJsonParsing.LocationResponse;
 import com.example.myapp.rest.restController.LocationRestController;
 import com.example.myapp.rest.weatherJsonParsing.Coordinates;
@@ -9,6 +10,8 @@ import com.example.myapp.route.RouteCalculation;
 import com.example.myapp.service.AddressService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -37,6 +40,9 @@ public class RouteController {
     private int distance;
 
     private List<String> route;
+
+    private static final Logger logger
+            = LoggerFactory.getLogger(RouteController.class);
 
     public RouteController(@Value("${google.api.url}")
                            String googleApiUrl,
@@ -135,7 +141,7 @@ public class RouteController {
     }
 
     @GetMapping("/file")
-    public void saveRouteToUserDevice(HttpServletResponse response) {
+    public String saveRouteToUserDevice(HttpServletResponse response, Model model) {
         List<String> array = new ArrayList<>();
         array.add("Your route is:");
         array.addAll(route);
@@ -146,14 +152,27 @@ public class RouteController {
                 InputStream inputStream = new ByteArrayInputStream(
                         String.join("\n", array).getBytes())
         ) {
+            // Checking if there is enough disk space before writing the file
+            long fileSize = array.stream().mapToLong(String::length).sum();
+            if (!DiskSpaceUtil.isEnoughDiskSpace(fileSize)) {
+                String errorMessage = "Not enough space to download the file.";
+                model.addAttribute("errorMessage", errorMessage);
+                return "route";
+            }
+
+            // Writing the file
             IOUtils.copy(inputStream, response.getOutputStream());
             response.setContentType("text/plain");
             response.setHeader("Content-Disposition",
                     "attachment; filename=\"route.txt\"");
             response.flushBuffer();
-        } catch (IOException ioException) {
-            System.out.println("Could not save the file");
-            ioException.printStackTrace(System.out); // temp solution
+        } catch (IOException e) {
+            logger.error("Save the route file to user device error: {}",
+                    e.getMessage(), e);
+            throw new RuntimeException(e);
         }
+
+        // if the file download is success then no further actions needed
+        return null;
     }
 }

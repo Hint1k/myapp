@@ -1,4 +1,4 @@
-package com.example.myapp.entity;
+package com.example.myapp.file;
 
 public class FileInfo {
 

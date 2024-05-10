@@ -2,11 +2,11 @@ package com.example.myapp.controller;
 
 import com.example.myapp.entity.Courier;
 import com.example.myapp.entity.FileDb;
-import com.example.myapp.entity.FileInfo;
-import com.example.myapp.responseFile.ResponseFile;
+import com.example.myapp.file.DiskSpaceUtil;
+import com.example.myapp.file.FileInfo;
+import com.example.myapp.file.ResponseFile;
 import com.example.myapp.service.CourierService;
 import com.example.myapp.service.FileService;
-import com.example.myapp.service.FileServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
-import java.nio.file.FileStore;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +35,7 @@ public class FileController {
     private CourierService courierService;
 
     private static final Logger logger
-            = LoggerFactory.getLogger(FileServiceImpl.class);
+            = LoggerFactory.getLogger(FileController.class);
 
     @PostMapping("/files/upload") // "upload" here is a noun
     public String uploadFileToDb(
@@ -71,7 +68,7 @@ public class FileController {
         int courierId = 0;
         try {
             courierId = Integer.parseInt(fileName[0]);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             String message = "File name is a number or number.extension";
             model.addAttribute("errorMessage", message);
             return "upload-form";
@@ -147,23 +144,8 @@ public class FileController {
             @PathVariable Integer id) {
 
         Optional<FileDb> file = fileService.getById(id);
-
-        // Checking available disk space
-        if (file.isPresent()) {
-            byte[] fileData = file.get().getData();
-            if (!isEnoughDiskSpace(fileData.length)) {
-                String errorMessage = "Not enough space on your device.";
-                return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE)
-                        .body(errorMessage.getBytes());
-            }
-        }
-
-        return file.map(value -> ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename = "
-                                + value.getName())
-                .body(value.getData())).orElseGet(() ->
-                new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        ResponseEntity<byte[]> responseEntity = checkDiskSpace(file);
+        return handleResponse(responseEntity, file);
     }
 
     @GetMapping("/files/html/{name}")
@@ -171,36 +153,37 @@ public class FileController {
             @PathVariable String name) {
 
         FileDb file = fileService.getByName(name);
-
-        // Checking available disk space
-        byte[] fileData = file.getData();
-        if (!isEnoughDiskSpace(fileData.length)) {
-            String errorMessage = "Not enough space on your device to download the file.";
-            return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE)
-                    .body(errorMessage.getBytes());
-        }
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename = "
-                                + file.getName())
-                .body(file.getData());
+        ResponseEntity<byte[]> responseEntity
+                = checkDiskSpace(Optional.ofNullable(file));
+        return handleResponse(responseEntity, Optional.ofNullable(file));
     }
 
-    private boolean isEnoughDiskSpace(long fileSize) {
-        try {
-            Iterable<FileStore> fileStores = FileSystems.getDefault().getFileStores();
-            for (FileStore store : fileStores) {
-                long usableSpace = store.getUsableSpace();
-                if (usableSpace >= fileSize) {
-                    return true;
-                }
+    private ResponseEntity<byte[]> checkDiskSpace(Optional<FileDb> file) {
+
+        if (file.isPresent()) {
+            byte[] fileData = file.get().getData();
+            if (!DiskSpaceUtil.isEnoughDiskSpace(fileData.length)) {
+                String errorMessage = "Not enough space on your device.";
+                return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE)
+                        .body(errorMessage.getBytes());
             }
-        } catch (IOException e) {
-            logger.error("An error occurred: {}", e.getMessage(), e);
-            throw new RuntimeException(e);
         }
-        return false;
+        // if there is enough disk space
+        return null;
+    }
+
+    private ResponseEntity<byte[]> handleResponse(
+            ResponseEntity<byte[]> responseEntity, Optional<FileDb> file) {
+
+        if (responseEntity != null) {
+            return responseEntity;
+        }
+        return file.map(value -> ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename = "
+                                + value.getName())
+                .body(value.getData())).orElseGet(() ->
+                new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/files/html/{name}")
