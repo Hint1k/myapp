@@ -1,4 +1,4 @@
-package com.example.myapp.responseFile;
+package com.example.myapp.file;
 
 public class ResponseFile {
     private String name;

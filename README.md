@@ -21,8 +21,7 @@ B) Planned:
 - All planned features have been added
 
 C) To-do list:
-- Handles errors for all classes
-- Update all tests after that
+- Update / Check all tests due to lots of classes updates
 
 Installation info:
 1) Create file "secret.properties" on this path: src/main/resources/

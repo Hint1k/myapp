@@ -85,6 +85,7 @@ User name = <span sec:authentication="principal.username"></span>
         </div>
     </div>
 </div>
+<p th:text="${errorMessage}" style="color: red;"></p>
 <hr>
 <a th:href="@{/home}">
     <button type="button" class="update-button">Return to home page</button>

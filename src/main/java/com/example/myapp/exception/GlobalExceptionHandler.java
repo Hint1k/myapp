@@ -18,6 +18,16 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
+    // Handling invalid weather responses
+    @ExceptionHandler(InvalidWeatherResponse.class)
+    public String handleInvalidWeatherResponse(
+            InvalidWeatherResponse ex, Model model) {
+
+        String errorMessage = ex.getMessage();
+        model.addAttribute("errorMessage", errorMessage);
+        return "error";
+    }
+
     // Handling invalid Google responses
     @ExceptionHandler(InvalidGoogleResponse.class)
     public String handleInvalidGoogleResponse(
