@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -71,7 +72,16 @@ public class CustomerControllerTest {
 
     @Test
     public void testSaveCustomer() {
-        Customer customer = customers.get(0);
+        // Creating new customer that does not exist in the database
+        Customer customer = new Customer();
+        customer.setFirstName("John");
+        customer.setLastName("Doe");
+        customer.setEmail("john.doe@test.com");
+        customer.setUsername("customer6");
+        customer.setPassword("password");
+
+        // List "customers" imitates the database content
+        when(customerService.getCustomers()).thenReturn(customers);
         doNothing().when(customerService).saveCustomer(customer);
 
         // testing
@@ -91,6 +101,7 @@ public class CustomerControllerTest {
         }
 
         verify(customerService, times(1)).saveCustomer(customer);
+        verify(customerService, times(1)).getCustomers();
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 // unit testing of service layer
@@ -30,6 +31,20 @@ public class CustomerServiceImplTest {
     public static void createCustomerList() {
         CustomerData customerData = new CustomerData();
         customers = customerData.getCustomerData();
+    }
+
+    @Test
+    public void testGetCustomers() {
+        when(customerDaoImpl.getCustomers()).thenReturn(customers);
+
+        // testing
+        List<Customer> customerList = customerServiceImpl.getCustomers();
+
+        assertEquals(5, customerList.size());
+        assertEquals("Petr", customerList.get(1).getFirstName());
+        assertEquals("Sidorov", customerList.get(2).getLastName());
+
+        verify(customerDaoImpl, times(1)).getCustomers();
     }
 
     @Test

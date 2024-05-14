@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -18,6 +20,13 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerServiceImpl(CustomerDao customerDao) {
         this.customerDao = customerDao;
         this.passwordEncoder = new BCryptPasswordEncoder();
+    }
+
+    @Override
+    @Transactional
+    public List<Customer> getCustomers() {
+        List<Customer> customers = customerDao.getCustomers();
+        return customers;
     }
 
     @Override

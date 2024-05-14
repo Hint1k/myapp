@@ -24,6 +24,16 @@ public class CustomerDaoImplTest {
     private List<Customer> customers;
 
     @Test
+    public void testGetCustomers() {
+        Query query = entityManager.createQuery("FROM Customer");
+        customers = query.getResultList();
+
+        assertEquals(5, customers.size());
+        Assertions.assertThat(customers).extracting(Customer::getId)
+                .containsOnly(1, 2, 3, 4, 5);
+    }
+
+    @Test
     public void testSaveCustomer() {
         Role role6 = new Role("customer2", "ROLE_CUSTOMER");
 
