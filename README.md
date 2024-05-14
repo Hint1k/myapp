@@ -8,14 +8,14 @@ A) Completed:
 2) The manager/admin can edit the list of addresses and the list of couriers in the database.
 3) The couriers can only see their individual tasks, but cannot edit anything. 
 4) However, the couriers can generate the shortest route to speed up the delivery.
-5) Every courier, manager and admin should have a username and a password to access the application.
+5) Every courier, customer, manager and admin should have a username and a password to access the application.
 6) The application has to check the validity of the fields (fields are not empty etc.).
-7) The application shows the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
-8) The application has to have a new user registration process.
-9) After a courier generated the delivery route, it can be saved as a text file right from the calculation page.
-10) The route as a text file can be uploaded to database, downloaded or deleted from database only by admin.
-11) The application has to check the validity of the address entered by a customer using a Google Address Validation API.
-12) The customer can save the validated address to database for further processing by company.  
+7) The application has to show the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
+8) After a courier generated the delivery route, it can be saved as a text file right from the calculation page.
+9) The route as a text file can be uploaded to database, downloaded or deleted from database only by admin.
+10) The application has to have a new customer registration process.
+11) The application has to check the validity of an address entered by a customer using Google Address Validation API.
+12) The customer can save the validated address to database for further processing by the company.  
  
 B) Planned:
 - All planned features have been added
