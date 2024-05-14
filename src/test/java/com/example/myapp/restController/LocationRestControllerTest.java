@@ -1,6 +1,7 @@
 package com.example.myapp.restController;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// unit test of controller layer
+// integration test of rest controllers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LocationRestControllerTest {
 
@@ -33,6 +34,7 @@ public class LocationRestControllerTest {
     static WireMockExtension wireMockExtension = WireMockExtension
             .newInstance()
             .options(wireMockConfig().dynamicPort()
+                    .notifier(new ConsoleNotifier(true))
                     .usingFilesUnderClasspath("wiremock"))
             .build();
 
@@ -103,9 +105,13 @@ public class LocationRestControllerTest {
                         .withHeader("Content-Type", "application/json")
                         .withBodyFile("weather.json")));
 
-        // parsing the response in json format
+        // parsing the 1st response in json format
         String latitude = "$.coord.lat";
         String longitude = "$.coord.lon";
+
+        // parsing the 2nd response in json format
+        String temperature = "$.main.temp";
+        String feelsLike = "$.main.feels_like";
 
         // testing the response for two stubs simultaneously
         try {
@@ -113,6 +119,8 @@ public class LocationRestControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath(latitude).value(55.75))
                     .andExpect(jsonPath(longitude).value(37.59))
+                    .andExpect(jsonPath(temperature).value(0.3))
+                    .andExpect(jsonPath(feelsLike).value(-4.83))
                     .andDo(print())
                     .andReturn();
         } catch (Exception e) {

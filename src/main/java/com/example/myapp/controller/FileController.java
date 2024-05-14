@@ -69,7 +69,7 @@ public class FileController {
         try {
             courierId = Integer.parseInt(fileName[0]);
         } catch (NumberFormatException e) {
-            String message = "File name is a number or number.extension";
+            String message = "File name must be a number or number.extension";
             model.addAttribute("errorMessage", message);
             return "upload-form";
         }

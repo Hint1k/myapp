@@ -17,8 +17,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -60,7 +58,7 @@ public class ValidationRestControllerTest {
             .build();
 
     @Test
-    public void testValidateAddress() throws IOException {
+    public void testValidateAddress() {
         String urlString = GOOGLE_ADDRESS + GOOGLE_API_KEY;
 
         // stubbing Google response with WireMock

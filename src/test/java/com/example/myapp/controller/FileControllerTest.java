@@ -1,8 +1,10 @@
 package com.example.myapp.controller;
 
+import com.example.myapp.entity.Courier;
 import com.example.myapp.entity.FileDb;
 import com.example.myapp.service.CourierService;
 import com.example.myapp.service.FileService;
+import com.example.myapp.testData.CourierData;
 import com.example.myapp.testData.FileData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,21 +45,32 @@ public class FileControllerTest {
 
     private static List<FileDb> filesStatic;
 
+    private List<Courier> couriers;
+
+    private static List<Courier> couriersStatic;
+
     @BeforeAll
     public static void createFileList() {
         FileData fileData = new FileData();
         filesStatic = fileData.getFileData();
+        CourierData courierData = new CourierData();
+        couriersStatic = courierData.getCourierData();
     }
 
     @BeforeEach
     public void setupFiles() {
         // in case of any changes
         files = filesStatic;
+        couriers = couriersStatic;
     }
 
     @Test
     public void testUploadFileToDb() {
-        int id = 2; // file "13.txt" has index 2 in the array "files"
+        /* this fileId = "13.txt", the name w/o extension = 13,
+        array "couriers" contains a courier with id = 13,
+        therefore if (filename == courierId) will be true,
+        so the test result is success message and no error message */
+        int fileId = 2;
 
         // creating a virtual file
         byte[] fileData = "nice-information-3".getBytes(); // file's content
@@ -68,7 +81,8 @@ public class FileControllerTest {
         // success message
         String message = "The file is uploaded successfully: 13.txt";
 
-        when(fileService.saveFile(file)).thenReturn(files.get(id));
+        when(courierService.getCouriers()).thenReturn(couriers);
+        when(fileService.saveFile(file)).thenReturn(files.get(fileId));
 
         // testing
         try {
@@ -77,7 +91,9 @@ public class FileControllerTest {
                             .with(csrf())
                     )
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.message").value(message))
+                    .andExpect(view().name("upload-form"))
+                    .andExpect(model().attribute("successMessage", message))
+                    .andExpect(model().attributeDoesNotExist("errorMessage"))
                     .andDo(print())
                     .andReturn();
 
@@ -86,6 +102,7 @@ public class FileControllerTest {
             throw new RuntimeException(e);
         }
 
+        verify(courierService, times(1)).getCouriers();
         verify(fileService, times(1)).saveFile(file);
     }
 

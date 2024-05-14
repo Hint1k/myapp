@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 public class LocationRestController {
@@ -34,17 +32,13 @@ public class LocationRestController {
 
     @GetMapping("/location")
     public LocationResponse getLocation(@RequestParam String address) {
-        UriComponents uriComponents = UriComponentsBuilder
-                .fromHttpUrl(googleApiUrl)
-                .path("/maps/api/geocode/json")
-                .queryParam("key", googleApiKey)
-                .queryParam("address", address)
-                .build();
 
         try {
             ResponseEntity<LocationResponse> locationResponse =
-                    new RestTemplate().getForEntity(uriComponents
-                            .toUriString(), LocationResponse.class);
+                    new RestTemplate().getForEntity(googleApiUrl
+                            + "/maps/api/geocode/json?key="
+                            + googleApiKey + "&address="
+                            + address, LocationResponse.class);
 
             return locationResponse.getBody();
         } catch (Exception e) {
