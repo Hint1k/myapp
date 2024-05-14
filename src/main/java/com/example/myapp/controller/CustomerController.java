@@ -62,10 +62,9 @@ public class CustomerController {
         if (names.entrySet().stream().anyMatch(entry ->
                 entry.getKey().equals(customer.getFirstName()) &&
                         entry.getValue().equals(customer.getLastName()))) {
-            result.rejectValue("firstName", "customer.exists",
-                    "This customer already exists in the database");
-            result.rejectValue("lastName", "customer.exists",
-                    "This customer already exists in the database");
+            String message = "This customer already exists in the database";
+            result.rejectValue("firstName", "customer.exists", message);
+            result.rejectValue("lastName", "customer.exists", message);
             return "customer-form";
         }
 

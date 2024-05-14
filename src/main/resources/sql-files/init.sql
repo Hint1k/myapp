@@ -128,3 +128,10 @@ instead of 0, so the update command fixes it:
 */
 
 update courier set id = 0 where id = 1;
+
+/*
+setting the starting value of auto increment back to 1
+to avoid getting id = 2 when the first real courier is added
+*/
+
+alter table courier auto_increment = 1;

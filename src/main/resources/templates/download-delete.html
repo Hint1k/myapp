@@ -5,12 +5,33 @@
 <head>
     <meta charset="UTF-8">
     <title>File download / delete from database page</title>
+    <style>
+        .table {
+            border: 1px solid #adb5bd;
+        }
+        .table th,
+        .table td {
+            border: 1px solid #adb5bd;
+        }
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            text-align: center;
+            color: #ffffff;
+            background-color: #6c757d;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #495057;
+        }
+    </style>
 </head>
 <body>
 <div>
     <h2 class="text-center">List of Files</h2>
     <div>
-        <table class="table table-hover" border="1">
+        <table class="table">
             <thead class="thead-light">
             <tr>
                 <th scope="col">File Name</th>
@@ -20,10 +41,10 @@
             <tbody>
             <tr th:each="file : ${files}">
                 <td th:text="${file.fileName}">File name</td>
-                <td><a th:href="@{${file.fileUrl}}">Download</a>
+                <td><a th:href="@{${file.fileUrl}}" class="button">Download</a>
                     <form action="#" th:action="@{/api/files/html/{name}(name=${file.fileName})}" th:method="delete"
                           onclick="if(!(confirm('Are you sure to delete this file?'))) return false">
-                        <button type="submit" class="btn">Delete file</button>
+                        <button type="submit" class="button">Delete file</button>
                     </form>
                 </td>
             </tr>
