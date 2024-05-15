@@ -1,31 +1,31 @@
-General description of the application: 
-A web based application that helps a company to deliver goods to its customers.  
+**General description of the application**:  
+A web-based application that helps companies deliver goods to their customers.    
 
-Application requirements:
+**Application requirements**:  
 
-A) Completed:
-1) Every courier has an individual task. It consists of list of addresses that has to be visited to complete the delivery.
-2) The manager/admin can edit the list of addresses and the list of couriers in the database.
-3) The couriers can only see their individual tasks, but cannot edit anything. 
-4) However, the couriers can generate the shortest route to speed up the delivery.
-5) Every courier, customer, manager and admin should have a username and a password to access the application.
-6) The application has to check the validity of the fields (fields are not empty etc.).
-7) The application has to show the weather forecast to anyone. This info is taken from a weather forecast site based on the location entered by user.
-8) After a courier generated the delivery route, it can be saved as a text file right from the calculation page.
-9) The route as a text file can be uploaded to database, downloaded or deleted from database only by admin.
-10) The application has to have a new customer registration process.
-11) The application has to check the validity of an address entered by a customer using Google Address Validation API.
-12) The customer can save the validated address to database for further processing by the company.  
+A) Completed:  
+**Individual Tasks**: Each courier has an individual task consisting of a list of addresses that must be visited to complete deliveries.  
+**Task Management**: The manager/admin can edit the list of addresses and couriers in the database.  
+**Courier Access**: Couriers can only see their individual tasks and cannot edit anything.  
+**Route Optimization**: However, couriers can generate the shortest route to expedite deliveries.  
+**Secure Login**: Every courier, customer, manager, and admin requires a username and password to access the application.  
+**Data Validation**: The application must check the validity of fields (ensuring they are not empty, etc.).  
+**Weather Integration**: The application displays the weather forecast for any user based on their entered location (information retrieved from a weather forecast website).  
+**Route Management**: After generating a delivery route, couriers can save it as a text file directly from the calculation page.  
+**Route Administration**: Only admins can upload route text files to the database, download them, or delete them.  
+**Customer Registration**: The application provides a new customer registration process.  
+**Address Validation**: The application verifies the validity of customer-entered addresses using the Google Address Validation API.  
+**Customer Address Storage**: Customers can save validated addresses to the database for further company processing.  
  
-B) Planned:
+B) Planned:  
 - All planned features have been added
 
-C) To-do list:
+C) To-do list:  
 - All planned updates have been made
 
-Installation info:
-1) Create file "secret.properties" on this path: src/main/resources/
-2) The file's content has to be:  
-google.api.key=here should be your real Google api key  
-weather.api.key=here should be your real OpenWeatherMap api key
+**Installation info**:
+1) Create file "secret.properties" on this path: src/main/resources/  
+2) The file's content has to be:    
+google.api.key=here should be your real Google api key    
+weather.api.key=here should be your real OpenWeatherMap api key  
 3) SQL scripts to create and fill in the database are here: src/main/resources/sql-files/init.sql
