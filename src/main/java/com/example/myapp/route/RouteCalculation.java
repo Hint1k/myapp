@@ -31,12 +31,12 @@ public class RouteCalculation {
     }
 
     public RouteCalculation(Map<Address, Coordinates> addresses) {
-        createListOfDistancesAndListOfCities(addresses);
+        createListOfDistancesAndListOfAddresses(addresses);
         createDistanceMatrix();
         calculateShortestPath();
     }
 
-    private double calculateDistanceBetweenCities
+    private double calculateDistanceBetweenAddresses
             (double lat1, double lon1, double lat2, double lon2) {
 
         int earth_radius = 6371; // km
@@ -51,7 +51,7 @@ public class RouteCalculation {
         return distance;
     }
 
-    private void createListOfDistancesAndListOfCities(Map<Address, Coordinates> addresses) {
+    private void createListOfDistancesAndListOfAddresses(Map<Address, Coordinates> addresses) {
         distances = new ArrayList<>();
         map = addresses;
         //creating ArrayList to iterate "map" by index, since keys and/or values are unknown
@@ -72,7 +72,7 @@ public class RouteCalculation {
                     double longitudeI = coordinatesI.getLongitude();
                     double longitudeJ = coordinatesJ.getLongitude();
 
-                    double distance = calculateDistanceBetweenCities
+                    double distance = calculateDistanceBetweenAddresses
                             (latitudeI, longitudeI, latitudeJ, longitudeJ);
 
                     distances.add(distance);
