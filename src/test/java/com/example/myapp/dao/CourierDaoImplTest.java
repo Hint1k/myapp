@@ -44,13 +44,13 @@ public class CourierDaoImplTest {
     @Test
     public void testMergeCourier() {
         Courier courier6 = new Courier(
-                6,"Frodo", "Baggings", "+79991111177");
+                5,"Frodo", "Baggings", "+79991111177");
         entityManager.merge(courier6);
 
         Query query = entityManager.createQuery("from Courier");
         couriers = query.getResultList();
 
-        assertEquals(6, couriers.size());
+        assertEquals(5, couriers.size());
         Assertions.assertThat(couriers).extracting(Courier::getLastName)
                 .contains("Baggings");
     }

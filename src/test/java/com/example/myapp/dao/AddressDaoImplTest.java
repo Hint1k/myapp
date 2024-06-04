@@ -45,16 +45,16 @@ public class AddressDaoImplTest {
     @Test
     public void testMergeAddress() {
         Courier courier6 = new Courier(
-                6, "Harry", "Potter", "+79991111166");
+                5, "Harry", "Potter", "+79991111166");
         Address address6 = new Address(
-                6, "Spain", "Madrid",
+                5, "Spain", "Madrid",
                 "Forward street", "16", courier6);
         entityManager.merge(address6);
 
         Query query = entityManager.createQuery("from Address");
         addresses = query.getResultList();
 
-        assertEquals(6, addresses.size());
+        assertEquals(5, addresses.size());
         Assertions.assertThat(addresses).extracting(Address::getStreetName)
                 .contains("Forward street");
 
