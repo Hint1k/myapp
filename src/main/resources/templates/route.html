@@ -48,7 +48,8 @@ User name = <span sec:authentication="principal.username"></span>
     </a>
     <table>
         <tr th:each="entry : ${map}">
-            <td th:text="${entry.key.getCityName()}">City Name</td>
+            <td th:text="${#strings.concat(entry.key.countryName, ', ', entry.key.cityName, ', ',
+            entry.key.streetName, ', ', entry.key.houseNumber)}">City Name</td>
             <table th:border="1">
                 <tr th:each="coordinates : ${entry.value}">
                     <td th:text="${coordinates.latitude}">Latitude</td>

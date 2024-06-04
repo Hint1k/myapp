@@ -81,7 +81,7 @@ public class RouteCalculation {
         }
     }
 
-    // creating a matrix of distances between cities
+    // creating a matrix of distances between addresses
     private void createDistanceMatrix() {
         matrix = new double[map.size()][map.size()];
         int k = 0;
@@ -108,10 +108,10 @@ public class RouteCalculation {
     private int getVariable(int counter) {
         int variable = 0;
         double step = 1.5;
-        int numberOfCities = map.size();
+        int numberOfAddresses = map.size();
         for (int i = 0; i < counter + 1; i++) {
             // my own equation to fill in the distance matrix correctly
-            variable = (int) (counter * (numberOfCities - step));
+            variable = (int) (counter * (numberOfAddresses - step));
             step += 0.5;
         }
         return variable;
@@ -125,39 +125,44 @@ public class RouteCalculation {
         if (map.size() == 1) {
             distance = 0.0;
             path = new ArrayList<>();
-            path.add(map.keySet().iterator().next().getCityName());
+            String address = map.keySet().iterator().next().getCountryName() + ", " +
+                    map.keySet().iterator().next().getCityName() + ", " +
+                    map.keySet().iterator().next().getStreetName() + ", " +
+                    map.keySet().iterator().next().getHouseNumber();
+            path.add(address);
             return;
         }
 
         // handle all other cases
         double minimum = Double.MAX_VALUE;
-        List<String> cities = new ArrayList<>();
+        List<String> addresses = new ArrayList<>();
         path = new ArrayList<>();
         for (Address address : map.keySet()) {
-            cities.add(address.getCityName());
+            addresses.add(address.getCountryName() + ", " + address.getCityName() + ", "
+                    + address.getStreetName() + ", " + address.getHouseNumber());
         }
-        path.add(cities.get(0)); // adding starting city
-        String nearestCity = null;
-        int lastCityIndex = 0;
+        path.add(addresses.get(0)); // adding starting address
+        String nearestAddress = null;
+        int lastAddressIndex = 0;
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 if (i != j && matrix[i][j] < minimum
-                        && !path.contains(cities.get(j))) {
+                        && !path.contains(addresses.get(j))) {
                     minimum = matrix[i][j];
-                    nearestCity = cities.get(j);
-                    lastCityIndex = j;
+                    nearestAddress = addresses.get(j);
+                    lastAddressIndex = j;
                 }
             }
             distance += minimum;
-            path.add(nearestCity);
+            path.add(nearestAddress);
             minimum = Double.MAX_VALUE;
-            i = lastCityIndex - 1;
+            i = lastAddressIndex - 1;
             // breaking cycle condition
             if (path.size() == map.size()) {
-                // adding distance to return back to the finishing city
-                distance += matrix[0][lastCityIndex];
-                // adding finishing city to complete path
-                path.add(cities.get(0));
+                // adding distance to return back to the last address
+                distance += matrix[0][lastAddressIndex];
+                // adding the last address to complete the path
+                path.add(addresses.get(0));
                 break;
             }
         }
