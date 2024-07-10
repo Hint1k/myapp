@@ -11,7 +11,7 @@ public class FileDb {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Integer id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;

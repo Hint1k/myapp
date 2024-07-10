@@ -20,10 +20,10 @@ import static org.mockito.Mockito.*;
 public class AddressServiceImplTest {
 
     @InjectMocks
-    AddressServiceImpl addressServiceImpl;
+    private AddressServiceImpl addressServiceImpl;
 
     @Mock
-    AddressDaoImpl addressDaoImpl;
+    private AddressDaoImpl addressDaoImpl;
 
     private static List<Address> addresses;
 

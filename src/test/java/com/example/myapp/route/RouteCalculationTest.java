@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RouteCalculationTest {
 
-    RouteCalculation routeCalculation;
-
     private Map<Address, Coordinates> map;
 
     private void createData() {
@@ -25,7 +23,7 @@ public class RouteCalculationTest {
 
         // testing
         createData();
-        routeCalculation = new RouteCalculation(map);
+        RouteCalculation routeCalculation = new RouteCalculation(map);
         double distance = routeCalculation.getDistance();
         distance = (int) distance;
 

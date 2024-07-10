@@ -7,13 +7,13 @@ import java.util.List;
 public class PostalAddress {
 
     @JsonProperty("regionCode")
-    String regionCode;
+    private String regionCode;
 
     @JsonProperty("locality")
-    String locality;
+    private String locality;
 
     @JsonProperty("addressLine")
-    List<String> addressLine;
+    private List<String> addressLine;
 
     public String getRegionCode() {
         return regionCode;

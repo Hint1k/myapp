@@ -13,9 +13,9 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private CustomerDao customerDao;
+    private final CustomerDao customerDao;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public CustomerServiceImpl(CustomerDao customerDao) {
         this.customerDao = customerDao;

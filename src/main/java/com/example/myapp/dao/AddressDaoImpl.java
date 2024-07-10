@@ -15,7 +15,7 @@ import java.util.List;
 public class AddressDaoImpl implements AddressDao {
 
     @Autowired
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     private static final Logger logger
             = LoggerFactory.getLogger(AddressDaoImpl.class);

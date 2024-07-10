@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    FileDao fileDao;
+    private FileDao fileDao;
 
     private static final Logger logger
             = LoggerFactory.getLogger(FileServiceImpl.class);

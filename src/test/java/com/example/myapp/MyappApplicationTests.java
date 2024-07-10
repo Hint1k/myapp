@@ -11,10 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MyappApplicationTests {
 
 	@Autowired
-	CourierController courierController;
+	private CourierController courierController;
 
 	@Autowired
-	AddressController addressController;
+	private AddressController addressController;
 
 	//checking if the tests are working at all
 	@Test
