@@ -37,5 +37,5 @@ build/
 # my files with api keys
 secret.properties
 
-docker-compose.yml
-Dockerfile
+# Dockerfile for local development
+Dockerfile_local
