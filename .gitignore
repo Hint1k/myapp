@@ -36,3 +36,6 @@ build/
 
 # my files with api keys
 secret.properties
+
+docker-compose.yml
+Dockerfile
