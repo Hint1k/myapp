@@ -39,3 +39,4 @@ secret.properties
 
 # Dockerfile for local development
 Dockerfile_local
+docker-compose_local.yml

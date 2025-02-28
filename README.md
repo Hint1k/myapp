@@ -1,38 +1,50 @@
-**General description of the application**: <br>  
-A web-based application that helps companies to deliver goods to their customers.<br>    
+# **General Description of the Application**
 
-**Application requirements**:<br>
+A web-based application that helps companies deliver goods to their customers.
 
-A) Completed:<br>
-- Each courier has a list of addresses to visit for deliveries.
-- Managers and admins can edit the list of addresses and couriers in the database.
-- Couriers can generate the shortest route to optimize deliveries.
-- After generating a delivery route, couriers can save it as a text file.
-- Admins can upload files containing routes to the database, download them, or delete them.
-- Every user role (courier, customer, manager, and admin) requires a username and password.
-- The application provides a customer registration process.
-- The application validates entered fields and handles errors.
-- The weather forecast for the entered location is available to all users through the OpenWeatherMap API.
-- Customer-entered addresses are validated using the Google Address Validation API.
-- Customers can save validated addresses to the database for further company processing.
+## **Key Features**
 
-B) Planned:<br>
-- All planned features have been added<br>
+### **User Roles & Authentication**
+- Supports Couriers, Customers, Managers, and Admins, each requiring a username and password.
 
-C) To-do list:<br>
-- All planned updates have been made<br>
+### **Courier Route Management**
+- Couriers receive a list of delivery addresses.
+- Generate optimized delivery routes.
+- Save routes as text files in the database.
 
-**Installation info**:
-- Get your free Google API key: https://developers.google.com/maps/documentation/geocoding/get-api-key <br>
-- Get your free OpenWeatherMap API key: https://openweathermap.org/appid <br>
-- Download and unzip the application <br>
-- Navigate to the project folder <br>
-- Create a "secret.properties" file at: src/main/resources/ <br>
-- Add the following content to the file: <br>
-  google.api.key=your_real_google_api_key_here <br>
-  weather.api.key=your_real_openweathermap_api_key_here <br>
-- Return to the root project folder where docker-compose.yml is located <br>
-- Run the console command: docker-compose up --build <br>
-- Wait for the process to complete (this may take a few minutes depending on your system and network speed) <br>
-- Once completed, the following link will appear in the console: http://localhost:8080 <br>
-- Open the link in your browser to access the application <br>
+### **Admin & Manager Controls**
+- Managers and Admins can manage couriers and addresses.
+- Only Admins can upload, download, and delete route files.
+
+### **Customer Features**
+- Register as a new Customer.
+- Enter delivery addresses and validate via the Google Address Validation API.
+- Submit validated addresses for company processing.
+
+### **External API Integrations**
+- Convert addresses to geographical coordinates using Google Geocoding API.
+- Retrieve real-time weather data via OpenWeatherMap API.
+
+## **Installation Info**
+
+1. Get your free Google API key: [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/get-api-key)
+2. Get your free OpenWeatherMap API key: [OpenWeatherMap API](https://openweathermap.org/appid)
+3. Download and unzip the application.
+4. Navigate to the project folder.
+5. Create a `secret.properties` file at: `src/main/resources/`
+6. Add the following content to the file:
+   ```properties
+   google.api.key=your_real_google_api_key_here
+   weather.api.key=your_real_OpenWeatherMap_api_key_here
+   ```
+7. Return to the root project folder where `docker-compose.yml` is located.
+8. Run the console command:
+   ```sh
+   docker-compose up --build
+   ```
+9. Wait for the process to complete (this may take a few minutes depending on your system and network speed).
+10. Once completed, the following link will appear in the console:
+    ```
+    http://localhost:8080
+    ```
+11. Open the link in your browser to access the application.
